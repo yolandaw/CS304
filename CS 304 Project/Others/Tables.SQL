@@ -9,7 +9,6 @@ borr_sinOrStNo integer,
 borr_expiryDate date
 borr_type varchar(20));
 
-
 create table borrowerType
 (bt_type varchar(20), 
 bt_bookTimeLimit date);
