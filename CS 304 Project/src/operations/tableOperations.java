@@ -1,11 +1,4 @@
-/**
- * 
- */
-
-/**
- * @author Yolanda
- *
- */
+package operations;
 public class tableOperations {
 
 	/**
