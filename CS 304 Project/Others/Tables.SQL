@@ -63,17 +63,3 @@ fine_issueDate date,
 fine_paidDate date,
 borrowing_borid integer not null
 foreign key (borrowing_borid) references borrowing);
-
-
-
-
-
-Borrower (bid, password, name, address, phone,  emailAddress, sinOrStNo, expiryDate, type)
-BorrowerType (type, bookTimeLimit)
-Book (callNumber, isbn, title, mainAuthor, publisher, year )
-HasAuthor (callNumber, name)
-HasSubject (callNumber, subject)
-BookCopy (callNumber, copyNo, status)
-HoldRequest(hid, bid, callNumber, issuedDate)
-Borrowing(borid, bid, callNumber, copyNo, outDate, inDate)
-Fine (fid, amount, issuedDate, paidDate, borid)
