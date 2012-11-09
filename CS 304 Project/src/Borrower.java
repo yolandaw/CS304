@@ -1,7 +1,6 @@
-package users;
-import operations.tableOperations;
 
-public class Borrower extends User{
+
+public class Borrower{
 
 	/**
 	 * 
