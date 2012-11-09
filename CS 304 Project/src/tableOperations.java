@@ -21,7 +21,7 @@ public class tableOperations {
 	
 	// Display all the rows of the table
 	public int displayRows() {
-		return 2;
+		return 0;
 		
 	}
 
