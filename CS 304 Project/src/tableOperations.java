@@ -10,17 +10,17 @@ public class tableOperations {
 	}
 
 	// Insert a tuple into the table
-	public void insertTuple(){
+	public void insertTuple() {
 		
 	}
 	
 	// Delete a tuple from the table
-	public void deleteTuple(){
+	public void deleteTuple() {
 		
 	}
 	
 	// Display all the rows of the table
-	public int displayRows(){
+	public int displayRows() {
 		return 2;
 		
 	}
