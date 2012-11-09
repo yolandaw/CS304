@@ -1,4 +1,3 @@
-
 import java.sql.*;
 
 public class tableOperations {
@@ -21,7 +20,7 @@ public class tableOperations {
 	}
 	
 	// Display all the rows of the table
-	public int display(){
+	public int displayRows(){
 		return 2;
 		
 	}
