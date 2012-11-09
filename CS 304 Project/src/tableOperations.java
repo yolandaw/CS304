@@ -9,16 +9,19 @@ public class tableOperations {
 	public tableOperations() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	public void insert(){
+
+	// Insert a tuple into the table
+	public void insertTuple(){
 		
 	}
 	
-	public void delete(){
+	// Delete a tuple from the table
+	public void deleteTuple(){
 		
 	}
 	
-	public int display(){
+	// Display all the rows of the table
+	public int displayRows(){
 		return 2;
 		
 	}
