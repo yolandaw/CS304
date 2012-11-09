@@ -16,12 +16,13 @@ public class tableOperations {
 	
 	// Delete a tuple from the table
 	public void deleteTuple() {
+		displayRows();
 		
 	}
 	
 	// Display all the rows of the table
 	public int displayRows() {
-		return 0;
+		return 4;
 		
 	}
 
