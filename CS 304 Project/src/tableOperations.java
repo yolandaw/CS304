@@ -19,7 +19,7 @@ public class tableOperations {
 	}
 	
 	public int display(){
-		return 0;
+		return 2;
 		
 	}
 
