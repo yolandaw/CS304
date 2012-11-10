@@ -107,13 +107,13 @@ public class GUI implements ActionListener{
 
 	      try 
 	      {
-		// Load the Oracle JDBC driver
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+	    	  // Load the Oracle JDBC driver
+	    	  DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 	      }
 	      catch (SQLException ex)
 	      {
-		System.out.println("Message: " + ex.getMessage());
-		System.exit(-1);
+	    	  System.out.println("Message: " + ex.getMessage());
+	    	  System.exit(-1);
 	      }
 	}
 
@@ -126,15 +126,15 @@ public class GUI implements ActionListener{
 
       try 
       {
-	con = DriverManager.getConnection(connectURL,username,password);
+    	  	con = DriverManager.getConnection(connectURL,username,password);
 
-	System.out.println("\nConnected to Oracle!");
-	return true;
+    	  	System.out.println("\nConnected to Oracle!");
+    	  	return true;
       }
       catch (SQLException ex)
       {
-	System.out.println("Message: " + ex.getMessage());
-	return false;
+    	  	System.out.println("Message: " + ex.getMessage());
+    	  	return false;
       }
     }
 
