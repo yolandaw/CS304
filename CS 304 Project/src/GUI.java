@@ -1,6 +1,7 @@
 
 // We need to import the java.sql package to use JDBC
 import java.sql.*;
+import javax.swing.*;
 
 // for reading from the command line
 import java.io.*;
@@ -138,13 +139,6 @@ public class GUI implements ActionListener{
       }
     }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -171,6 +165,20 @@ public class GUI implements ActionListener{
 		      passwordField.setText("");
 		  }
 		}             
+	}
+    
+    
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUI gui = new GUI();
+            }
+        });
 	}
 
 }
