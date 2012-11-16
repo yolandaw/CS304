@@ -33,7 +33,7 @@ public class borrowerTable {
 
 	
 	// Insert a borrower into the table Borrower
-	public void insertBorrower(Connection con, String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
+	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
 		int bid = 12345;
@@ -71,7 +71,7 @@ public class borrowerTable {
 	}
 	
 	// Delete a borrower from the table Borrower
-	public void deleteBorrower(Connection con, int bid) {
+	public void deleteBorrower(int bid) {
 		try {
 			PreparedStatement ps = con.prepareStatement("DELETE FROM borrower WHERE borr_bid = ?");
 			ps.setInt(1, bid);
@@ -107,8 +107,8 @@ public class borrowerTable {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
-                testTable.insertBorrower(con, "name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
-                testTable.deleteBorrower(con, 12345);
+                testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
+                testTable.deleteBorrower(12345);
             }
         });
 	}
