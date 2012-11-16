@@ -11,9 +11,7 @@ public class borrowerType {
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table BorrowerType
-	public void insertBorrowerType() {
-		String type;
-		Date bookTimeLimit;
+	public void insertBorrowerType(String type, Date bookTimeLimit) {
 		PreparedStatement ps;
 		
 		try {
@@ -53,8 +51,7 @@ public class borrowerType {
 	}
 		
 	// Delete a tuple from the table BorrowerType
-	public void deleteBorrowerType() {
-		String type;
+	public void deleteBorrowerType(String type) {
 		PreparedStatement ps;
 		
 		try {

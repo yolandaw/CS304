@@ -11,13 +11,8 @@ public class Book {
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table Book
-	public void insertBook() {
-		int callNo;
-		int isbn;
-		String title;
-		String mainAuthor;
-		String publisher;
-		int year;
+	public void insertBook(int callNo, int isbn, String title, String mainAuthor, String publisher, int year) {
+
 		PreparedStatement ps;
 		
 		try {
@@ -71,8 +66,8 @@ public class Book {
 	}
 		
 	// Delete a tuple from the table Book
-	public void deleteBook() {
-		int callNo;
+	public void deleteBook(int callNo) {
+		
 		PreparedStatement ps;
 		
 		try {
