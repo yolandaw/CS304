@@ -3,87 +3,55 @@ import java.sql.*;
 
 public class borrowerTable {
 
+	static Connection con;	
 	public borrowerTable() {
+
+	      try 
+	      {
+	    	  // Load the Oracle JDBC driver
+	    	  DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+	      }
+	      catch (SQLException ex)
+	      {
+	    	  System.out.println("Message: " + ex.getMessage());
+	    	  System.exit(-1);
+	      }
 		
+	      String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug"; 
+
+	      try 
+	      {
+	    	  	con = DriverManager.getConnection(connectURL,"ora_v2e7","a75190090");
+
+	    	  	System.out.println("\nConnected to Oracle!");
+	      }
+	      catch (SQLException ex)
+	      {
+	    	  	System.out.println("Message: " + ex.getMessage());
+	      }
 	}
-	private Connection con;
-	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
 	
 	// Insert a borrower into the table Borrower
-	public void insertBorrower() {
-		int bid;
-		String password;
-		String name;
-		String address;
-		int phone;
-		String emailAddress;
-		int sinOrStNo;
-		Date expiryDate;
-		String type;
-		PreparedStatement ps;
+	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
+		
+		//TODO: generate of bid and expiryDate
+		int bid = 12345;
+		java.sql.Date date = java.sql.Date.valueOf("2012-12-12");
 		
 		try {
-			ps = con.prepareStatement("INSERT INTO borrower Values(?,?,?,?,?,?,?,?,?)");
-			System.out.print("\nBorrower bid: ");
-			bid = Integer.parseInt(in.readLine());
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES(?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, bid);
-			
-			System.out.print("\nBorrower password: ");
-			password = in.readLine();
 			ps.setString(2, password);
-			
-			System.out.print("\nBorrower name: ");
-			name = in.readLine();
 			ps.setString(3, name);
-			
-			System.out.print("\nBorrower address: ");
-			address = in.readLine();
-			if (address.length() == 0)
-			{
-				ps.setString(4, null);
-			}
-			else {
-				ps.setString(4, address);
-			}
-			
-			System.out.print("\nBorrower phone: ");
-			String phoneTemp = in.readLine();
-			if (phoneTemp.length() == 0) {
-				ps.setNull(5, java.sql.Types.INTEGER);
-			}
-			else {
-				phone = Integer.parseInt(phoneTemp);
-				ps.setInt(5, phone);
-			}
-			
-			System.out.print("\nBorrower e-mail address: ");
-			emailAddress = in.readLine();
-			if (emailAddress.length() == 0) {
-				ps.setString(6, null);
-			}
-			else {
-				ps.setString(6, emailAddress);
-			}
-			
-			System.out.print("\nBorrower SIN or St. No: ");
-			sinOrStNo = Integer.parseInt(in.readLine());
+			ps.setString(4, address);
+			ps.setInt(5, phone);
+			ps.setString(6, email);
 			ps.setInt(7, sinOrStNo);
-			
-			System.out.print("\nBorrower expiry date: ");
-			expiryDate = Date.valueOf(in.readLine());
-			ps.setDate(8, expiryDate);
-			
-			System.out.print("\nBorrower type: ");
-			type = in.readLine();
-			ps.setString(9, type);
-			
+			ps.setDate(8, date);
+			ps.setString(9, borrowerType);
 			ps.executeUpdate();
-			con.commit();
-			ps.close();			
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
+			con.commit();		
 		}
 		catch (SQLException ex)
 		{
@@ -103,133 +71,45 @@ public class borrowerTable {
 	}
 	
 	// Delete a borrower from the table Borrower
-	public void deleteBorrower() {
-		int bid;
-		PreparedStatement ps;
-		
+	public void deleteBorrower(int bid) {
 		try {
-			ps = con.prepareStatement("DELETE FROM borrower WHERE borr_bid = ?");
-			
-			System.out.print("\nBorrower ID: ");
-			bid = Integer.parseInt(in.readLine());
+			PreparedStatement ps = con.prepareStatement("DELETE FROM borrower WHERE borr_bid = ?");
 			ps.setInt(1, bid);
-			
-			int rowCount = ps.executeUpdate();
-			
-			if (rowCount == 0) {
-				System.out.println("\nBorrower " + bid + " does not exist!");
-			}
-			
-			con.commit();
-			ps.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
+			ps.executeUpdate();
+			con.commit();		
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
-
-	        try 
+			System.out.println("Message: " + ex.getMessage());
+		    try 
 		    {
-	        	con.rollback();	
+			// undo the insert
+			con.rollback();	
 		    }
 		    catch (SQLException ex2)
 		    {
-		    	System.out.println("Message: " + ex2.getMessage());
-		    	System.exit(-1);
+			System.out.println("Message: " + ex2.getMessage());
+			System.exit(-1);
 		    }
+
 		}
 
 	}
 	
 	// Display all the rows of the table Borrower
 	public void displayBorrower() {
-		String bid;
-		String password;
-		String name;
-		String address;
-		String phone;
-		String emailAddress;
-		String sinOrStNo;
-		String expiryDate;
-		String type;
-		Statement stmt;
-		ResultSet rs;
-		
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM borrower");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int numCol = rsmd.getColumnCount();
-			
-			System.out.println(" ");
-			// display column names;
-			for (int i = 0; i < numCol; i++)
-			{
-			  // get column name and print it
-		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			}
-
-			System.out.println(" ");
-
-			while(rs.next()) {
-				bid = rs.getString("borr_bid");
-			    System.out.printf("%-10.10s", bid);
-
-			    password = rs.getString("borr_password");
-			    System.out.printf("%-20.20s", password);
-			    
-			    name = rs.getString("borr_name");
-			    System.out.printf("%-20.20s", name);
-			    
-			    address = rs.getString("borr_address");
-			    if (rs.wasNull())
-			    {
-			    	System.out.printf("%-20.20s", " ");
-			    }
-			    else
-			    {
-			    	System.out.printf("%-20.20s", address);
-			    }
-			    
-			    phone = rs.getString("borr_phone");
-			    if (rs.wasNull())
-			    {
-			    	System.out.printf("%-20.20s", " ");
-			    }
-			    else
-			    {
-			    	System.out.printf("%-20.20s", phone);
-			    }
-			    
-			    emailAddress = rs.getString("borr_emailAddress");
-			    if (rs.wasNull())
-			    {
-			    	System.out.printf("%-20.20s", " ");
-			    }
-			    else
-			    {
-			    	System.out.printf("%-20.20s", emailAddress);
-			    }
-			    
-			    sinOrStNo = rs.getString("borr_sinOrStNo");
-			    System.out.printf("%-20.20s", sinOrStNo);
-			    
-			    expiryDate = rs.getString("borr_expiryDate");
-			    System.out.printf("%-20.20s", expiryDate);
-			    
-			    type = rs.getString("borr_type");
-			    System.out.printf("%-20.20s", type);
-
-			}
-			stmt.close();
-		}
-		catch (SQLException ex)
-		{
-		    System.out.println("Message: " + ex.getMessage());
-		}	
+	//TODO
 	}
 	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                borrowerTable testTable = new borrowerTable();
+                testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
+                testTable.deleteBorrower(12345);
+            }
+        });
+	}
 }
