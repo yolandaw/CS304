@@ -17,37 +17,15 @@ public class Book {
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
-			System.out.print("\nCall Number: ");
-			callNo = Integer.parseInt(in.readLine());
 			ps.setInt(1, callNo);
-			
-			System.out.print("\nISBN: ");
-			isbn = Integer.parseInt(in.readLine());
 			ps.setInt(2, isbn);
-			
-			System.out.print("\nTitle: ");
-			title = in.readLine();
 			ps.setString(3, title);
-			
-			System.out.print("\nMain Author: ");
-			mainAuthor = in.readLine();
 			ps.setString(4, mainAuthor);
-			
-			System.out.print("\nPublisher: ");
-			publisher = in.readLine();
 			ps.setString(5, publisher);
-			
-			System.out.print("\nYear: ");
-			year = Integer.parseInt(in.readLine());
-			ps.setInt(6, year);
-			
+			ps.setInt(6, year);			
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{
@@ -72,23 +50,11 @@ public class Book {
 		
 		try {
 			ps = con.prepareStatement("DELETE FROM book WHERE book_callNo = ?");
-			System.out.print("\nBook Call Number: ");
-			callNo = Integer.parseInt(in.readLine());
 			ps.setInt(1, callNo);
-			
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0)
-			{
-				System.out.println("\nCall Number " + callNo + " does not exist!");
-			}
-
+			ps.executeUpdate();
 			con.commit();
 
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{

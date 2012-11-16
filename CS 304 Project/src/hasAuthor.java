@@ -15,21 +15,12 @@ public class hasAuthor {
 		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement("INSERT INTO hasAuthor VALUES (?,?)");
-			System.out.print("\nBook Call Number: ");
-			callNo = Integer.parseInt(in.readLine());
 			ps.setInt(1, callNo);
-			
-			System.out.print("\nAuthor Name: ");
-			name = in.readLine();
 			ps.setString(2, name);
 			
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{
@@ -54,24 +45,12 @@ public class hasAuthor {
 		
 		try {
 			ps = con.prepareStatement("DELETE FROM hasAuthor WHERE book_callNo = ? AND hasAuthor_name = ?");
-			System.out.print("\nBook Call Number: ");
-			callNo = Integer.parseInt(in.readLine());
 			ps.setInt(1, callNo);
-			System.out.print("\nAuthor Name: ");
-			name = in.readLine();
 			ps.setString(2, name);
+			ps.executeUpdate();
 			
-			int rowCount = ps.executeUpdate();
-			
-			if (rowCount == 0) {
-				System.out.println("\nBook Call Number " + callNo + " or Author " + name + " does not exist!");
-			}
 			con.commit();
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{

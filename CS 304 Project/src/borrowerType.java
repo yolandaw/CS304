@@ -16,22 +16,11 @@ public class borrowerType {
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO borrowerType VALUES (?,?)");
-			
-			System.out.print("\nBorrower Type: ");
-			type = in.readLine();
 			ps.setString(1, type);
-			
-			System.out.print("\nBook Time Limit: ");
-			bookTimeLimit = Date.valueOf(in.readLine());
-			ps.setDate(2, bookTimeLimit);
-			
+			ps.setDate(2, bookTimeLimit);			
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{
@@ -56,22 +45,10 @@ public class borrowerType {
 		
 		try {
 			ps = con.prepareStatement("DELETE FROM borrowerType WHERE bt_type = ?");
-			System.out.print("\nBorrower Type: ");
-			type = in.readLine();
 			ps.setString(1, type);
-			
-			int rowCount = ps.executeUpdate();
-			
-			if (rowCount == 0)
-			{
-				System.out.println("\nBorrower Type " + type + " does not exist!");
-			}
+			ps.executeUpdate();
 			con.commit();
 			ps.close();
-		}
-		catch (IOException e)
-		{
-		    System.out.println("IOException!");
 		}
 		catch (SQLException ex)
 		{
