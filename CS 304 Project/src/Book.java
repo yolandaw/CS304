@@ -2,14 +2,12 @@ import java.io.*;
 import java.sql.*;
  
 public class Book {
+
+	java.sql.Connection con = Connection.getInstance().getConnection();
 	
 	public Book () {
 		
 	}
-
-	java.sql.Connection con = Connection.getInstance().getConnection();
-	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	
 	
 	public int checkBook(int isbn) {
 
@@ -18,9 +16,9 @@ public class Book {
 		
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM borrower WHERE book_isbn = " + isbn);
-			while (rs.next()) {
-				
+			rs = stmt.executeQuery("SELECT COUNT(1) FROM book WHERE book_isbn = " + isbn);
+			if (rs.next()) {
+				return rs.getInt(1);
 			}
 			stmt.close();
 			
@@ -29,31 +27,10 @@ public class Book {
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}
+
+		System.out.println("no");
 		
-		PreparedStatement ps;
-		
-		try {
-			ps = con.prepareStatement("SELECT * FROM book WHERE book_isbn = ?");
-			ps.setInt(1, isbn);	
-			ps.executeUpdate();
-			con.commit();
-			ps.close();
-		}
-		catch (SQLException ex)
-		{
-		    System.out.println("Message: " + ex.getMessage());
-		    try 
-		    {
-		    	// undo the insert
-		    	con.rollback();	
-		    }
-		    catch (SQLException ex2)
-		    {
-		    	System.out.println("Message: " + ex2.getMessage());
-		    	System.exit(-1);
-		    }
-		}
-		return 0;			
+		return 0;
 		
 	}
 	
@@ -170,6 +147,21 @@ public class Book {
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}
+	}
+	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                Book testTable = new Book();
+           //     testTable.insertBook(3, 2, "a", "b", "c", 0);
+                System.out.println("isbn 100");
+                testTable.checkBook(100);
+                System.out.println("isbn 1");
+                testTable.checkBook(1);                
+            }
+        });
 	}
 	
 }
