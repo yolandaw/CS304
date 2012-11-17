@@ -2,49 +2,33 @@
 
 import java.sql.*;
 import java.io.*;
+import java.sql.Date;
+
 
 
 public class Fine {
+	
+	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	java.sql.Connection con = Connection.getInstance().getConnection();
 
 	public Fine() {
 		
 	}
-	
-	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	java.sql.Connection con = Connection.getInstance().getConnection();
+
 	
 	// Insert a tuple into the table Fine
-	public void insertFine() {
-
-		int fid;
-		float amount;
-		Date issueDate;
-		Date paidDate;
-		int borid;
+	public void insertFine(int fid, float amount, Date issueDate, Date paidDate, int borid) {
 		
 		PreparedStatement ps;
 		
+		java.sql.Date date = java.sql.Date.valueOf("2012-12-12");
 		try{
 			ps = con.prepareStatement("INSERT INTO fine VALUES(?,?,?,?,?,)");
 			
-			System.out.print("\nFine ID:");
-			fid = Integer.parseInt(in.readLine());
 			ps.setInt(1, fid);
-			
-			System.out.print("\nFine Amout:");
-			amount = Float.parseFloat(in.readLine());
 			ps.setFloat(2, amount);
-			
-			System.out.print("\nIssue Date:");
-			issueDate = Date.valueOf(in.readLine());
-			ps.setDate(3, issueDate);
-			
-			System.out.print("\nPaid Date:");
-			paidDate = Date.valueOf(in.readLine());
-			ps.setDate(4, paidDate);
-			
-			System.out.print("\n Borrower ID:");
-			borid = Integer.parseInt(in.readLine());
+			ps.setDate(3, date);
+			ps.setDate(4, date);
 			ps.setInt(5, borid);
 			
 			ps.executeUpdate();
@@ -52,11 +36,6 @@ public class Fine {
 			con.commit();
 			
 			ps.close();									
-		}
-		
-		catch(IOException e){
-			
-			System.out.println("IOException!");
 		}
 		
 		catch(SQLException ex){
@@ -75,16 +54,12 @@ public class Fine {
 	}
 	
 	// Delete a tuple from the table Fine
-	public void deleteFine() {
+	public void deleteFine(int fid) {
 		
-		int fid;
 		PreparedStatement ps;
 		
 		try{
 			ps = con.prepareStatement("DELETE FROM fine WHERE fine_fid = ?");
-			
-			System.out.print("\nFine ID:");
-			fid = Integer.parseInt(in.readLine());
 			ps.setInt(1, fid);
 			
 			int rowCount = ps.executeUpdate();
@@ -96,10 +71,6 @@ public class Fine {
 			con.commit();
 			
 			ps.close();
-		}
-		
-		catch(IOException e){
-			System.out.println("IOException!");
 		}
 		
 		catch(SQLException ex){
@@ -117,14 +88,9 @@ public class Fine {
 	}
 	
 	// Display all the rows of the table Fine
-	public void displayFine() {
-		int fid;
-		float amount;
-		Date issueDate;
-		Date paidDate;
-		int borid;
-		
-		Statement stmt;
+	public void displayFine(int fid, float amount, Date issueDate, Date paidDate, int borid) {
+
+/*		Statement stmt;
 		ResultSet rs;
 		
 		try{
@@ -170,8 +136,19 @@ public class Fine {
 			
 			System.out.println("Message:" + ex.getMessage());
 								
-		}
+		}*/
 			
 	}
+	
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+		Fine runFine = new Fine();
+		//runFine.connect("ora_v2e7","a75190090");
+		runFine.insertFine(0, 0, null, null, 10);
+	
+            }});
+	
+		}
 	
 }
