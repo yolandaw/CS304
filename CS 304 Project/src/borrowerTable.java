@@ -3,32 +3,10 @@ import java.sql.*;
 
 public class borrowerTable {
 
-	static Connection con;	
+	java.sql.Connection con = Connection.getInstance().getConnection();
+
 	public borrowerTable() {
 
-	      try 
-	      {
-	    	  // Load the Oracle JDBC driver
-	    	  DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-	      }
-	      catch (SQLException ex)
-	      {
-	    	  System.out.println("Message: " + ex.getMessage());
-	    	  System.exit(-1);
-	      }
-		
-	      String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug"; 
-
-	      try 
-	      {
-	    	  	con = DriverManager.getConnection(connectURL,"ora_v2e7","a75190090");
-
-	    	  	System.out.println("\nConnected to Oracle!");
-	      }
-	      catch (SQLException ex)
-	      {
-	    	  	System.out.println("Message: " + ex.getMessage());
-	      }
 	}
 
 	
@@ -108,7 +86,7 @@ public class borrowerTable {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
                 testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
-                testTable.deleteBorrower(12345);
+   //             testTable.deleteBorrower(12345);
             }
         });
 	}
