@@ -6,7 +6,7 @@ public class bookCopy {
 	public bookCopy() {
 		
 	}
-	private Connection con;
+	java.sql.Connection con = Connection.getInstance().getConnection();
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table BookCopy

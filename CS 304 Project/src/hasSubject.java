@@ -3,7 +3,7 @@ import java.sql.*;
 
 public class hasSubject {
 
-	static Connection con;
+	java.sql.Connection con = Connection.getInstance().getConnection();
 	
 	public hasSubject() {
 

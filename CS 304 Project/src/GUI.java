@@ -13,8 +13,8 @@ import java.awt.event.*;
 
 public class GUI implements ActionListener{
 	
-	private Connection con;
-
+	java.sql.Connection con = Connection.getInstance().getConnection();
+	
     // user is allowed 3 login attempts
     private int loginAttempts = 0;
 

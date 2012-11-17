@@ -11,7 +11,7 @@ public class Fine {
 	}
 	
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	private Connection con;
+	java.sql.Connection con = Connection.getInstance().getConnection();
 	
 	// Insert a tuple into the table Fine
 	public void insertFine() {
