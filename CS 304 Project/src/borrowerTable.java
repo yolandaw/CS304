@@ -76,7 +76,67 @@ public class borrowerTable {
 	
 	// Display all the rows of the table Borrower
 	public void displayBorrower() {
-	//TODO
+		int bid;
+		String password;
+		String name;
+		String address;
+		int phone;
+		String email;
+		int sinOrStNo;
+		String date;
+		String type;
+		Statement stmt;
+		ResultSet rs;
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM borrower");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numCols = rsmd.getColumnCount();
+
+			System.out.println(" ");
+			
+			for (int i = 0; i < numCols; i++)
+			{
+		      // get column name and print it
+		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
+			
+			while(rs.next()) {
+				bid = rs.getInt("borr_bid");
+			    System.out.printf("%-10.10s", bid);
+			    
+			    password = rs.getString("borr_password");
+			    System.out.printf("%-20.20s", password);
+			    
+			    name = rs.getString("borr_name");
+			    System.out.printf("%-20.20s", name);
+			    
+			    address = rs.getString("borr_address");
+			    System.out.printf("%-20.20s", address);
+			    
+			    phone = rs.getInt("borr_phone");
+			    System.out.printf("%-20.20s", phone);
+			    
+			    email = rs.getString("borr_emailAddress");
+			    System.out.printf("%-20.20s", email);
+			    
+			    sinOrStNo = rs.getInt("borr_sinOrStNo");
+			    System.out.printf("%-20.20s", sinOrStNo);
+			    
+			    date = rs.getString("borr_expiryDate");
+			    System.out.printf("%-20.20s", date);
+			    
+			    type = rs.getString("borr_type");
+			    System.out.printf("%-20.20s", type);
+			 
+			}
+			stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -85,7 +145,8 @@ public class borrowerTable {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
-                testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
+          //      testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
+                testTable.displayBorrower();
    //             testTable.deleteBorrower(12345);
             }
         });
