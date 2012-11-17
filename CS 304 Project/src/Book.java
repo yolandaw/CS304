@@ -10,6 +10,53 @@ public class Book {
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
+	
+	public int checkBook(int isbn) {
+
+		Statement stmt;
+		ResultSet rs;
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM borrower WHERE book_isbn = " + isbn);
+			while (rs.next()) {
+				
+			}
+			stmt.close();
+			
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		
+		PreparedStatement ps;
+		
+		try {
+			ps = con.prepareStatement("SELECT * FROM book WHERE book_isbn = ?");
+			ps.setInt(1, isbn);	
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		    try 
+		    {
+		    	// undo the insert
+		    	con.rollback();	
+		    }
+		    catch (SQLException ex2)
+		    {
+		    	System.out.println("Message: " + ex2.getMessage());
+		    	System.exit(-1);
+		    }
+		}
+		return 0;			
+		
+	}
+	
 	// Insert a tuple into the table Book
 	public void insertBook(int callNo, int isbn, String title, String mainAuthor, String publisher, int year) {
 
