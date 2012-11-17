@@ -15,15 +15,15 @@ public class holdRequest {
 	}
 	
 	// Insert a tuple into the table HoldRequest
-	public void insertHoldRequest(int hid, int bid, int callNo, String stringdate) {
+	public void insertHoldRequest(int bid, int callNo, String stringdate) {
 
 		java.sql.Date date = java.sql.Date.valueOf(stringdate);
 		
 		PreparedStatement ps;
 		
 		try {
-			ps = con.prepareStatement("INSERT INTO holdRequest VALUES (?,?,?,?)");
-			ps.setInt(1, hid);
+			ps = con.prepareStatement("INSERT INTO holdRequest VALUES (hid_counter.nextval,?,?,?)");
+			//ps.setInt(1, "hid_counter.nextval");
 			ps.setInt(2, bid);
 			ps.setInt(3, callNo);
 			ps.setDate(4, date);
@@ -126,7 +126,7 @@ public class holdRequest {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 holdRequest testTable = new holdRequest();
-                testTable.insertHoldRequest(0, 0, 0, "2012-11-16");
+                //testTable.insertHoldRequest(0, 0, 0, "2012-11-16");
                 testTable.displayHoldRequest();
    //             testTable.deleteBorrower(12345);
             }
