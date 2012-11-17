@@ -1,4 +1,3 @@
-import java.io.*;
 import java.sql.*;
  
 public class Book {
@@ -16,7 +15,7 @@ public class Book {
 		
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT COUNT(1) FROM book WHERE book_isbn = " + isbn);
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM book WHERE book_isbn = " + isbn);
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
@@ -28,9 +27,34 @@ public class Book {
 		    System.out.println("Message: " + ex.getMessage());
 		}
 
-		System.out.println("no");
 		
 		return 0;
+		
+	}
+	
+	public int numCopies(int callNo) {
+		
+		Statement stmt;
+		ResultSet rs;
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM bookCopy WHERE book_callNo = " + callNo);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				System.out.println(count);
+				return count;
+			}
+			stmt.close();
+			
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		System.out.println("end 0");
+		return 0;
+
 		
 	}
 	
@@ -156,10 +180,11 @@ public class Book {
             public void run() {
                 Book testTable = new Book();
            //     testTable.insertBook(3, 2, "a", "b", "c", 0);
-                System.out.println("isbn 100");
-                testTable.checkBook(100);
-                System.out.println("isbn 1");
-                testTable.checkBook(1);                
+
+                testTable.numCopies(1);
+                testTable.numCopies(2);
+                testTable.numCopies(20102);                
+                
             }
         });
 	}
