@@ -52,8 +52,37 @@ public class Borrower{
 	 * currently borrowed and not yet returned, any outstanding fines and the hold 
 	 * requests that have been placed by the borrower
 	 */
-	public void checkAccount() {
-		
+	public void checkAccount(int id) {
+		Statement stmt;
+		ResultSet rs;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT book_callNo,bookCopy_copyNo,fine_amount,holdRequest_hid FROM fine,borrowing,holdRequest,bookCopy,borrower WHERE borrower.borr_bid=borrowing.borr_bid AND borrowing.book_callNo=bookCopy.book_callNo AND borrowing.bookCopy_copyNo=bookCopy.bookCopy_copyNo AND borrowing.borrowing_borid=fine.borrowing_borid AND borrower.borr_bid=holdRequest.borr_bid AND borrower.borr_bid=?");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numCols = rsmd.getColumnCount();
+			System.out.println(" ");
+			
+			for(int i=0; i < numCols; i++) {
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));
+			}
+			System.out.println(" ");
+			
+			while(rs.next()) {
+				int book_callNo = rs.getInt("book_callNo");
+				System.out.printf("%-10.10s", book_callNo);
+				int bookCopy_copyNo = rs.getInt("bookCopy_copyNo");
+				System.out.printf("%-20.20s", bookCopy_copyNo);
+				int fine_amount = rs.getInt("fine_amount");
+				System.out.printf("%-20.20s", fine_amount);
+				int holdRequest_hid = rs.getInt("holdRequest_hid");
+				System.out.printf("%-20.20s", holdRequest_hid);
+			}
+			stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
 	}
 	
 	/*
@@ -61,15 +90,26 @@ public class Borrower{
 	 * the system sends an email to the borrower and informs the library clerk 
 	 * to keep the book out of the shelves.
 	 */
-	public void placeHold() {
-		
+	public void placeHold(int bid, int callNo, String date) {
+		holdRequest hr = new holdRequest();
+		hr.insertHoldRequest(bid, callNo, date);
 	}
 	
 	/*
 	 * Pay a fine
 	 */
-	public void payFine(int amount) {
+	public void payFine(int amount, int bid) {
+		PreparedStatement ps;
 		
+		try {
+			ps = con.prepareStatement("UPDATE fine SET fine.fine_amount=(fine.fine_amount=?) WHERE borrower.borr_bid=? AND borrower.borr_bid=borrowing.borr_bid AND borrowing.borrowing_borid=fine.borrowing_borid");
+			con.commit();
+			ps.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
 	}
 
 }
