@@ -1,4 +1,3 @@
-import java.io.*;
 import java.sql.*;
 
 public class bookCopy {
@@ -7,16 +6,20 @@ public class bookCopy {
 		
 	}
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table BookCopy
-	public void insertBookCopy(int callNo, int copyNo, int status) {
+	public void insertBookCopy(int callNo, String status) {
+		
 		PreparedStatement ps;
 		try {
-			ps = con.prepareStatement("INSERT INTO bookCopy VALUES (?,?,?)");
+			
+			
+			Book book = new Book();
+			int copyNo = book.numCopies(callNo) + 1;
+			
+			ps = con.prepareStatement("INSERT INTO bookCopy VALUES (?," + copyNo + ",?)");
 			ps.setInt(1, callNo);
-			ps.setInt(2, copyNo);
-			ps.setInt(3, status);
+			ps.setString(2, status);
 			
 			ps.executeUpdate();
 			con.commit();
@@ -71,35 +74,54 @@ public class bookCopy {
 		
 	// Display all the rows of the table BookCopy
 	public void displayBookCopy() {
-		int callNo;
-		int copyNo;
-		int status;
+		String callNo;
+		String copyNo;
+		String status;
 		Statement stmt;
 		ResultSet rs;
-		
-//		try {
-//			stmt = con.createStatement();
-//			rs = stmt.executeQuery("SELECT * FROM bookCopy");
-//			ResultSetMetaData rsmd = rs.getMetaData();
-//			int numCols = rsmd.getColumnCount();
-//			System.out.println("");
-//			for (int i = 0; i < numCols; i++)
-//			{
-//				// get column name and print it
-//
-//				System.out.printf("%-15s", rsmd.getColumnName(i+1));  
-//			}
-//			System.out.println("");
-//			
-//			while (rs.next()) {
-//				callNo = rs.getInt("book_callNo");
-//				System.out.printf("%-10.10s", callNo);
-//				
-//				copyNo = rs.getInt("bookCopy_copyNo");
-//				
-//			}
-//
-//		}
+
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM bookCopy");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numCols = rsmd.getColumnCount();
+
+			System.out.println(" ");
+
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
+
+			while(rs.next()) {
+				callNo = rs.getString("book_callNo");
+				System.out.printf("\n%-10.10s", callNo);
+
+				copyNo = rs.getString("bookCopy_copyNo");
+				System.out.printf("%-20.20s", copyNo);
+
+				status = rs.getString("bookCopy_status");
+				System.out.printf("%-20.20s", status);
+			}
+			stmt.close();
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		}
 	}
 
+	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                bookCopy testTable = new bookCopy();
+                testTable.displayBookCopy();
+            }
+        });
+	}
+	
 }
