@@ -108,7 +108,7 @@ public class Borrower{
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
+		    //System.out.println("Message: " + ex.getMessage());
 		}
 	}
 
