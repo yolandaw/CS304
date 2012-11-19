@@ -14,7 +14,7 @@ public class borrowerTable {
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
-		int bid = 12345;
+		int bid = 20;
 		java.sql.Date date = java.sql.Date.valueOf("2012-12-12");
 		
 		try {
@@ -139,6 +139,30 @@ public class borrowerTable {
 		}
 	}
 	
+	
+	//checks if SIN or Stu. No. alreadt exists in database, if exists returns true, else false.
+	public boolean checkSinOrStNo(int sinOrStNo){
+		
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borr_sinorstno FROM borrower WHERE borr_sinorstno = " + sinOrStNo );
+			
+			while(rs.next()){
+				if (rs.getInt(1) == sinOrStNo){
+					return true;
+				}
+			}
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return false;
+		
+	}
+	
 	public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
@@ -146,8 +170,11 @@ public class borrowerTable {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
           //      testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
-                testTable.displayBorrower();
+                //testTable.displayBorrower();
    //             testTable.deleteBorrower(12345);
+                
+                  //testTable.insertBorrower("tom", "abc", "home", 333444, "ubc@email.com", 123456, "borrowertype");
+               System.out.println(testTable.checkSinOrStNo(123456));
             }
         });
 	}
