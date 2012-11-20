@@ -7,6 +7,30 @@ public class bookCopy {
 	}
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	
+	//check status of book copy
+	public String checkStatus(int callNo, int copyNo){
+		String returnStatus;
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT bookcopy_status FROM bookCopy WHERE book_callNo =" + callNo + "AND bookCopy_copyNo =" + copyNo);
+			while(rs.next()){
+				returnStatus = rs.getString(1);
+				return returnStatus;
+			}
+			stmt.close();
+		}
+
+		catch(SQLException e){
+			System.out.print("Message: " + e.getMessage());
+		}
+		
+		return "Unavailable";
+		
+	}
+	
 	// Insert a tuple into the table BookCopy
 	public void insertBookCopy(int callNo, String status) {
 		
@@ -120,6 +144,12 @@ public class bookCopy {
             public void run() {
                 bookCopy testTable = new bookCopy();
                 testTable.displayBookCopy();
+                System.out.println(" ");
+                System.out.println("check Status of:");
+                System.out.println("callNo 1 copy 10:  " + testTable.checkStatus(1, 10));
+                System.out.println("callNo 1 copy 1: " + testTable.checkStatus(1, 1));
+                System.out.println("callNo 1 copy 2: " + testTable.checkStatus(1, 2));
+                System.out.println("callNo 102 copy 2: " + testTable.checkStatus(102, 2));
             }
         });
 	}
