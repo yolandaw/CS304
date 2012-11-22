@@ -29,7 +29,7 @@ foreign key (book_callNo) references book);
 
 create table hasSubject
 (book_callNo integer not null,
-hasSubject subject varchar(30)
+hasSubject_subject varchar(30)
 foreign key (book_callNo) references book);
 
 create table bookCopy
