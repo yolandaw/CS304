@@ -9,6 +9,7 @@ import java.sql.Statement;
 public class holdRequest {
 
 	java.sql.Connection con = Connection.getInstance().getConnection();
+	CastDate newDate = new CastDate();
 	
 	public holdRequest() {
 		
@@ -16,8 +17,6 @@ public class holdRequest {
 	
 	// Insert a tuple into the table HoldRequest
 	public void insertHoldRequest(int bid, int callNo, String stringdate) {
-
-		java.sql.Date date = java.sql.Date.valueOf(stringdate);
 		
 		PreparedStatement ps;
 		
@@ -26,7 +25,7 @@ public class holdRequest {
 			//ps.setInt(1, "hid_counter.nextval");
 			ps.setInt(2, bid);
 			ps.setInt(3, callNo);
-			ps.setDate(4, date);
+			ps.setDate(4, newDate.currentDate());
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
@@ -132,5 +131,7 @@ public class holdRequest {
             }
         });
 	}
+
+
 
 }

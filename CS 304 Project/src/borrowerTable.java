@@ -1,5 +1,7 @@
 import java.io.*;
 import java.sql.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class borrowerTable {
 
@@ -9,14 +11,19 @@ public class borrowerTable {
 
 	}
 
+	CastDate newDate = new CastDate();
+	Calendar cal = Calendar.getInstance();
+
 	
 	// Insert a borrower into the table Borrower
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
-		int bid = 20210;
-		java.sql.Date date = java.sql.Date.valueOf("2012-12-12");
+		int bid = 20003;
 		
+		cal.getTime();
+		cal.add(cal.YEAR, 2);		
+	
 		try {
 			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES(?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, bid);
@@ -26,7 +33,7 @@ public class borrowerTable {
 			ps.setInt(5, phone);
 			ps.setString(6, email);
 			ps.setInt(7, sinOrStNo);
-			ps.setDate(8, date);
+			ps.setDate(8, newDate.getSQLDate(cal));
 			ps.setString(9, borrowerType);
 			ps.executeUpdate();
 			con.commit();		
@@ -104,7 +111,7 @@ public class borrowerTable {
 			
 			while(rs.next()) {
 				bid = rs.getInt("borr_bid");
-			    System.out.printf("\n%-10.10s", bid);
+			    System.out.printf("\n%-20.20s", bid);
 			    
 			    password = rs.getString("borr_password");
 			    System.out.printf("%-20.20s", password);
@@ -221,7 +228,7 @@ public class borrowerTable {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
-            //    testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "student");
+                testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "student");
                 //testTable.displayBorrower();
    //             testTable.deleteBorrower(12345);
                 
@@ -233,5 +240,7 @@ public class borrowerTable {
             }
         });
 	}
+
+
 
 }

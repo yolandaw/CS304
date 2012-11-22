@@ -13,7 +13,7 @@ public class Fine {
 	private BufferedReader in = new BufferedReader(new InputStreamReader(
 			System.in));
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	
+	CastDate newDate = new CastDate();
 
 	public Fine() {
 
@@ -25,15 +25,13 @@ public class Fine {
 
 		PreparedStatement ps;
 
-		java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
-		java.sql.Date paidD = java.sql.Date.valueOf("2012-12-12");
 		try {
 			ps = con.prepareStatement("INSERT INTO fine VALUES(?,?,?,?,?)");
 
 			ps.setInt(1, fid);
 			ps.setFloat(2, amount);
-			ps.setDate(3, issueD);
-			ps.setDate(4, paidD);
+			ps.setDate(3, newDate.currentDate());
+			ps.setDate(4, null);
 			ps.setInt(5, borid);
 
 			ps.executeUpdate();
@@ -90,29 +88,7 @@ public class Fine {
 
 	}
 	
-	//gets current date from system locale
-	public Date currentDate(){
-		
-		Calendar cal = Calendar.getInstance();
-		
-		java.util.Date utilDate = cal.getTime();
-		java.sql.Date SQLDate = new java.sql.Date(utilDate.getTime());
-		
-		return SQLDate;
-	}
-	
-	//returns a Gregorian calendar date type of the SQLDate
-	public Calendar getGDate(java.sql.Date SQLDate){
-		
-		Calendar cal = new GregorianCalendar();
-		
-		cal.setTime(SQLDate); 
-		
-		return cal;
-		
-		
-	}
-	
+	//unfinished
 	public void payAllFines(int bid){
 		PreparedStatement ps;
 		
@@ -136,7 +112,7 @@ public class Fine {
 		try{
 		ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = " + fid);
 
-		ps.setDate(1, currentDate());
+		ps.setDate(1, newDate.currentDate());
 		ps.executeUpdate();
 		con.commit();
 		ps.close();
@@ -308,8 +284,8 @@ public boolean checkFine(int bid) {
 				runFine.setPaidDate(10);
 				runFine.displayFine();
 				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
-				System.out.println(runFine.getGDate(issueD));
-				cal.setTime(runFine.getGDate(issueD).getTime());
+				//System.out.println(runFine.getGDate(issueD));
+				//cal.setTime(runFine.getGDate(issueD).getTime());
 				System.out.println(cal.getTime());
 				cal.add(cal.DATE, 20);
 				System.out.println(cal.getTime());
