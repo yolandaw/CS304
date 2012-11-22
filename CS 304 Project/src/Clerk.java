@@ -14,6 +14,7 @@ public class Clerk {
 
 		borrowerTable newBorrower = new borrowerTable();
 
+		
 		// check if SIN or St. No already exists
 		if (newBorrower.checkSinOrStNo(sinOrStNo) == true) {
 
@@ -30,7 +31,54 @@ public class Clerk {
 	public void checkOut(int bid, int callNo) {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
+		
+		Borrower currentBorrower = new Borrower();
+		currentBorrower.checkAccount(bid);
+		
+		boolean checkFines= getFines(bid);
+		
+		if (checkFines == false)
+		{
+			
+		}
+		
+		else 
+		{
+			System.out.println("Borrower has fines! Please pay fines before continuing"); 
+		}
+		
 	}
+	
+	
+	public boolean getFines(int bid){
+		Statement stmt;
+		ResultSet rs; 
+		boolean fineBool = false;
+
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT fine_fid FROM fine f, borrowing b, " +
+					"borrower br WHERE f.borrowing_bid = b.borrowing_bid AND b.borr_bid = " + bid);
+			
+
+			
+			while(rs.next()){
+				fineBool = true;
+			
+		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		return fineBool;
+
+		
+	}
+	
 
 	public void bookReturn() {
 		
