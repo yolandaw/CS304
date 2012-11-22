@@ -88,7 +88,7 @@ public class Fine {
 
 	}
 	
-	//unfinished
+	//make a payment that pays all fine ids belonging to the bid - unfinished
 	public void payAllFines(int bid){
 		PreparedStatement ps;
 		
@@ -102,6 +102,11 @@ public class Fine {
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
 		}
+	}
+	
+	//select a single fine to pay - unfinished
+	public void payAFine(int bid, int fid){
+		
 	}
 
 	//sets the fine paid date to current date
@@ -128,14 +133,14 @@ public class Fine {
 	}
 	
 	
-	//unfinished
+	//prints out a list of fines based on inputed BID
 	public void displayBIDFines(int bid){
 		Statement stmt;
 		ResultSet rs;
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
+			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
 			
 			ResultSetMetaData rsmd = rs.getMetaData();
 
@@ -183,86 +188,63 @@ public class Fine {
 		}
 		
 	}
-
-	// returns an array of fine IDs that match the given bid 
-/*	public int[] getFines(int bid){
-		Statement stmt;
-		ResultSet rs; 
-		int[] fineArray = null;
-		int size;
-
-		
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT fine_fid FROM fine f, borrowing b, borrower br WHERE f.borrowing_bid = b.borrowing_bid AND b.borr_bid = " + bid);
-			
-			size = rs.getFetchSize();
-			fineArray = new int[size];
-			
-			while(rs.next()){
-				for(int i = 0; i <= size; i++){
-					fineArray[i] = rs.getInt(1);
-				}
-			
-		}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
-		
-		return fineArray;
-
-		
-	}
-	*/
 	
-/*	public int getBorrowingFineID(int borid){
+	//returns all the unpaid fines of the inputed bid - unfinihsed
+	public void displayUnPaidFines(int bid){
 		Statement stmt;
 		ResultSet rs;
-		Statement stmt2;
-		ResultSet rs2;
+		java.sql.Date nullDate = null;
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT f.fine_fid FROM fine f, borrowing b WHERE f.borrowing_borid = b.borrowing_borid");
-			stmt2 = con.createStatement();
-			rs2 = stmt2.executeQuery("SELECT ");
+			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			int numCols = rsmd.getColumnCount();
+
+			System.out.println(" ");
+
+			for (int i = 0; i < numCols; i++) {
+
+				System.out.printf("%-20s", rsmd.getColumnName(i + 1));
+
+			}
+
+			System.out.println(" ");
+			
+			int fid;
+			float amount;
+			Date issueDate;
+			Date paidDate;
+			int borid;
+
+
+			while (rs.next()) {
+
+				fid = rs.getInt("fine_fid");
+				System.out.printf("%-20.20s", fid);
+
+				amount = rs.getFloat("fine_amount");
+				System.out.printf("%-20.20s", amount);
+
+				issueDate = rs.getDate("fine_issueDate");
+				System.out.printf("%-20.20s", issueDate);
+
+				paidDate = rs.getDate("fine_paidDate");
+				System.out.printf("%-20.20s", paidDate);
+
+				borid = rs.getInt("borrowing_borid");
+				System.out.printf("%-20.20s", borid);
+				System.out.println(" ");
+			}
+			stmt.close();
 		}
-		
-		catch(SQLException ex){
-			System.out.println("Message: " + ex.getMessage());
-			System.exit(-1);
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
 		}
-		return borid;
 		
 	}
 	
-public boolean checkFine(int bid) {
-		Statement stmt;
-		Statement stmt2;
-		ResultSet rs;
-		ResultSet rs2;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT COUNT(*)  FROM fine");
-			stmt2 = con.createStatement();
-			rs2 = stmt2.executeQuery("SELECT COUNT(*) FROM borrowing");
-
-			while (rs.next()) {
-				if (rs == rs2) {
-					System.out.println(rs);
-					System.out.println(rs2);
-					return true;
-				}
-			}
-		} catch (SQLException ex) {
-			System.out.println("Message:" + ex.getMessage());
-		}
-		return false;
-
-	}*/
 
 	// Display all the rows of the table Fine
 	public void displayFine() {
@@ -334,7 +316,7 @@ public boolean checkFine(int bid) {
 				Fine runFine = new Fine();
 				Calendar cal = Calendar.getInstance();
 				// runFine.connect("ora_v2e7","a75190090");
-				//runFine.insertFine(99, 20, "2012-12-12", "2012-12-12", 21);
+				runFine.insertFine(100, 20, "2012-12-12", null , 21);
 				// runFine.deleteFine(11);
 				//System.out.print(runFine.getBorrowingFineID(10));
 				//runFine.getFines(10);
