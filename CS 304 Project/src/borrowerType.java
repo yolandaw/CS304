@@ -104,5 +104,18 @@ public class borrowerType {
 		    System.out.println("Message: " + ex.getMessage());
 		}
 	}
+	
 
+	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                borrowerType testTable = new borrowerType();
+                
+                testTable.displayBorrowerType();
+            }
+        });
+	}
 }

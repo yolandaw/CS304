@@ -1,11 +1,16 @@
 import java.io.*;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 
 public class Librarian {
 
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
+	java.sql.Connection con = Connection.getInstance().getConnection();
 
 	public Librarian() {
 		// TODO Auto-generated constructor stub
@@ -69,6 +74,8 @@ public class Librarian {
 			}
 			
 			bookCopy copies = new bookCopy();
+
+
 			copies.insertBookCopy(callNo, status);
 		}
 
@@ -80,8 +87,59 @@ public class Librarian {
 
 
 
-	public void generateBookReport () {
+	public void generateBookReport() {
 
+		String bid;
+		String callNo;
+		String copyNo;
+		Date outDate;
+		Date inDate;
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borr_bid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numCols = rsmd.getColumnCount();
+			
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
+			
+			System.out.printf("%-15s", "Overdue?");  
+
+			while(rs.next()) {
+				callNo = rs.getString("book_callNo");
+				System.out.printf("\n%-10.10s", callNo);
+
+				copyNo = rs.getString("bookCopy_copyNo");
+				System.out.printf("%-20.20s", copyNo);
+
+				bid = rs.getString("borr_bid");
+				System.out.printf("%-20.20s", bid);
+				
+				outDate = rs.getDate("borrowing_outDate");
+				System.out.printf("%-20.20s", outDate);	
+				
+				inDate = rs.getDate("borrowing_inDate");
+				System.out.printf("%-20.20s", inDate);		
+				
+				
+				
+				if () {
+					
+				}
+			}
+			stmt.close();
+		}
+
+		catch(SQLException e){
+			System.out.print("Message: " + e.getMessage());
+		}
+		
 	}
 
 	public void generatePopularBooksReport () {
@@ -96,7 +154,7 @@ public class Librarian {
 				Librarian librarian = new Librarian();
 				//     testTable.insertBook(3, 2, "a", "b", "c", 0);
 
-				librarian.addBook();               
+				librarian.generateBookReport();               
 
 			}
 		});

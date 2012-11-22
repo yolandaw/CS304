@@ -14,7 +14,7 @@ public class borrowerTable {
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
-		int bid = 20;
+		int bid = 20210;
 		java.sql.Date date = java.sql.Date.valueOf("2012-12-12");
 		
 		try {
@@ -83,7 +83,7 @@ public class borrowerTable {
 		int phone;
 		String email;
 		int sinOrStNo;
-		String date;
+		Date date;
 		String type;
 		Statement stmt;
 		ResultSet rs;
@@ -99,12 +99,12 @@ public class borrowerTable {
 			for (int i = 0; i < numCols; i++)
 			{
 		      // get column name and print it
-		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+		      System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 			
 			while(rs.next()) {
 				bid = rs.getInt("borr_bid");
-			    System.out.printf("%-10.10s", bid);
+			    System.out.printf("\n%-10.10s", bid);
 			    
 			    password = rs.getString("borr_password");
 			    System.out.printf("%-20.20s", password);
@@ -124,10 +124,10 @@ public class borrowerTable {
 			    sinOrStNo = rs.getInt("borr_sinOrStNo");
 			    System.out.printf("%-20.20s", sinOrStNo);
 			    
-			    date = rs.getString("borr_expiryDate");
+			    date = rs.getDate("borr_expiryDate");
 			    System.out.printf("%-20.20s", date);
 			    
-			    type = rs.getString("borr_type");
+			    type = rs.getString("bt_type");
 			    System.out.printf("%-20.20s", type);
 			 
 			}
@@ -163,18 +163,48 @@ public class borrowerTable {
 		
 	}
 	
+	public String checkBorrowerType(int bid) {
+		
+		String type;
+		Statement stmt;
+		ResultSet rs;
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borrowerType.bt_type FROM borrowerType JOIN borrower ON borrower.bt_type = borrowerType.bt_type WHERE borrower.borr_bid = " + bid);
+	
+			while(rs.next()) {
+				type = rs.getString("bt_type");
+				System.out.printf("\n\n%-10.10s", type);
+				return type;
+			}
+			stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		return null;
+		
+		
+	}
+
+	
 	public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
-          //      testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "borrowertype");
+            //    testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "student");
                 //testTable.displayBorrower();
    //             testTable.deleteBorrower(12345);
                 
-                  //testTable.insertBorrower("tom", "abc", "home", 333444, "ubc@email.com", 123456, "borrowertype");
-               System.out.println(testTable.checkSinOrStNo(123456));
+           //  testTable.insertBorrower("tom", "abc", "home", 333444, "ubc@email.com", 123456, "student");
+               //System.out.println(testTable.checkSinOrStNo(123456));
+            testTable.displayBorrower();
+            testTable.checkBorrowerType(20210);
+            
             }
         });
 	}
