@@ -102,7 +102,7 @@ public class Borrower{
 		PreparedStatement ps;
 		
 		try {
-			ps = con.prepareStatement("UPDATE fine SET fine.fine_amount=(fine.fine_amount=?) WHERE borrower.borr_bid=? AND borrower.borr_bid=borrowing.borr_bid AND borrowing.borrowing_borid=fine.borrowing_borid");
+			ps = con.prepareStatement("UPDATE fine SET fine.fine_amount=(fine.fine_amount-?) WHERE borrower.borr_bid=? AND borrower.borr_bid=borrowing.borr_bid AND borrowing.borrowing_borid=fine.borrowing_borid");
 			con.commit();
 			ps.close();
 		}
