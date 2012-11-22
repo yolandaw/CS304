@@ -67,6 +67,7 @@ public class Borrowing {
 		    }
 		}
 	}
+		
 	
 	// Display all the rows of the table Borrowing
 	public void displayBorrowing() {
