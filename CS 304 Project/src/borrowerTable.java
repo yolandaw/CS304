@@ -19,10 +19,14 @@ public class borrowerTable {
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
-		int bid = 20003;
+		int bid = 20018;
 		
+		//getting current day borrower was created and then setting the expiry date to 2 years later
 		cal.getTime();
-		cal.add(cal.YEAR, 2);		
+		cal.add(cal.YEAR, 2);
+		java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
+
+		
 	
 		try {
 			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES(?,?,?,?,?,?,?,?,?)");
@@ -33,7 +37,7 @@ public class borrowerTable {
 			ps.setInt(5, phone);
 			ps.setString(6, email);
 			ps.setInt(7, sinOrStNo);
-			ps.setDate(8, newDate.getSQLDate(cal));
+			ps.setDate(8, newDate.addToDate(issueD, 2000)); //newDate.getSQLDate(cal)
 			ps.setString(9, borrowerType);
 			ps.executeUpdate();
 			con.commit();		
