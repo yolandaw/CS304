@@ -28,23 +28,24 @@ public class Clerk {
 
 	}
 
-	public void checkOut(int bid, int callNo) {
+	public void checkOut(int bid, int callNo, int copyNo) {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
 		
-		Borrower currentBorrower = new Borrower();
-		currentBorrower.checkAccount(bid);
+		Borrowing currBorr = new Borrowing();
+		bookCopy bookCopy = new bookCopy();
+		String copyStatus = bookCopy.checkStatus(callNo, copyNo);
 		
 		boolean checkFines= getFines(bid);
 		
-		if (checkFines == false)
+		if (checkFines == true)
 		{
-			
+			System.out.println("Borrower has fines! Please pay fines before continuing");
 		}
 		
 		else 
 		{
-			System.out.println("Borrower has fines! Please pay fines before continuing"); 
+			 
 		}
 		
 	}
@@ -54,15 +55,11 @@ public class Clerk {
 		Statement stmt;
 		ResultSet rs; 
 		boolean fineBool = false;
-
 		
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT fine_fid FROM fine f, borrowing b, " +
 					"borrower br WHERE f.borrowing_bid = b.borrowing_bid AND b.borr_bid = " + bid);
-			
-
-			
 			while(rs.next()){
 				fineBool = true;
 			
@@ -71,12 +68,7 @@ public class Clerk {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		
-		
 		return fineBool;
-
-		
 	}
 	
 
