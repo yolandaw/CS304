@@ -23,7 +23,7 @@ public class borrowerTable {
 		
 		//getting current day borrower was created and then setting the expiry date to 2 years later
 		cal.getTime();
-		cal.add(cal.YEAR, 2);
+		cal.add(cal.YEAR, 2); //use with newDate.getSQLDate(cal) line
 		java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
 
 		
