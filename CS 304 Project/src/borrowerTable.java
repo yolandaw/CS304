@@ -188,6 +188,31 @@ public class borrowerTable {
 		
 		
 	}
+	
+	public int getTimeLimit(String type) {
+
+		int timeLimit;
+		Statement stmt;
+		ResultSet rs;
+		
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borrowerType.bt_bookTimeLimit FROM borrowerType WHERE borrowerType.bt_type = '" + type + "'");
+	
+			while(rs.next()) {
+				timeLimit = rs.getInt("bt_bookTimeLimit");
+				System.out.printf("\n\n%-10.10s", timeLimit);
+				return timeLimit;
+			}
+			stmt.close();
+		}
+		catch (SQLException ex)
+		{
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		return 0;
+		
+	}
 
 	
 	public static void main(String[] args) {
@@ -204,7 +229,7 @@ public class borrowerTable {
                //System.out.println(testTable.checkSinOrStNo(123456));
             testTable.displayBorrower();
             testTable.checkBorrowerType(20210);
-            
+            testTable.getTimeLimit("student");
             }
         });
 	}

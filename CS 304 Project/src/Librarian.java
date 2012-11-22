@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.*;
 
 
 
@@ -89,13 +90,15 @@ public class Librarian {
 
 	public void generateBookReport() {
 
-		String bid;
+		int bid;
 		String callNo;
 		String copyNo;
 		Date outDate;
 		Date inDate;
 		Statement stmt;
 		ResultSet rs;
+		
+		borrowerTable borrowerTable = new borrowerTable();
 		
 		try{
 			stmt = con.createStatement();
@@ -118,7 +121,7 @@ public class Librarian {
 				copyNo = rs.getString("bookCopy_copyNo");
 				System.out.printf("%-20.20s", copyNo);
 
-				bid = rs.getString("borr_bid");
+				bid = rs.getInt("borr_bid");
 				System.out.printf("%-20.20s", bid);
 				
 				outDate = rs.getDate("borrowing_outDate");
@@ -127,11 +130,14 @@ public class Librarian {
 				inDate = rs.getDate("borrowing_inDate");
 				System.out.printf("%-20.20s", inDate);		
 				
+				String type = borrowerTable.checkBorrowerType(bid);
+				int timeLimit = borrowerTable.getTimeLimit(type);
 				
+				GregorianCalendar gregCalendar = new GregorianCalendar();
 				
-//				if () {
-//					
-//				}
+				if () {
+					
+				}
 			}
 			stmt.close();
 		}

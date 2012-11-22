@@ -92,7 +92,7 @@ public class borrowerType {
 			
 			while(rs.next()) {
 				type = rs.getString("bt_type");
-				System.out.printf("%-10.10s", type);
+				System.out.printf("\n%-10.10s", type);
 				
 				bookTimeLimit = rs.getString("bt_bookTimeLimit");
 				System.out.printf("%-10.10s", bookTimeLimit);
