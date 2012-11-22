@@ -7,7 +7,6 @@ import java.lang.Object;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-
 public class Fine {
 
 	private BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -61,7 +60,7 @@ public class Fine {
 		PreparedStatement ps;
 
 		try {
-			ps = con.prepareStatement("DELETE FROM fine WHERE fine_fid = ?" );
+			ps = con.prepareStatement("DELETE FROM fine WHERE fine_fid = ?");
 			ps.setInt(1, fid);
 
 			int rowCount = ps.executeUpdate();
@@ -88,60 +87,120 @@ public class Fine {
 
 	}
 	
-	//make a payment that pays all fine ids belonging to the bid - unfinished
-	public void payAllFines(int bid){
-		PreparedStatement ps;
+	// check if the borrower with bid has any unpaid fines, if there is 1 or more fines then returns true, else returns false
+	public boolean checkHasFines(int bid){
 		
-		try{
-			ps = con.prepareStatement("");
+		int count = 0;
+		Statement stmt;
+		ResultSet rs;
+
+		try {
+			stmt = con.createStatement();
+			rs = stmt
+					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+		
+			while (rs.next()) {
 			
+				count = count + 1;
+
+			}
+			stmt.close();
+			
+			if(count > 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+
+		}
+
+		catch(SQLException e){
+			
+		}
+			return false;
+	
+	}
+
+	// make a payment that pays all fine ids belonging to the bid - unfinished
+	public void payAllFines(int bid) {
+		PreparedStatement ps;
+
+		try {
+			ps = con.prepareStatement("UPDATE fine f SET f.fine_paiddate = ? WHERE (SELECT f.fine_fid FROM fine f borrowing b borrower br WHERE b.borr_bid = "
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+			
+			ps.setDate(1, newDate.currentDate());
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
 		}
 	}
-	
-	//select a single fine to pay - unfinished
-	public void payAFine(int bid, int fid){
-		
+
+	// select a single fine to pay - unfinished
+	public void payAFine(int bid, int fid) {
+
 	}
 
-	//sets the fine paid date to current date
-	public void setPaidDate(int fid){
-		
-		PreparedStatement ps; 
-		
-		try{
-		ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = " + fid);
+	// sets the fine paid date to current date
+	public void setPaidDate(int fid) {
 
-		ps.setDate(1, newDate.currentDate());
-		ps.executeUpdate();
-		con.commit();
-		ps.close();
-		
+		PreparedStatement ps;
+
+		try {
+			ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = "
+					+ fid);
+
+			ps.setDate(1, newDate.currentDate());
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+
 		}
-		
-		catch(SQLException e){
+
+		catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
 			System.exit(-1);
 		}
-		
 
 	}
 	
-	
-	//prints out a list of fines based on inputed BID
-	public void displayBIDFines(int bid){
+	public void setPaidDateToNull(int fid) {
+
+		PreparedStatement ps;
+
+		try {
+			ps = con.prepareStatement("UPDATE fine SET fine_paiddate = NULL WHERE fine_fid = "
+					+ fid);
+
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+
+		}
+
+		catch (SQLException e) {
+			System.out.println("Message: " + e.getMessage());
+			System.exit(-1);
+		}
+
+	}
+
+
+	// prints out a list of fines based on inputed BID
+	public void displayBIDFines(int bid) {
 		Statement stmt;
 		ResultSet rs;
-		
-		try{
+
+		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
-			
+			rs = stmt
+					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			int numCols = rsmd.getColumnCount();
@@ -151,17 +210,15 @@ public class Fine {
 			for (int i = 0; i < numCols; i++) {
 
 				System.out.printf("%-20s", rsmd.getColumnName(i + 1));
-
 			}
 
 			System.out.println(" ");
-			
+
 			int fid;
 			float amount;
 			Date issueDate;
 			Date paidDate;
 			int borid;
-
 
 			while (rs.next()) {
 
@@ -182,22 +239,22 @@ public class Fine {
 				System.out.println(" ");
 			}
 			stmt.close();
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-		
+
 	}
-	
-	//returns all the unpaid fines of the inputed bid - unfinihsed
-	public void displayUnPaidFines(int bid){
+
+	// returns all the unpaid fines of the inputed bid - unfinihsed
+	public void displayUnPaidFines(int bid) {
 		Statement stmt;
 		ResultSet rs;
-		java.sql.Date nullDate = null;
-		
-		try{
+
+		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
+			rs = stmt
+					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			int numCols = rsmd.getColumnCount();
@@ -211,13 +268,12 @@ public class Fine {
 			}
 
 			System.out.println(" ");
-			
+
 			int fid;
 			float amount;
 			Date issueDate;
 			Date paidDate;
 			int borid;
-
 
 			while (rs.next()) {
 
@@ -238,13 +294,11 @@ public class Fine {
 				System.out.println(" ");
 			}
 			stmt.close();
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-		
+
 	}
-	
 
 	// Display all the rows of the table Fine
 	public void displayFine() {
@@ -293,7 +347,6 @@ public class Fine {
 				borid = rs.getInt("borrowing_borid");
 				System.out.printf("%-20.20s", borid);
 				System.out.println(" ");
-				
 
 			}
 
@@ -305,8 +358,6 @@ public class Fine {
 			System.out.println("Message:" + ex.getMessage());
 
 		}
-		
-		
 
 	}
 
@@ -316,20 +367,30 @@ public class Fine {
 				Fine runFine = new Fine();
 				Calendar cal = Calendar.getInstance();
 				// runFine.connect("ora_v2e7","a75190090");
-				runFine.insertFine(100, 20, "2012-12-12", null , 21);
+				//runFine.insertFine(100, 20, "2012-12-12", null, 21);
 				// runFine.deleteFine(11);
-				//System.out.print(runFine.getBorrowingFineID(10));
-				//runFine.getFines(10);
-				runFine.setPaidDate(10);
-				runFine.displayFine();
-				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
-				//System.out.println(runFine.getGDate(issueD));
-				//cal.setTime(runFine.getGDate(issueD).getTime());
-				System.out.println(cal.getTime());
-				cal.add(cal.DATE, 20);
-				System.out.println(cal.getTime());
-				runFine.displayBIDFines(10);
+				// System.out.print(runFine.getBorrowingFineID(10));
+				// runFine.getFines(10);
+//				runFine.setPaidDate(100);
+//				runFine.setPaidDate(2);
+//				runFine.setPaidDate(99);
+//				runFine.setPaidDate(10);
+//				System.out.println("All rows");
+//				runFine.displayFine();
+//				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
+				// System.out.println(runFine.getGDate(issueD));
+				// cal.setTime(runFine.getGDate(issueD).getTime());
+//				System.out.println(cal.getTime());
+//				cal.add(cal.DATE, 20);
+//				System.out.println(cal.getTime());
+//				System.out.println("Null rows");
+//				runFine.displayBIDFines(10);
+				runFine.payAllFines(10);
+//				runFine.setPaidDateToNull(10);
+//				runFine.displayFine();
+//				System.out.println(runFine.checkHasFines(10));
 				
+
 			}
 		});
 
