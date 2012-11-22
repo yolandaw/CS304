@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.lang.Object;
 import java.util.Arrays;
 import java.util.Calendar;
-
+import java.sql.Timestamp;
 public class Fine {
 
 	private BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -93,10 +93,12 @@ public class Fine {
 	public void setPaidDate(int fid){
 		
 		PreparedStatement ps; 
-		java.sql.Date pDate = (Date) cal.getTime();
+		java.sql.Timestamp t = new java.sql.Timestamp(cal.getTimeInMillis());
+		//java.sql.Date pDate = java.sql.Date.
 		try{
-		ps = con.prepareStatement("UPDATE fine SET fine_paidDate = ?, WHERE fine_fid =" + fid);
-		ps.setDate(1, pDate);
+		ps = con.prepareStatement("UPDATE fine SET fine_paidDate =?, WHERE fine_fid =" + fid);
+		ps.setTimestamp(1,t);
+		System.out.println(t);
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -105,7 +107,7 @@ public class Fine {
 	}
 
 	// returns an array of fine IDs that match the given bid 
-	public int[] getFines(int bid){
+/*	public int[] getFines(int bid){
 		Statement stmt;
 		ResultSet rs; 
 		int[] fineArray = null;
@@ -136,7 +138,7 @@ public class Fine {
 
 		
 	}
-	
+	*/
 	
 /*	public int getBorrowingFineID(int borid){
 		Statement stmt;
@@ -249,11 +251,11 @@ public boolean checkFine(int bid) {
 			public void run() {
 				Fine runFine = new Fine();
 				// runFine.connect("ora_v2e7","a75190090");
-				// runFine.insertFine(10, 20, "2012-12-12", "2012-12-12", 20);
+				//runFine.insertFine(99, 20, "2012-12-12", "2012-12-12", 21);
 				// runFine.deleteFine(11);
 				//System.out.print(runFine.getBorrowingFineID(10));
 				runFine.displayFine();
-				runFine.getFines(10);
+				//runFine.getFines(10);
 				runFine.setPaidDate(10);
 
 			}
