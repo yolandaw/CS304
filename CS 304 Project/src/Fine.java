@@ -126,6 +126,63 @@ public class Fine {
 		
 
 	}
+	
+	
+	//unfinished
+	public void displayBIDFines(int bid){
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM fine f, borrowing b, borrower br WHERE b.borr_bid = " + bid + "AND b.borrowing_borid = f.borrowing_borid");
+			
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			int numCols = rsmd.getColumnCount();
+
+			System.out.println(" ");
+
+			for (int i = 0; i < numCols; i++) {
+
+				System.out.printf("%-20s", rsmd.getColumnName(i + 1));
+
+			}
+
+			System.out.println(" ");
+			
+			int fid;
+			float amount;
+			Date issueDate;
+			Date paidDate;
+			int borid;
+
+
+			while (rs.next()) {
+
+				fid = rs.getInt("fine_fid");
+				System.out.printf("%-20.20s", fid);
+
+				amount = rs.getFloat("fine_amount");
+				System.out.printf("%-20.20s", amount);
+
+				issueDate = rs.getDate("fine_issueDate");
+				System.out.printf("%-20.20s", issueDate);
+
+				paidDate = rs.getDate("fine_paidDate");
+				System.out.printf("%-20.20s", paidDate);
+
+				borid = rs.getInt("borrowing_borid");
+				System.out.printf("%-20.20s", borid);
+				System.out.println(" ");
+			}
+			stmt.close();
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
+	}
 
 	// returns an array of fine IDs that match the given bid 
 /*	public int[] getFines(int bid){
@@ -289,6 +346,7 @@ public boolean checkFine(int bid) {
 				System.out.println(cal.getTime());
 				cal.add(cal.DATE, 20);
 				System.out.println(cal.getTime());
+				runFine.displayBIDFines(10);
 				
 			}
 		});
