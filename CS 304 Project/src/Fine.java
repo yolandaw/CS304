@@ -4,16 +4,16 @@ import java.sql.*;
 import java.io.*;
 import java.sql.Date;
 import java.lang.Object;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.sql.Timestamp;
+import java.util.GregorianCalendar;
+
+
 public class Fine {
 
 	private BufferedReader in = new BufferedReader(new InputStreamReader(
 			System.in));
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	
-	Calendar cal = Calendar.getInstance();
 
 	public Fine() {
 
@@ -90,20 +90,65 @@ public class Fine {
 
 	}
 	
-	public void setPaidDate(int fid){
+	//gets current date from system locale
+	public Date currentDate(){
 		
-		PreparedStatement ps; 
-		java.sql.Timestamp t = new java.sql.Timestamp(cal.getTimeInMillis());
-		//java.sql.Date pDate = java.sql.Date.
+		Calendar cal = Calendar.getInstance();
+		
+		java.util.Date utilDate = cal.getTime();
+		java.sql.Date SQLDate = new java.sql.Date(utilDate.getTime());
+		
+		return SQLDate;
+	}
+	
+	//returns a Gregorian calendar date type of the SQLDate
+	public Calendar getGDate(java.sql.Date SQLDate){
+		
+		Calendar cal = new GregorianCalendar();
+		
+		cal.setTime(SQLDate); 
+		
+		return cal;
+		
+		
+	}
+	
+	public void payAllFines(int bid){
+		PreparedStatement ps;
+		
 		try{
-		ps = con.prepareStatement("UPDATE fine SET fine_paidDate =?, WHERE fine_fid =" + fid);
-		ps.setTimestamp(1,t);
-		System.out.println(t);
+			ps = con.prepareStatement("");
+			
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
 		}
+	}
+
+	//sets the fine paid date to current date
+	public void setPaidDate(int fid){
 		
+		PreparedStatement ps; 
+		
+		try{
+		ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = " + fid);
+
+		ps.setDate(1, currentDate());
+		ps.executeUpdate();
+		con.commit();
+		ps.close();
+		
+		}
+		
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+			System.exit(-1);
+		}
+		
+
 	}
 
 	// returns an array of fine IDs that match the given bid 
@@ -210,7 +255,7 @@ public boolean checkFine(int bid) {
 
 			for (int i = 0; i < numCols; i++) {
 
-				System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+				System.out.printf("%-20s", rsmd.getColumnName(i + 1));
 
 			}
 
@@ -219,7 +264,7 @@ public boolean checkFine(int bid) {
 			while (rs.next()) {
 
 				fid = rs.getInt("fine_fid");
-				System.out.printf("%-10.10s", fid);
+				System.out.printf("%-20.20s", fid);
 
 				amount = rs.getFloat("fine_amount");
 				System.out.printf("%-20.20s", amount);
@@ -232,6 +277,8 @@ public boolean checkFine(int bid) {
 
 				borid = rs.getInt("borrowing_borid");
 				System.out.printf("%-20.20s", borid);
+				System.out.println(" ");
+				
 
 			}
 
@@ -243,6 +290,8 @@ public boolean checkFine(int bid) {
 			System.out.println("Message:" + ex.getMessage());
 
 		}
+		
+		
 
 	}
 
@@ -250,14 +299,21 @@ public boolean checkFine(int bid) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Fine runFine = new Fine();
+				Calendar cal = Calendar.getInstance();
 				// runFine.connect("ora_v2e7","a75190090");
 				//runFine.insertFine(99, 20, "2012-12-12", "2012-12-12", 21);
 				// runFine.deleteFine(11);
 				//System.out.print(runFine.getBorrowingFineID(10));
-				runFine.displayFine();
 				//runFine.getFines(10);
 				runFine.setPaidDate(10);
-
+				runFine.displayFine();
+				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
+				System.out.println(runFine.getGDate(issueD));
+				cal.setTime(runFine.getGDate(issueD).getTime());
+				System.out.println(cal.getTime());
+				cal.add(cal.DATE, 20);
+				System.out.println(cal.getTime());
+				
 			}
 		});
 
