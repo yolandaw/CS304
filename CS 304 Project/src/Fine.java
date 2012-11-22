@@ -5,12 +5,15 @@ import java.io.*;
 import java.sql.Date;
 import java.lang.Object;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class Fine {
 
 	private BufferedReader in = new BufferedReader(new InputStreamReader(
 			System.in));
 	java.sql.Connection con = Connection.getInstance().getConnection();
+	
+	Calendar cal = Calendar.getInstance();
 
 	public Fine() {
 
@@ -60,7 +63,7 @@ public class Fine {
 		PreparedStatement ps;
 
 		try {
-			ps = con.prepareStatement("DELETE FROM fine WHERE fine_fid = ?");
+			ps = con.prepareStatement("DELETE FROM fine WHERE fine_fid = ?" );
 			ps.setInt(1, fid);
 
 			int rowCount = ps.executeUpdate();
@@ -85,6 +88,20 @@ public class Fine {
 			}
 		}
 
+	}
+	
+	public void setPaidDate(int fid){
+		
+		PreparedStatement ps; 
+		java.sql.Date pDate = (Date) cal.getTime();
+		try{
+		ps = con.prepareStatement("UPDATE fine SET fine_paidDate = ?, WHERE fine_fid =" + fid);
+		ps.setDate(1, pDate);
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
 	}
 
 	// returns an array of fine IDs that match the given bid 
@@ -237,6 +254,7 @@ public boolean checkFine(int bid) {
 				//System.out.print(runFine.getBorrowingFineID(10));
 				runFine.displayFine();
 				runFine.getFines(10);
+				runFine.setPaidDate(10);
 
 			}
 		});
