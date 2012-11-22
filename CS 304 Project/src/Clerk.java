@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.Calendar;
 
 
 public class Clerk {
 
 	java.sql.Connection con = Connection.getInstance().getConnection();
+	Calendar cal = Calendar.getInstance();
 
 	public Clerk() {
 		// TODO Auto-generated constructor stub
@@ -28,6 +32,7 @@ public class Clerk {
 
 	}
 
+
 	public void checkOut(int bid, int callNo, int copyNo) {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
@@ -35,6 +40,7 @@ public class Clerk {
 		Borrowing currBorr = new Borrowing();
 		bookCopy bookCopy = new bookCopy();
 		String copyStatus = bookCopy.checkStatus(callNo, copyNo);
+		java.sql.Date pDate = (Date) cal.getTime();
 		
 		boolean checkFines= getFines(bid);
 		
@@ -43,9 +49,15 @@ public class Clerk {
 			System.out.println("Borrower has fines! Please pay fines before continuing");
 		}
 		
+		else if (copyStatus != "in")
+		{
+			System.out.println("Sorry, the book is" + copyStatus);
+		}
+		
 		else 
 		{
-			 
+			 currBorr.insertBorrowing(123, bid, callNo, copyNo, pDate, null);
+			 System.out.println("Success! Return Date: ");
 		}
 		
 	}
@@ -72,8 +84,41 @@ public class Clerk {
 	}
 	
 
-	public void bookReturn() {
+	public void bookReturn(int callNo, int copyNo) {
 		
+		
+	}
+	
+	
+	// Insert a tuple into the table Borrowing
+	public void returnBook(int callNo, int copyNo) {
+		try {
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(?,?,?,?,?,?)");
+			ps.setInt(1, borid);
+			ps.setInt(2, bid);
+			ps.setInt(3, callNo);
+			ps.setInt(4, copyNo);
+			ps.setDate(5, outDate);
+			ps.setDate(6, inDate);
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		    try 
+		    {
+			// undo the insert
+			con.rollback();	
+		    }
+		    catch (SQLException ex2)
+		    {
+			System.out.println("Message: " + ex2.getMessage());
+			System.exit(-1);
+		    }
+
+		}
 	}
 
 	public void checkOverdue() {
