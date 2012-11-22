@@ -20,6 +20,7 @@ public class CastDate {
 	}
 	
 	//add number of days via 365 days a year to the sql you pass through
+	//for an alternate way to add time period to date instead of this function, refer to borrowerTable insertBorrower
 	public Date addToDate(java.sql.Date date, int days){
 		
 		Calendar cal = new GregorianCalendar();
