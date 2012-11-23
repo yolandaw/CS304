@@ -16,16 +16,16 @@ public class holdRequest {
 	}
 	
 	// Insert a tuple into the table HoldRequest
-	public void insertHoldRequest(int bid, int callNo, String stringdate) {
+	public void insertHoldRequest(int bid, int callNo) {
 		
 		PreparedStatement ps;
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO holdRequest VALUES (hid_counter.nextval,?,?,?)");
-			//ps.setInt(1, "hid_counter.nextval");
-			ps.setInt(2, bid);
-			ps.setInt(3, callNo);
-			ps.setDate(4, newDate.currentDate());
+			//ps.setInt(1, null);
+			ps.setInt(1, bid);
+			ps.setInt(2, callNo);
+			ps.setDate(3, newDate.currentDate());
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
@@ -84,7 +84,7 @@ public class holdRequest {
 		
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM book");
+			rs = stmt.executeQuery("SELECT * FROM holdRequest");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numCols = rsmd.getColumnCount();
 
@@ -125,9 +125,9 @@ public class holdRequest {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 holdRequest testTable = new holdRequest();
-                //testTable.insertHoldRequest(0, 0, 0, "2012-11-16");
+                //testTable.displayHoldRequest();
                 testTable.displayHoldRequest();
-   //             testTable.deleteBorrower(12345);
+                
             }
         });
 	}
