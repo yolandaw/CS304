@@ -113,8 +113,7 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid
-							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 
 			while (rs.next()) {
 
@@ -148,8 +147,7 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid
-							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 
 			while (rs.next()) {
 				ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = "
@@ -160,9 +158,18 @@ public class Fine {
 				con.commit();
 				ps.close();
 			}
-		} catch (SQLException e) {
-			System.out.println("Message: " + e.getMessage());
 		}
+			catch (SQLException ex) {
+				System.out.println("Message:" + ex.getMessage());
+
+				try {
+					con.rollback();
+				} catch (SQLException ex2) {
+					System.out.println("Message:" + ex2.getMessage());
+					System.exit(-1);
+				}
+			}
+
 	}
 
 	// sets the fine paid date to current date (or is equivalent to paying a
@@ -182,10 +189,17 @@ public class Fine {
 
 		}
 
-		catch (SQLException e) {
-			System.out.println("Message: " + e.getMessage());
-			System.exit(-1);
+		catch (SQLException ex) {
+			System.out.println("Message:" + ex.getMessage());
+
+			try {
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message:" + ex2.getMessage());
+				System.exit(-1);
+			}
 		}
+
 
 	}
 
@@ -204,10 +218,17 @@ public class Fine {
 
 		}
 
-		catch (SQLException e) {
-			System.out.println("Message: " + e.getMessage());
-			System.exit(-1);
+		catch (SQLException ex) {
+			System.out.println("Message:" + ex.getMessage());
+
+			try {
+				con.rollback();
+			} catch (SQLException ex2) {
+				System.out.println("Message:" + ex2.getMessage());
+				System.exit(-1);
+			}
 		}
+
 
 	}
 
@@ -275,8 +296,7 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid
-							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			int numCols = rsmd.getColumnCount();
