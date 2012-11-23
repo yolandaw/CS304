@@ -186,7 +186,6 @@ public class borrowerTable {
 	
 			while(rs.next()) {
 				type = rs.getString("bt_type");
-				System.out.printf("\n\n%-10.10s", type);
 				return type;
 			}
 			stmt.close();
@@ -212,7 +211,6 @@ public class borrowerTable {
 	
 			while(rs.next()) {
 				timeLimit = rs.getInt("bt_bookTimeLimit");
-				System.out.printf("\n\n%-10.10s", timeLimit);
 				return timeLimit;
 			}
 			stmt.close();
