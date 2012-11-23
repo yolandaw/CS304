@@ -26,6 +26,7 @@ public class Fine {
 		try {
 			ps = con.prepareStatement("INSERT INTO fine VALUES(?,?,?,NULL,?)");
 
+			
 			ps.setInt(1, fid);
 			ps.setFloat(2, amount);
 			ps.setDate(3, newDate.currentDate());
