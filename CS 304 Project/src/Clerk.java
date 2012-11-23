@@ -66,6 +66,7 @@ public class Clerk {
 		
 		Fine currFine = new Fine();
 		
+		
 		if (currFine.checkHasFines(bid) == true)
 		{
 			System.out.println("Borrower has fines! Please pay fine before continuing.");
