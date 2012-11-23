@@ -93,15 +93,15 @@ public class holdRequest {
 			for (int i = 0; i < numCols; i++)
 			{
 		      // get column name and print it
-		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+		      System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 			
 			while(rs.next()) {
 				hid = rs.getInt("holdRequest_hid");
-			    System.out.printf("%-10.10s", hid);
+			    System.out.printf("\n%-10.10s", hid);
 			    
 			    bid = rs.getInt("borr_bid");
-			    System.out.printf("%-20.20s", bid);
+			    System.out.printf("%-30.30s", bid);
 			    
 			    callNo = rs.getInt("book_callNo");
 			    System.out.printf("%-20.20s", callNo);

@@ -73,7 +73,7 @@ public class Borrower{
 		ResultSet rs;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT bc.book_callNo,bc.bookCopy_copyNo,f.fine_amount,h.holdRequest_hid FROM fine f,borrowing b,holdRequest h,bookCopy bc,borrower bo WHERE bo.borr_bid=b.borr_bid AND b.book_callNo=bc.book_callNo AND b.bookCopy_copyNo=bc.bookCopy_copyNo AND b.borrowing_borid=f.borrowing_borid AND bo.borr_bid=h.borr_bid AND bo.borr_bid=" + id);
+			rs = stmt.executeQuery("SELECT bc.book_callNo,bc.bookCopy_copyNo,f.fine_amount,h.holdRequest_hid FROM fine f,borrowing b,holdRequest h,bookCopy bc,borrower bo WHERE (bo.borr_bid=b.borr_bid AND b.book_callNo=bc.book_callNo AND b.bookCopy_copyNo=bc.bookCopy_copyNo AND b.borrowing_borid=f.borrowing_borid AND bo.borr_bid=h.borr_bid) AND bo.borr_bid=" + id + " ");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numCols = rsmd.getColumnCount();
 			System.out.println(" ");
@@ -85,11 +85,11 @@ public class Borrower{
 			
 			while(rs.next()) {
 				int book_callNo = rs.getInt("book_callNo");
-				System.out.printf("%-10.10s", book_callNo);
+				System.out.printf("\n%-10.10s", book_callNo);
 				int bookCopy_copyNo = rs.getInt("bookCopy_copyNo");
-				System.out.printf("%-20.20s", bookCopy_copyNo);
+				System.out.printf("\n%-20.20s", bookCopy_copyNo);
 				int fine_amount = rs.getInt("fine_amount");
-				System.out.printf("%-30.30s", fine_amount);
+				System.out.printf("%-20.20s", fine_amount);
 				int holdRequest_hid = rs.getInt("holdRequest_hid");
 				System.out.printf("%-20.20s", holdRequest_hid);
 			}
@@ -106,25 +106,22 @@ public class Borrower{
 	 * the system sends an email to the borrower and informs the library clerk 
 	 * to keep the book out of the shelves.
 	 */
-	public void placeHold(int bid, int callNo, String date) {
+	public void placeHold(int bid, int callNo) {
 		holdRequest hr = new holdRequest();
-		hr.insertHoldRequest(bid, callNo, date);
+		hr.insertHoldRequest(bid, callNo);
 	}
 	
 	/*
 	 * Pay a fine
 	 */
-	public void payFine(int amount, int bid) {
-		PreparedStatement ps;
-		
-		try {
-			ps = con.prepareStatement("UPDATE fine SET fine.fine_amount=(fine.fine_amount-?) WHERE borrower.borr_bid=? AND borrower.borr_bid=borrowing.borr_bid AND borrowing.borrowing_borid=fine.borrowing_borid");
-			con.commit();
-			ps.close();
+	public void payFine(int bid) {
+		Fine f = new Fine();
+		if ( f.checkHasFines(bid) ) {
+			f.payAllFines(bid);
+			System.out.println("Fines successfully paid!");
 		}
-		catch (SQLException ex)
-		{
-		    System.out.println("Message: " + ex.getMessage());
+		else {
+			System.out.println("No fines associated with ID: " + bid + ".");
 		}
 	}
 	
@@ -133,12 +130,11 @@ public class Borrower{
 		//creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-//				borrowerTable bt = new borrowerTable();
-//				bt.displayBorrower();
-				//Borrowing bo = new Borrowing();
-				//bo.insertBorrowing(100, 10, 234234, 1, 2012/02/12, "2012/03/12");
-//				Borrower borrower = new Borrower();
-//				borrower.checkAccount(10);
+				//hr.displayHoldRequest();
+				Borrower borrower = new Borrower();
+				//borrower.payFine(10);
+				Fine f = new Fine();
+				f.displayBIDFines(10);
 			}
 		});
 	}
