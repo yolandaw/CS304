@@ -84,7 +84,10 @@ public class Clerk {
 	{
 		bookCopy bookCopy = new bookCopy();
 		CastDate dueDate = new CastDate();
-		dueDate.addToDate(date, days)
+		borrowerTable bidMeta = new borrowerTable();
+		String bidType = bidMeta.checkBorrowerType(bid);
+		int timeLimit = bidMeta.getTimeLimit(bidType);
+		dueDate.addToDate(date, timeLimit);
 
 		String copyStatus = bookCopy.checkStatus(callNo, copyNo);
 		if (copyStatus != "in")
