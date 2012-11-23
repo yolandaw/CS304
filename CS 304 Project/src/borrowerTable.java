@@ -237,8 +237,8 @@ public class borrowerTable {
            //  testTable.insertBorrower("tom", "abc", "home", 333444, "ubc@email.com", 123456, "student");
                //System.out.println(testTable.checkSinOrStNo(123456));
             testTable.displayBorrower();
-            testTable.checkBorrowerType(20210);
-            testTable.getTimeLimit("student");
+//            testTable.checkBorrowerType(20210);
+//            testTable.getTimeLimit("student");
             }
         });
 	}

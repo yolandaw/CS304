@@ -97,6 +97,9 @@ public class Librarian {
 		Date inDate;
 		Statement stmt;
 		ResultSet rs;
+		CastDate castDate;
+		Calendar calDueDate = new GregorianCalendar();
+		Calendar calCurrDate = new GregorianCalendar();
 		
 		borrowerTable borrowerTable = new borrowerTable();
 		
@@ -129,14 +132,19 @@ public class Librarian {
 				
 				inDate = rs.getDate("borrowing_inDate");
 				System.out.printf("%-20.20s", inDate);		
+
+				castDate = new CastDate();
 				
 				String type = borrowerTable.checkBorrowerType(bid);
 				int timeLimit = borrowerTable.getTimeLimit(type);
+				Date dueDate = castDate.addToDate(outDate, timeLimit);
+				calDueDate = castDate.getGDate(dueDate);
+				calCurrDate = castDate.getGDate(castDate.currentDate());
 				
-				GregorianCalendar gregCalendar = new GregorianCalendar();
-				
-				if () {
-					
+				if (calCurrDate.compareTo(calDueDate) > 0) {
+					System.out.printf("%-20.20s", "Overdue");	
+				} else {
+					System.out.printf("%-20.20s", "");
 				}
 			}
 			stmt.close();
