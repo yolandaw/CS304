@@ -14,7 +14,7 @@ public class Clerk {
 	private String staff = "staff";
 	private String general = "general";
 	CastDate newDate = new CastDate();
-
+ 
 
 	public Clerk() {
 		// TODO Auto-generated constructor stub
