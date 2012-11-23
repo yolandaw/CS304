@@ -13,6 +13,7 @@ public class Clerk {
 	private String faculty = "faculty";
 	private String staff = "staff";
 	private String general = "general";
+	//Fine currFine = new Fine();
 	CastDate newDate = new CastDate();
  
 
@@ -63,7 +64,7 @@ public class Clerk {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
 		
-		Fine currFine = new Fine();		
+		Fine currFine = new Fine();
 		
 		if (currFine.checkHasFines(bid) == true)
 		{
