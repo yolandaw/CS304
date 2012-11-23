@@ -94,6 +94,20 @@ public class Borrowing {
 		}
 	}
 	
+	// use group by function? - UNFINISHED (does this belong in this class or the borrowing class?)
+	public void checkOverdues(int borid) {
+		Statement stmt;
+		ResultSet rs;
+
+		try {
+			stmt = con.createStatement();
+			// rs =
+			// stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
+		} catch (SQLException e) {
+
+		}
+	}
+	
 	// Display all the rows of the table Borrowing
 	public void displayBorrowing() {
 		//TODO
