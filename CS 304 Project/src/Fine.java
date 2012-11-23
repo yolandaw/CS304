@@ -87,7 +87,7 @@ public class Fine {
 
 	}
 
-	// use group by function? - UNFINISHED
+	// use group by function? - UNFINISHED (does this belong in this class or the borrowing class?)
 	public void checkOverdues() {
 		Statement stmt;
 		ResultSet rs;
