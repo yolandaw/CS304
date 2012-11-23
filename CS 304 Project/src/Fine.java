@@ -86,24 +86,25 @@ public class Fine {
 		}
 
 	}
-	
-	//use group by function?
-	public void checkOverdues(){
+
+	// use group by function? - UNFINISHED
+	public void checkOverdues() {
 		Statement stmt;
 		ResultSet rs;
-		
-		try{
+
+		try {
 			stmt = con.createStatement();
-			//rs = stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
-		}
-		catch(SQLException e){
-			
+			// rs =
+			// stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
+		} catch (SQLException e) {
+
 		}
 	}
-	
-	// check if the borrower with bid has any unpaid fines, if there is 1 or more fines then returns true, else returns false
-	public boolean checkHasFines(int bid){
-		
+
+	// check if the borrower with bid has any unpaid fines, if there is 1 or
+	// more fines then returns true, else returns false
+	public boolean checkHasFines(int bid) {
+
 		int count = 0;
 		Statement stmt;
 		ResultSet rs;
@@ -112,29 +113,29 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
-		
+							+ bid
+							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+
 			while (rs.next()) {
-			
+
 				count = count + 1;
 
 			}
 			stmt.close();
-			
-			if(count > 0){
+
+			if (count > 0) {
 				return true;
-			}
-			else{
+			} else {
 				return false;
 			}
 
 		}
 
-		catch(SQLException e){
-			
+		catch (SQLException e) {
+
 		}
-			return false;
-	
+		return false;
+
 	}
 
 	// make a payment that pays all fine ids belonging to the bid
@@ -142,41 +143,30 @@ public class Fine {
 		Statement stmt;
 		PreparedStatement ps;
 		ResultSet rs;
-		
-		try{
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 
-			while(rs.next()){
-				ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = " + rs.getInt(1));
+		try {
+			stmt = con.createStatement();
+			rs = stmt
+					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+							+ bid
+							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+
+			while (rs.next()) {
+				ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = "
+						+ rs.getInt(1));
 
 				ps.setDate(1, newDate.currentDate());
 				ps.executeUpdate();
 				con.commit();
 				ps.close();
 			}
-		}
-		catch(SQLException e){
-			System.out.println("Message: " +  e.getMessage());
-		}
-		
-		/*		PreparedStatement ps;
-
-		try {
-			ps = con.prepareStatement("UPDATE fine f SET f.fine_paiddate = ? WHERE (SELECT f.fine_fid FROM fine f borrowing b borrower br WHERE b.borr_bid = "
-							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
-			
-			ps.setDate(1, newDate.currentDate());
-			ps.executeUpdate();
-			con.commit();
-			ps.close();
 		} catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
-		}*/
+		}
 	}
 
-	// sets the fine paid date to current date (or is equivalent to paying a single fine)
+	// sets the fine paid date to current date (or is equivalent to paying a
+	// single fine)
 	public void setPaidDate(int fid) {
 
 		PreparedStatement ps;
@@ -198,8 +188,8 @@ public class Fine {
 		}
 
 	}
-	
-	//set the fine paid date to null
+
+	// set the fine paid date to null
 	public void setPaidDateToNull(int fid) {
 
 		PreparedStatement ps;
@@ -220,7 +210,6 @@ public class Fine {
 		}
 
 	}
-
 
 	// prints out a list of fines based on inputed BID
 	public void displayBIDFines(int bid) {
@@ -277,7 +266,7 @@ public class Fine {
 
 	}
 
-	// returns all the unpaid fines of the inputed bid - unfinihsed
+	// returns all the unpaid fines of the inputed bid
 	public void displayUnPaidFines(int bid) {
 		Statement stmt;
 		ResultSet rs;
@@ -286,7 +275,8 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+							+ bid
+							+ "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			int numCols = rsmd.getColumnCount();
@@ -399,33 +389,32 @@ public class Fine {
 				Fine runFine = new Fine();
 				Calendar cal = Calendar.getInstance();
 				// runFine.connect("ora_v2e7","a75190090");
-				//runFine.insertFine(100, 20, "2012-12-12", null, 23);
+				// runFine.insertFine(100, 20, "2012-12-12", null, 23);
 				// runFine.deleteFine(11);
 				// System.out.print(runFine.getBorrowingFineID(10));
 				// runFine.getFines(10);
-//				runFine.setPaidDate(100);
-//				runFine.setPaidDate(2);
-//				runFine.setPaidDate(99);
-//				runFine.setPaidDate(10);
-//				System.out.println("All rows");
-//				runFine.displayFine();
-//				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
+				// runFine.setPaidDate(100);
+				// runFine.setPaidDate(2);
+				// runFine.setPaidDate(99);
+				// runFine.setPaidDate(10);
+				// System.out.println("All rows");
+				// runFine.displayFine();
+				// java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
 				// System.out.println(runFine.getGDate(issueD));
 				// cal.setTime(runFine.getGDate(issueD).getTime());
-//				System.out.println(cal.getTime());a
-//				cal.add(cal.DATE, 20);
-//				System.out.println(cal.getTime());
-//				System.out.println("Null rows");
-				//runFine.displayBIDFines(10);
-				//runFine.displayUnPaidFines(10);
-//				runFine.payAllFines(10);
-//				runFine.setPaidDateToNull(10);
-//				runFine.displayFine();
-//				System.out.println(runFine.checkHasFines(10));
-//				runFine.payAllFines(10);
-//				runFine.displayUnPaidFines(10);
-//				runFine.displayFine();
-				
+				// System.out.println(cal.getTime());a
+				// cal.add(cal.DATE, 20);
+				// System.out.println(cal.getTime());
+				// System.out.println("Null rows");
+				// runFine.displayBIDFines(10);
+				// runFine.displayUnPaidFines(10);
+				// runFine.payAllFines(10);
+				// runFine.setPaidDateToNull(10);
+				// runFine.displayFine();
+				// System.out.println(runFine.checkHasFines(10));
+				// runFine.payAllFines(10);
+				// runFine.displayUnPaidFines(10);
+				// runFine.displayFine();
 
 			}
 		});
