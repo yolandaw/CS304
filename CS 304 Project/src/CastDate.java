@@ -11,7 +11,7 @@ public class CastDate {
 	// gets current date from system locale in SQL format
 	public Date currentDate() {
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = GregorianCalendar.getInstance();
 
 		java.util.Date utilDate = cal.getTime();
 		java.sql.Date SQLDate = new java.sql.Date(utilDate.getTime());

@@ -12,7 +12,7 @@ public class borrowerTable {
 	}
 
 	CastDate newDate = new CastDate();
-	Calendar cal = Calendar.getInstance();
+	Calendar cal = GregorianCalendar.getInstance();
 
 	
 	// Insert a borrower into the table Borrower
