@@ -19,19 +19,18 @@ public class Fine {
 	}
 
 	// Insert a tuple into the table Fine
-	public void insertFine(int fid, float amount, String issueDate,
-			String paidDate, int borid) {
+	public void insertFine(int fid, float amount, int borid) {
 
 		PreparedStatement ps;
 
 		try {
-			ps = con.prepareStatement("INSERT INTO fine VALUES(?,?,?,?,?)");
+			ps = con.prepareStatement("INSERT INTO fine VALUES(?,?,?,NULL,?)");
 
+			
 			ps.setInt(1, fid);
 			ps.setFloat(2, amount);
 			ps.setDate(3, newDate.currentDate());
-			ps.setDate(4, null);
-			ps.setInt(5, borid);
+			ps.setInt(4, borid);
 
 			ps.executeUpdate();
 
@@ -87,19 +86,6 @@ public class Fine {
 
 	}
 
-	// use group by function? - UNFINISHED (does this belong in this class or the borrowing class?)
-	public void checkOverdues() {
-		Statement stmt;
-		ResultSet rs;
-
-		try {
-			stmt = con.createStatement();
-			// rs =
-			// stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
-		} catch (SQLException e) {
-
-		}
-	}
 
 	// check if the borrower with bid has any unpaid fines, if there is 1 or
 	// more fines then returns true, else returns false
