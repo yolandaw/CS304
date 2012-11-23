@@ -87,6 +87,20 @@ public class Fine {
 
 	}
 	
+	//use group by function?
+	public void checkOverdues(){
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			//rs = stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
+		}
+		catch(SQLException e){
+			
+		}
+	}
+	
 	// check if the borrower with bid has any unpaid fines, if there is 1 or more fines then returns true, else returns false
 	public boolean checkHasFines(int bid){
 		
@@ -123,9 +137,31 @@ public class Fine {
 	
 	}
 
-	// make a payment that pays all fine ids belonging to the bid - unfinished
+	// make a payment that pays all fine ids belonging to the bid
 	public void payAllFines(int bid) {
+		Statement stmt;
 		PreparedStatement ps;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+
+			while(rs.next()){
+				ps = con.prepareStatement("UPDATE fine SET fine_paiddate = ? WHERE fine_fid = " + rs.getInt(1));
+
+				ps.setDate(1, newDate.currentDate());
+				ps.executeUpdate();
+				con.commit();
+				ps.close();
+			}
+		}
+		catch(SQLException e){
+			System.out.println("Message: " +  e.getMessage());
+		}
+		
+		/*		PreparedStatement ps;
 
 		try {
 			ps = con.prepareStatement("UPDATE fine f SET f.fine_paiddate = ? WHERE (SELECT f.fine_fid FROM fine f borrowing b borrower br WHERE b.borr_bid = "
@@ -137,15 +173,10 @@ public class Fine {
 			ps.close();
 		} catch (SQLException e) {
 			System.out.println("Message: " + e.getMessage());
-		}
+		}*/
 	}
 
-	// select a single fine to pay - unfinished
-	public void payAFine(int bid, int fid) {
-
-	}
-
-	// sets the fine paid date to current date
+	// sets the fine paid date to current date (or is equivalent to paying a single fine)
 	public void setPaidDate(int fid) {
 
 		PreparedStatement ps;
@@ -168,6 +199,7 @@ public class Fine {
 
 	}
 	
+	//set the fine paid date to null
 	public void setPaidDateToNull(int fid) {
 
 		PreparedStatement ps;
@@ -199,7 +231,7 @@ public class Fine {
 			stmt = con.createStatement();
 			rs = stmt
 					.executeQuery("SELECT DISTINCT f.fine_fid, f.fine_amount, f.fine_issuedate, f.fine_paiddate, f.borrowing_borid  FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
-							+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL");
+							+ bid + "AND b.borrowing_borid = f.borrowing_borid");
 
 			ResultSetMetaData rsmd = rs.getMetaData();
 
@@ -367,7 +399,7 @@ public class Fine {
 				Fine runFine = new Fine();
 				Calendar cal = Calendar.getInstance();
 				// runFine.connect("ora_v2e7","a75190090");
-				//runFine.insertFine(100, 20, "2012-12-12", null, 21);
+				//runFine.insertFine(100, 20, "2012-12-12", null, 23);
 				// runFine.deleteFine(11);
 				// System.out.print(runFine.getBorrowingFineID(10));
 				// runFine.getFines(10);
@@ -380,15 +412,19 @@ public class Fine {
 //				java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
 				// System.out.println(runFine.getGDate(issueD));
 				// cal.setTime(runFine.getGDate(issueD).getTime());
-//				System.out.println(cal.getTime());
+//				System.out.println(cal.getTime());a
 //				cal.add(cal.DATE, 20);
 //				System.out.println(cal.getTime());
 //				System.out.println("Null rows");
-//				runFine.displayBIDFines(10);
-				runFine.payAllFines(10);
+				//runFine.displayBIDFines(10);
+				//runFine.displayUnPaidFines(10);
+//				runFine.payAllFines(10);
 //				runFine.setPaidDateToNull(10);
 //				runFine.displayFine();
 //				System.out.println(runFine.checkHasFines(10));
+//				runFine.payAllFines(10);
+//				runFine.displayUnPaidFines(10);
+//				runFine.displayFine();
 				
 
 			}
