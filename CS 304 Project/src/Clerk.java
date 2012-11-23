@@ -13,7 +13,8 @@ public class Clerk {
 	private String faculty = "faculty";
 	private String staff = "staff";
 	private String general = "general";
-	
+	CastDate newDate = new CastDate();
+
 
 	public Clerk() {
 		// TODO Auto-generated constructor stub
@@ -58,15 +59,11 @@ public class Clerk {
 
 
 	//Unfinihsed, input must be a list of call numbers
-	public void checkOut(int bid, int callNo, int copyNo) {
+	public void checkBorrower(int bid) {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
 		
 		Fine currFine = new Fine();		
-		Borrowing currBorr = new Borrowing();
-		bookCopy bookCopy = new bookCopy();
-		CastDate newDate = new CastDate();
-		String copyStatus =bookCopy.checkStatus(callNo, copyNo);
 		
 		if (currFine.checkHasFines(bid) == true)
 		{
@@ -74,20 +71,32 @@ public class Clerk {
 			//prompt user with a pop up if they want to pay fines now or later and if true then return the payFine window
 		}
 		
-		else if (copyStatus != "in")
+		else
 		{
-			System.out.println("Sorry, the book is" + copyStatus);
-		}
-		
-		else 
-		{
-			 currBorr.insertBorrowing(123, bid, callNo, copyNo, newDate.currentDate());
-			 System.out.println("All books checked out.");
-			 // create a function that returns book callNo + corresponding expiry date
+			System.out.println("Borrower has no fines");
 		}
 		
 	}
 	
+	public void checkoutHelper(int bid, int callNo, int copyNo, Date date)
+	{
+		bookCopy bookCopy = new bookCopy();
+		CastDate dueDate = new CastDate();
+		dueDate.addToDate(date, days)
+
+		String copyStatus = bookCopy.checkStatus(callNo, copyNo);
+		if (copyStatus != "in")
+		{
+			System.out.println("Sorry, the book is" + copyStatus);
+		}
+		else
+		{
+			Borrowing currBorr = new Borrowing();
+			currBorr.insertBorrowing(123, bid, callNo, copyNo, date);
+			System.out.println("Book: " + bid + "has been checked out. \n return date: " );
+		}
+
+	}
 	
 	
 	// Insert a tuple into the table Borrowing
