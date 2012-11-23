@@ -137,22 +137,15 @@ public class Borrowing {
 				calCurrDate = castDate.getGDate(castDate.currentDate());
 				
 				if (inDate == null) {
-					System.out.println("\n\nindate is null");
 					if (calCurrDate.compareTo(calDueDate) > 0) {
 
-						System.out.println("\n\noverdue");
 						return true;	
 					} else {
 
-						System.out.println("\n\nnot overdue");
 						return false;
 					}
-				} else {
-
-					System.out.println("\n\nreturned");
-				}
-				
-
+				} 
+				return false;
 			}
 			stmt.close();
 		}
@@ -225,7 +218,6 @@ public class Borrowing {
             public void run() {
                 Borrowing testTable = new Borrowing();
                 testTable.displayBorrowing();
-                testTable.isOverdue(23);
             }
         });
 	}
