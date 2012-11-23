@@ -98,10 +98,10 @@ public class holdRequest {
 			
 			while(rs.next()) {
 				hid = rs.getInt("holdRequest_hid");
-			    System.out.printf("\n%-10.10s", hid);
+			    System.out.printf("\n%-20.20s", hid);
 			    
 			    bid = rs.getInt("borr_bid");
-			    System.out.printf("%-30.30s", bid);
+			    System.out.printf("%-20.20s", bid);
 			    
 			    callNo = rs.getInt("book_callNo");
 			    System.out.printf("%-20.20s", callNo);
