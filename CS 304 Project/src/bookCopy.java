@@ -31,6 +31,46 @@ public class bookCopy {
 		
 	}
 	
+	//set book copy to out status
+	public void setStatusOut(int callNo, int copyNo){
+		PreparedStatement ps;
+	
+		try{
+			ps = con.prepareStatement("UPDATE bookCopy SET bookCopy_status = ? WHERE book_callNo=? AND bookcopy_copyNo=?");
+			ps.setString(1, "out");
+			ps.setInt(2,callNo);
+			ps.setInt(3,copyNo);
+			
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+			
+		}
+	}
+	
+	//set book copy to in status
+	public void setStatusIn(int callNo, int copyNo){
+		PreparedStatement ps;
+		
+		try{
+			ps = con.prepareStatement("UPDATE bookCopy SET bookCopy_status = ? WHERE book_callNo=? AND bookcopy_copyNo=?");
+			ps.setString(1, "in");
+			ps.setInt(2,callNo);
+			ps.setInt(3,copyNo);
+			
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+			
+		}
+	}
+	
 	// Insert a tuple into the table BookCopy
 	public void insertBookCopy(int callNo, String status) {
 		
@@ -96,7 +136,7 @@ public class bookCopy {
 
 	}
 		
-	// Display all the rows of the table BookCopy
+	// Disply all the rows of the table BookCopy
 	public void displayBookCopy() {
 		String callNo;
 		String copyNo;
@@ -115,12 +155,12 @@ public class bookCopy {
 			for (int i = 0; i < numCols; i++)
 			{
 				// get column name and print it
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 
 			while(rs.next()) {
 				callNo = rs.getString("book_callNo");
-				System.out.printf("\n%-10.10s", callNo);
+				System.out.printf("\n%-20.20s", callNo);
 
 				copyNo = rs.getString("bookCopy_copyNo");
 				System.out.printf("%-20.20s", copyNo);
@@ -145,11 +185,18 @@ public class bookCopy {
                 bookCopy testTable = new bookCopy();
                 testTable.displayBookCopy();
                 System.out.println(" ");
-                System.out.println("check Status of:");
-                System.out.println("callNo 1 copy 10:  " + testTable.checkStatus(1, 10));
-                System.out.println("callNo 1 copy 1: " + testTable.checkStatus(1, 1));
-                System.out.println("callNo 1 copy 2: " + testTable.checkStatus(1, 2));
-                System.out.println("callNo 102 copy 2: " + testTable.checkStatus(102, 2));
+//                System.out.println("check Status of:");
+//                System.out.println("callNo 1 copy 10:  " + testTable.checkStatus(1, 10));
+//                System.out.println("callNo 1 copy 1: " + testTable.checkStatus(1, 1));
+//                System.out.println("callNo 1 copy 2: " + testTable.checkStatus(1, 2));
+//                System.out.println("callNo 102 copy 2: " + testTable.checkStatus(102, 2));
+                System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
+
+                testTable.setStatusOut(2,1);
+          System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
+
+            
+                
             }
         });
 	}
