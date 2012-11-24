@@ -114,14 +114,14 @@ public class Borrower{
 	/*
 	 * Pay a fine
 	 */
-	public void payFine(int bid) {
+	public boolean payFine(int bid) {
 		Fine f = new Fine();
 		if ( f.checkHasFines(bid) ) {
 			f.payAllFines(bid);
-			System.out.println("Fines successfully paid!");
+			return true;
 		}
 		else {
-			System.out.println("No fines associated with ID: " + bid + ".");
+			return false;
 		}
 	}
 	

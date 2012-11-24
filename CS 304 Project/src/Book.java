@@ -183,11 +183,11 @@ public class Book {
 //				testTable.numCopies(2);
 //				testTable.numCopies(20102);                
 
-				
-				testTable.checkBook(1);
-				testTable.checkBook(2);
-				testTable.checkBook(4);
-				
+//				
+//				testTable.checkBook(1);
+//				testTable.checkBook(2);
+//				testTable.checkBook(4);
+//				
 				testTable.displayBook();
 			}
 		});
