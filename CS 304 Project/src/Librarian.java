@@ -5,7 +5,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-
+import javax.swing.*;
 
 
 public class Librarian {
@@ -17,7 +17,8 @@ public class Librarian {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addBook () {
+	//choice only takes in int 1 or 2 
+	public void addBook (int callNo, String title, String mainAuthor, String publisher, int year, int choice) {
 
 
 		try {
@@ -28,28 +29,17 @@ public class Librarian {
 			Book book = new Book();
 			int existingCallNo = book.checkBook(isbn);
 			if (book.checkBook(isbn) == 0) {
-				System.out.print("\nNo matching book found in system. Add a new book: ");
-				System.out.print("\nCall Number: ");
-				int callNo = Integer.parseInt(in.readLine());
-				if (book.numCopies(callNo) == 0) {
-					System.out.print("\nTitle: ");
-					String title = in.readLine();
-					System.out.print("\nAuthor: ");
-					String mainAuthor = in.readLine();
-					System.out.print("\nPublisher: ");
-					String publisher = in.readLine();
-					System.out.print("\nYear Published: ");
-					int year = Integer.parseInt(in.readLine());	
+				if (book.numCopies(callNo) == 0) {	
 					book.insertBook(callNo, isbn, title, mainAuthor, publisher, year);			
 				} else {
 					System.out.print("\nCall Number exists, perhaps there was an error in entering the ISBN or Call Number.");	
 					return;
 				}
 				
-				addCopy(callNo);
+				addCopy(callNo, choice);
 			} else {
 				System.out.print("\nBook exists, adding new copy:");
-				addCopy(existingCallNo);
+				addCopy(existingCallNo, choice);
 			}
 		}
 
@@ -59,14 +49,11 @@ public class Librarian {
 		}
 	}
 
-	public void addCopy (int callNo) {
+	//choice only takes in int 1 or 2 
+	public void addCopy (int callNo, int choice) {
 
 		try {
-			System.out.print("\n\nPlease choose one of the following statuses: \n");
-			System.out.print("1.  In\n");
-			System.out.print("2.  Checked Out\n");
-			
-			int choice = Integer.parseInt(in.readLine());
+
 			String status = null;
 			switch(choice)
 			{
@@ -79,16 +66,13 @@ public class Librarian {
 
 			copies.insertBookCopy(callNo, status);
 		}
-
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
+		catch(IllegalArgumentException e){
 		}
 	}
 
 
 
-	public void generateBookReport() {
+	public ResultSet generateBookReport() {
 
 		int bid;
 		int borid;
@@ -102,42 +86,14 @@ public class Librarian {
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borrowing_borid, borr_bid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int numCols = rsmd.getColumnCount();
-			
-			for (int i = 0; i < numCols; i++)
-			{
-				// get column name and print it
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			}
-			
-			System.out.printf("%-15s", "Overdue?");  
-			
-			while(rs.next()) {
-				borid = rs.getInt("borrowing_borid");
-				
-				callNo = rs.getString("book_callNo");
-				System.out.printf("\n%-10.10s", callNo);
-
-				copyNo = rs.getString("bookCopy_copyNo");
-				System.out.printf("%-20.20s", copyNo);
-
-				bid = rs.getInt("borr_bid");
-				System.out.printf("%-20.20s", bid);
-				
-				outDate = rs.getDate("borrowing_outDate");
-				System.out.printf("%-20.20s", outDate);	
-				
-				inDate = rs.getDate("borrowing_inDate");
-				System.out.printf("%-20.20s", inDate);		
+			rs = stmt.executeQuery("SELECT borrowing_borid, borr_bid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");	
 
 				if (borrowing.isOverdue(borid)) {
-					System.out.printf("%-20.20s", "Overdue");		
+		
 				} else {
 					System.out.printf("%-20.20s", "");
 				}
-			}
+			
 			stmt.close();
 		}
 
@@ -198,6 +154,7 @@ public class Librarian {
 				
 				librarian.generatePopularBooksReport(2012, 1);
 
+				librarian.addBook(, title, mainAuthor, publisher, year, choice)
 			}
 		});
 	}
