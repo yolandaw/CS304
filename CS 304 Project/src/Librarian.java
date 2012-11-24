@@ -1,10 +1,8 @@
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import javax.swing.*;
 
 
 public class Librarian {
@@ -67,7 +65,7 @@ public class Librarian {
 
 
 
-	public void generateBookReport() {
+	public List<List<String>> generateBookReport() {
 
 		int borid;
 		String overdue;
@@ -98,6 +96,7 @@ public class Librarian {
 				}
 				rowArray.add(overdue);
 				colArray.add(rowArray);
+				return colArray;
 			}
 						
 			stmt.close();
@@ -106,46 +105,49 @@ public class Librarian {
 		catch(SQLException e){
 			System.out.print("Message: " + e.getMessage());
 		}
+		return null;
 
 	}
 
-	public void generatePopularBooksReport(int year, int n) {
+	public List<List<String>> generatePopularBooksReport(int year, int n) {
 
-		int callNo;
-		int count;
 		Statement stmt;
 		ResultSet rs;
 
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT book_callNo, COUNT(borrowing_borid) FROM borrowing WHERE EXTRACT(YEAR from borrowing_outDate) ='" + year + "' GROUP BY book_callNo ORDER BY COUNT(borrowing_borid) DESC");
+			rs = stmt.executeQuery("SELECT book_callNo, COUNT(*) FROM borrowing WHERE EXTRACT(YEAR from borrowing_outDate) ='" + year + "' GROUP BY book_callNo ORDER BY COUNT(borrowing_borid) DESC");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numCols = rsmd.getColumnCount();
 
-			System.out.println("\n\n");
-
-			for (int i = 0; i < numCols; i++)
-			{
-				// get column name and print it
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			}
-
+			List<List<String>> colArray = new ArrayList<List<String>>(1);
 			int j = 1;
+			
 			while(rs.next() && j <= n) {
-
-				callNo = rs.getInt("book_callNo");
-				System.out.printf("\n%-10.10s", callNo);
-
-				count = rs.getInt("COUNT(borrowing_borid)");
-				System.out.printf("%-20.20s", count);
-				j++;
+				
+				List<String> rowArray = new ArrayList<String>(1);
+				for (int i=0; i < numCols; i++) {
+					rowArray.add(i, rs.getString(i+1));
+				}
+				colArray.add(rowArray);
+				
 			}
+			
+//			int numRows = colArray.size();
+//			for (int i=0; i < numRows; i++) {
+//				for (int k=0; k < numCols; k++) {
+//					System.out.println(colArray.get(i).get(k));
+//				}
+//			}
 			stmt.close();
+
+			return colArray;
 		}
 
 		catch(SQLException e){
 			System.out.print("Message: " + e.getMessage());
 		}
+		return null;
 	}
 
 	public static void main(String[] args) {
@@ -162,7 +164,7 @@ public class Librarian {
 
 			//	librarian.addBook(48, 0, "title", "mainAuthor", "publisher", 1939);
 			
-			librarian.generateBookReport();
+			librarian.generatePopularBooksReport(2012, 10);
 			}
 		});
 	}
