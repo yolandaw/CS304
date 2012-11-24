@@ -1,6 +1,9 @@
 
 // We need to import the java.sql package to use JDBC
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -26,7 +29,7 @@ public class GUI implements ActionListener{
 		mainFrame = new JFrame("Library System");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		libPanel = new JPanel (new GridLayout(1,1));
-		libPanel.add(new JLabel ("Library Panel: "));
+		//libPanel.add(new JLabel ("Library Panel: "));
 		
 		initializeButtons();
 		
@@ -66,8 +69,61 @@ public class GUI implements ActionListener{
 					popUp("Book added successfully!");
 				}
 				else {
-					popUp("Book with ISBN " + isbn + " already exists!");
+					popUp("Book with ISBN " + isbn + " already exists! Try to add a copy instead.");
 				}
+			}
+		});
+		
+		JButton addCopy = new JButton ("Add Copy");
+		libPanel.add(addCopy);
+		
+		addCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] status = {"In", "Out", "On Hold"};
+				final JTextField callNo = new JTextField();
+				final JComboBox box = new JComboBox();				
+				for (int i = 0; i < status.length; i++) {
+					box.addItem(status[i]);
+	
+				}
+				box.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int count = box.getSelectedIndex();
+						librarian.addCopy(Integer.parseInt(callNo.getText()), count);
+					}
+				});
+				//int count = box.getSelectedIndex()+1;
+				final JComponent[] inputs = new JComponent[] {
+						new JLabel ("Call Number"),callNo,
+						new JLabel ("Status"),box};
+				JOptionPane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
+				popUp("Copy added successfully!");
+			}
+		});
+		
+		JButton generateReport = new JButton ("Generate Book Report");
+		final JTextArea bookReport = new JTextArea();
+		bookReport.setEditable(false);
+		libPanel.add(generateReport);
+		libPanel.add(bookReport);
+		
+		generateReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<List<String>> libArray = new ArrayList<List<String>>(1);
+				libArray = librarian.generateBookReport();
+				String[][] bookArray = new String[libArray.size()][libArray.size()];
+				for (int i = 0; i < libArray.size(); i++) {
+					//bookReport.insert(colArray[i], i);
+					//bookArray
+				}
+			}
+		});
+		
+		JButton generatePopularReport = new JButton ("Generate Popular Books Report");
+		libPanel.add(generatePopularReport);
+		generatePopularReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 	}
