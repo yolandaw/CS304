@@ -144,11 +144,12 @@ public class Clerk {
 	public static void main(String[] args) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-		Clerk clerkTest = new Clerk();
-		clerkTest.addBorrower("nam", "pass", "address", 9090, "email@email.ubc.com", 12345670, 1);
-            }
-        });
+			public void run() {
+				Clerk clerkTest = new Clerk();
+//				clerkTest.addBorrower("nam", "pass", "address", 9090, "email@email.ubc.com", 12345670, 1);
+	 			clerkTest.checkBorrower(9090);
+			}
+		});
 	}
 
 }
