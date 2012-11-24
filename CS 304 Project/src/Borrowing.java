@@ -13,15 +13,14 @@ public class Borrowing {
 	CastDate newDate = new CastDate();
 	
 	// Insert a tuple into the table Borrowing
-	public void insertBorrowing(int borid, int bid, int callNo, int copyNo, Date inDate) {
+	public void insertBorrowing(int borid, int bid, int callNo, int copyNo) {
 		try {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(?,?,?,?,?,?)");
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(?,?,?,?,?,NULL)");
 			ps.setInt(1, borid);
 			ps.setInt(2, bid);
 			ps.setInt(3, callNo);
 			ps.setInt(4, copyNo);
 			ps.setDate(5, newDate.currentDate());
-			ps.setDate(6, inDate);
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
@@ -70,16 +69,62 @@ public class Borrowing {
 		    }
 		}
 	}
-		
 	
-	public void setInDate(int borid){
+	//find borrowing id of given book that has not been returned
+	public int findBoridOfBook(int callNo, int copyNo){
+		Statement stmt;
+		ResultSet rs;
+		int borid = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borrowing_borid FROM borrowing WHERE book_callno =" + callNo + "AND bookcopy_copyno =" + copyNo + "AND borrowing_indate IS NULL");
+			while(rs.next()){
+				borid = rs.getInt(1);
+			}
+			stmt.close();	
+		}
+
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
+		return borid;
+	}
+	
+	//find borrower of the retunred book
+	public int findBorrowerOfBook(int callNo, int copyNo){
+		Statement stmt;
+		ResultSet rs;
+		int bid = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borr_bid FROM borrowing WHERE book_callno =" + callNo + "AND bookcopy_copyno =" + copyNo + "AND borrowing_indate IS NULL");
+			while(rs.next()){
+				bid = rs.getInt(1);
+			}
+			stmt.close();	
+		}
+
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
+		return bid;
+	}
+	
+	//sets the return date of book if the return date is NULL initially
+	public void setInDate(int callNo, int copyNo){
 		
 		PreparedStatement ps; 
 		
 		try{
-		ps = con.prepareStatement("UPDATE borrowing SET borrowing_indate = ? WHERE  borrowing_borid = " + borid);
+		ps = con.prepareStatement("UPDATE borrowing SET borrowing_indate = ? WHERE book_callno =? AND bookcopy_copyno =? AND borrowing_indate IS NULL");
 
 		ps.setDate(1, newDate.currentDate());
+		ps.setInt(2, callNo);
+		ps.setInt(3,copyNo);
 		ps.executeUpdate();
 		con.commit();
 		ps.close();
@@ -92,19 +137,6 @@ public class Borrowing {
 		}
 	}
 	
-	// use group by function? - UNFINISHED (does this belong in this class or the borrowing class?)
-	public void checkOverdues(int borid) {
-		Statement stmt;
-		ResultSet rs;
-
-		try {
-			stmt = con.createStatement();
-			// rs =
-			// stmt.executeQuery("SELECT DISTINCT b.borrowing_borid, br.borr_bid ")
-		} catch (SQLException e) {
-
-		}
-	}
 	
 	public boolean isOverdue(int borid) {
 		
@@ -217,7 +249,13 @@ public class Borrowing {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 Borrowing testTable = new Borrowing();
+                //testTable.setInDate(1, 2);
                 testTable.displayBorrowing();
+                //testTable.insertBorrowing(1005, 15, 1, 10);
+                //testTable.displayBorrowing();
+                System.out.println(" ");
+                System.out.println(testTable.findBorrowerOfBook(1, 10));
+                System.out.println(testTable.findBoridOfBook(1, 10));
             }
         });
 	}

@@ -79,16 +79,16 @@ public class Clerk {
 			//prompt user with a pop up if they want to pay fines now or later and if true then return the payFine window
 		}
 		else{
-			System.out.println(callNo.length);
 			
 			for(int i = 0; i < callNo.length; i++){
 				copyStatus	= bookCopy.checkStatus(callNo[i], copyNo[i]);
-				if (copyStatus != "in")
+				if (copyStatus.equalsIgnoreCase("out"))
 				{
-					System.out.println("Sorry, the book is " + copyStatus);
+					System.out.println("Sorry, the book" + callNo[i]+ " is " + copyStatus);
 				}
 				else{
-					currBorr.insertBorrowing(123, bid, callNo[i], copyNo[i]);
+					currBorr.insertBorrowing(i + 1000, bid, callNo[i], copyNo[i]);
+					bookCopy.setStatusOut(callNo[i], copyNo[i]);
 					System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: " );
 				}
 			}
@@ -99,33 +99,16 @@ public class Clerk {
 	
 	// Insert a tuple into the table Borrowing
 	public void returnBook(int callNo, int copyNo) {
-		try {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(?,?,?,?,?,?)");
-			ps.setInt(1, borid);
-			ps.setInt(2, bid);
-			ps.setInt(3, callNo);
-			ps.setInt(4, copyNo);
-			ps.setDate(5, outDate);
-			ps.setDate(6, inDate);
-			ps.executeUpdate();
-			con.commit();
-			ps.close();
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-		    try 
-		    {
-			// undo the insert
-			con.rollback();	
-		    }
-		    catch (SQLException ex2)
-		    {
-			System.out.println("Message: " + ex2.getMessage());
-			System.exit(-1);
-		    }
+		int bid;
+		int borid;
+		Borrowing bor = new Borrowing();
+		Fine fine = new Fine();
+		
+		bid = bor.findBorrowerOfBook(callNo, copyNo);
+		borid = bor.findBoridOfBook(callNo, copyNo);
+		bor.isOverdue(borid);
 
-		}
+		
 	}
 
 	public void checkOverdue() {

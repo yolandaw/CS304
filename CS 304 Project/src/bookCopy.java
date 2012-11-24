@@ -192,8 +192,8 @@ public class bookCopy {
 //                System.out.println("callNo 102 copy 2: " + testTable.checkStatus(102, 2));
                 System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
 
-                testTable.setStatusOut(2,1);
-          System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
+                //testTable.setStatusOut(2,1);
+         // System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
 
             
                 
