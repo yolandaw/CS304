@@ -119,6 +119,73 @@ public class holdRequest {
 		
 	}
 	
+	
+	//get hid from callNo
+	public int getHID(int callNo){
+		Statement stmt;
+		ResultSet rs;
+		int hid = 0;
+
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT holdRequest_hid FROM holdRequest WHERE book_callno =" + callNo);
+			
+			while(rs.next()){
+				hid = rs.getInt(1);
+			}
+		}
+
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return hid;
+	}
+	
+	//get bid from callNo
+		public int getBID(int callNo){
+			Statement stmt;
+			ResultSet rs;
+			int bid = 0;
+
+			try{
+				stmt = con.createStatement();
+				rs = stmt.executeQuery("SELECT borr_bid FROM holdRequest WHERE book_callno =" + callNo);
+				
+				while(rs.next()){
+					bid = rs.getInt(1);
+				}
+			}
+
+			catch(SQLException e){
+				System.out.println("Message: " + e.getMessage());
+			}
+			return bid;
+		}
+	
+	//check if there are any hold requests for book
+	public boolean hasHold(int callNo){
+		Statement stmt;
+		ResultSet rs;
+		int count = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM holdRequest WHERE book_callno =" + callNo);
+					
+			while(rs.next()){
+				count = rs.getInt(1);
+			}
+			if (count > 0){
+				return true;
+			}
+			stmt.close();			
+		}
+
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return false;
+	}
 	public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
@@ -127,6 +194,8 @@ public class holdRequest {
                 holdRequest testTable = new holdRequest();
                 //testTable.displayHoldRequest();
                 testTable.displayHoldRequest();
+                System.out.print(testTable.getBID(10));
+               
                 
             }
         });

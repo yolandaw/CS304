@@ -137,7 +137,22 @@ public class Borrowing {
 		}
 	}
 	
-	
+
+	public ResultSet overdueBooksAndBor(){
+		PreparedStatement ps;
+		ResultSet rs;
+		
+		try{
+			ps = con.prepareStatement("");
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
+		return null;
+		
+	}
+
 	public boolean isOverdue(int borid) {
 		
 		int bid;

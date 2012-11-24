@@ -71,6 +71,25 @@ public class bookCopy {
 		}
 	}
 	
+	public void setStatusHold(int callNo, int copyNo){
+		PreparedStatement ps;
+		
+		try{
+			ps = con.prepareStatement("UPDATE bookCopy SET bookCopy_status = ? WHERE book_callNo=? AND bookcopy_copyNo=?");
+			ps.setString(1, "on hold");
+			ps.setInt(2,callNo);
+			ps.setInt(3,copyNo);
+			
+			ps.executeUpdate();
+			con.commit();
+			ps.close();
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+			
+		}
+	}
+	
 	// Insert a tuple into the table BookCopy
 	public void insertBookCopy(int callNo, String status) {
 		
@@ -184,15 +203,18 @@ public class bookCopy {
             public void run() {
                 bookCopy testTable = new bookCopy();
                 testTable.displayBookCopy();
-                System.out.println(" ");
+                //System.out.println(" ");
 //                System.out.println("check Status of:");
 //                System.out.println("callNo 1 copy 10:  " + testTable.checkStatus(1, 10));
 //                System.out.println("callNo 1 copy 1: " + testTable.checkStatus(1, 1));
 //                System.out.println("callNo 1 copy 2: " + testTable.checkStatus(1, 2));
 //                System.out.println("callNo 102 copy 2: " + testTable.checkStatus(102, 2));
-                System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
+                //System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
 
-                //testTable.setStatusOut(2,1);
+                testTable.setStatusIn(10,1);
+ //              System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
+                testTable.displayBookCopy();
+
          // System.out.println("callNo 2 copy 1: " + testTable.checkStatus(2, 1));
 
             
