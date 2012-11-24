@@ -49,9 +49,9 @@ public class Librarian {
 			String status = null;
 			switch(choice)
 			{
-			case 1: status = "in"; break;
-			case 2: status = "out"; break;
-			case 3: status = "on-hold"; break;
+			case 0: status = "in"; break;
+			case 1: status = "out"; break;
+			case 2: status = "on-hold"; break;
 			}
 
 			bookCopy copies = new bookCopy();
