@@ -1,4 +1,3 @@
-import java.io.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -9,8 +8,6 @@ import javax.swing.*;
 
 
 public class Librarian {
-
-	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	java.sql.Connection con = Connection.getInstance().getConnection();
 
 	public Librarian() {
@@ -84,7 +81,7 @@ public class Librarian {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numCols = rsmd.getColumnCount();
 
-			List<List<String>> colArray = new ArrayList<List<String>>();
+			List<List<String>> colArray = new ArrayList<List<String>>(1);
 
 			while(rs.next()) {
 
@@ -95,22 +92,14 @@ public class Librarian {
 					overdue = "";
 				}
 				
-				List<String> rowArray = new ArrayList<String>();
-				for (int i=1; i <= numCols; i++) {
-					rowArray.add(i, rs.getString(i));
+				List<String> rowArray = new ArrayList<String>(1);
+				for (int i=0; i < numCols; i++) {
+					rowArray.add(i, rs.getString(i+1));
 				}
 				rowArray.add(overdue);
 				colArray.add(rowArray);
 			}
-			
-			int numRows = colArray.size();
-			System.out.println(numRows);
-			for (int i=1; i <= numRows; i++) {
-				for (int j=1; j <= 7; j++) {
-					System.out.println(colArray.get(i).get(j));
-				}
-			}
-			
+						
 			stmt.close();
 		}
 
