@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class Connection {
 	private static Connection connectionClass;
 	private static java.sql.Connection con;
-	private Connection()
+	Connection()
 	{
 		connectionClass = this;
 		

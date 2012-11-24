@@ -60,45 +60,38 @@ public class Clerk {
 
 
 	//Unfinihsed, input must be a list of call numbers
-	public void checkBorrower(int bid) {
+	public void checkOut(int bid, int[] callNo, int[] copyNo) {
 		// checks if borrower has any unpaid fines
 		// takes in list of books and user bid
 		
 		Fine currFine = new Fine();
-		
+		bookCopy bookCopy = new bookCopy();
+		CastDate dueDate = new CastDate();
+		borrowerTable bidMeta = new borrowerTable();
+		String bidType = bidMeta.checkBorrowerType(bid);
+		int timeLimit = bidMeta.getTimeLimit(bidType);
+		String copyStatus = null;
+		Borrowing currBorr = new Borrowing();
 		
 		if (currFine.checkHasFines(bid) == true)
 		{
 			System.out.println("Borrower has fines! Please pay fine before continuing.");
 			//prompt user with a pop up if they want to pay fines now or later and if true then return the payFine window
 		}
-		
-		else
-		{
-			System.out.println("Borrower has no fines");
-		}
-		
-	}
-	
-	public void checkoutHelper(int bid, int callNo, int copyNo, Date date)
-	{
-		bookCopy bookCopy = new bookCopy();
-		CastDate dueDate = new CastDate();
-		borrowerTable bidMeta = new borrowerTable();
-		String bidType = bidMeta.checkBorrowerType(bid);
-		int timeLimit = bidMeta.getTimeLimit(bidType);
-		dueDate.addToDate(date, timeLimit);
-
-		String copyStatus = bookCopy.checkStatus(callNo, copyNo);
-		if (copyStatus != "in")
-		{
-			System.out.println("Sorry, the book is" + copyStatus);
-		}
-		else
-		{
-			Borrowing currBorr = new Borrowing();
-			currBorr.insertBorrowing(123, bid, callNo, copyNo, date);
-			System.out.println("Book: " + bid + "has been checked out. \n return date: " );
+		else{
+			System.out.println(callNo.length);
+			
+			for(int i = 0; i < callNo.length; i++){
+				copyStatus	= bookCopy.checkStatus(callNo[i], copyNo[i]);
+				if (copyStatus != "in")
+				{
+					System.out.println("Sorry, the book is " + copyStatus);
+				}
+				else{
+					currBorr.insertBorrowing(123, bid, callNo[i], copyNo[i]);
+					System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: " );
+				}
+			}
 		}
 
 	}
@@ -138,6 +131,7 @@ public class Clerk {
 	public void checkOverdue() {
 		
 		
+		
 
 	}
 
@@ -146,8 +140,19 @@ public class Clerk {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Clerk clerkTest = new Clerk();
+				Borrowing borTest = new Borrowing();
+				int[] callNo = new int[3];
+				callNo[0] = 1;
+				callNo[1] = 1;
+				callNo[2] = 10;
+				
+				int[] copyNo = new int[3];
+				copyNo[0] = 1;
+				copyNo[1] = 2;
+				copyNo[2] = 1;
 //				clerkTest.addBorrower("nam", "pass", "address", 9090, "email@email.ubc.com", 12345670, 1);
-	 			clerkTest.checkBorrower(9090);
+	 			clerkTest.checkOut(10, callNo, copyNo);
+	 			borTest.displayBorrowing();
 			}
 		});
 	}

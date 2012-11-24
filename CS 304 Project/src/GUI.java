@@ -5,9 +5,6 @@ import javax.swing.*;
 
 // for reading from the command line
 import java.io.*;
-
-// for the login window
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -22,6 +19,9 @@ public class GUI implements ActionListener{
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JFrame mainFrame;
+    
+    //components for Main Interface
+   // private JFrame mainIFrame;
 
 	public GUI() {
 		// TODO Auto-generated constructor stub
@@ -116,6 +116,18 @@ public class GUI implements ActionListener{
 	    	  System.out.println("Message: " + ex.getMessage());
 	    	  System.exit(-1);
 	      }
+	      
+	      
+	      //For Main Interface
+	      
+	      
+//	      mainIFrame = new JFrame("Library System");
+//	      
+//	      JPanel iContentPane = new JPanel();
+//	      mainIFrame.setContentPane(iContentPane);
+	      
+	      
+	      
 	}
 
 	/*
@@ -123,7 +135,7 @@ public class GUI implements ActionListener{
      */ 
     private boolean connect(String username, String password)
     {
-      String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1521:ug"; 
+      String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug"; 
 
       try 
       {
