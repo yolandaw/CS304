@@ -91,21 +91,18 @@ public class Librarian {
 	public void generateBookReport() {
 
 		int bid;
+		int borid;
 		String callNo;
 		String copyNo;
 		Date outDate;
 		Date inDate;
 		Statement stmt;
 		ResultSet rs;
-		CastDate castDate;
-		Calendar calDueDate = new GregorianCalendar();
-		Calendar calCurrDate = new GregorianCalendar();
-		
-		borrowerTable borrowerTable = new borrowerTable();
+		Borrowing borrowing = new Borrowing();
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borr_bid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
+			rs = stmt.executeQuery("SELECT borrowing_borid, borr_bid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numCols = rsmd.getColumnCount();
 			
@@ -116,8 +113,10 @@ public class Librarian {
 			}
 			
 			System.out.printf("%-15s", "Overdue?");  
-
+			
 			while(rs.next()) {
+				borid = rs.getInt("borrowing_borid");
+				
 				callNo = rs.getString("book_callNo");
 				System.out.printf("\n%-10.10s", callNo);
 
@@ -133,16 +132,8 @@ public class Librarian {
 				inDate = rs.getDate("borrowing_inDate");
 				System.out.printf("%-20.20s", inDate);		
 
-				castDate = new CastDate();
-				
-				String type = borrowerTable.checkBorrowerType(bid);
-				int timeLimit = borrowerTable.getTimeLimit(type);
-				Date dueDate = castDate.addToDate(outDate, timeLimit);
-				calDueDate = castDate.getGDate(dueDate);
-				calCurrDate = castDate.getGDate(castDate.currentDate());
-				
-				if (calCurrDate.compareTo(calDueDate) > 0) {
-					System.out.printf("%-20.20s", "Overdue");	
+				if (borrowing.isOverdue(borid)) {
+					System.out.printf("%-20.20s", "Overdue");		
 				} else {
 					System.out.printf("%-20.20s", "");
 				}
@@ -156,8 +147,43 @@ public class Librarian {
 		
 	}
 
-	public void generatePopularBooksReport () {
-		//test test
+	public void generatePopularBooksReport(int year, int n) {
+
+		int callNo;
+		int count;
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT book_callNo, COUNT(borrowing_borid) FROM borrowing WHERE EXTRACT(YEAR from borrowing_outDate) ='" + year + "' GROUP BY book_callNo ORDER BY COUNT(borrowing_borid) DESC");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numCols = rsmd.getColumnCount();
+			
+			System.out.println("\n\n");
+			
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
+			
+			int j = 1;
+			while(rs.next() && j <= n) {
+				
+				callNo = rs.getInt("book_callNo");
+				System.out.printf("\n%-10.10s", callNo);
+
+				count = rs.getInt("COUNT(borrowing_borid)");
+				System.out.printf("%-20.20s", count);
+				j++;
+			}
+			stmt.close();
+		}
+
+		catch(SQLException e){
+			System.out.print("Message: " + e.getMessage());
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -168,7 +194,9 @@ public class Librarian {
 				Librarian librarian = new Librarian();
 				//     testTable.insertBook(3, 2, "a", "b", "c", 0);
 
-				librarian.generateBookReport();               
+				librarian.generateBookReport();    
+				
+				librarian.generatePopularBooksReport(2012, 1);
 
 			}
 		});
