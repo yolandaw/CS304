@@ -43,14 +43,16 @@ public class GUI implements ActionListener{
 	}
 
 	public void showLibrary() {
+
 		mainFrame = new JFrame("Library System");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//libPanel = new JPanel (new GridLayout(1,1));
 		//borrowerPanel = new JPanel (new GridLayout(1,1));
-		dataPanel = new JPanel ();
-		dataPanel.add(textArea);
-		dataPanel.setVisible(true);
 		initializeMenu();
+		dataPanel = new JPanel ();
+//		dataPanel.add(textArea);
+
+
 		
 		//mainFrame.getContentPane().add(libPanel, BorderLayout.PAGE_START);
 		//mainFrame.getContentPane().add(borrowerPanel, BorderLayout.SOUTH);
@@ -59,6 +61,8 @@ public class GUI implements ActionListener{
 		mainFrame.pack();
 		mainFrame.setSize(600, 800);
 		mainFrame.setVisible(true);
+		dataPanel.setVisible(true);
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -79,7 +83,7 @@ public class GUI implements ActionListener{
 		menuItem2c = new JMenuItem("Process Returns");
 		menuItem2d = new JMenuItem("Check Overdue Items");
 		menuItem3a = new JMenuItem("Add Book");
-		menuItem3b = new JMenuItem("View Checked-Out Books");
+		menuItem3b = new JMenuItem("All Loans");
 		menuItem3c = new JMenuItem("Popular Books");
 		textArea.setEditable(false);
 		
@@ -196,7 +200,9 @@ public class GUI implements ActionListener{
 						{ "279", "9033", "3092" }
 					};
 				JTable bookTable = new JTable(dataValues,columnNames);
+//				bookTable.setVisible(true);
 				dataPanel.add(new JScrollPane(bookTable));
+				mainFrame.validate();
 			}
 		});
 		
