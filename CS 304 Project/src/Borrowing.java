@@ -166,9 +166,8 @@ public class Borrowing {
 				return null;
 			}
 			
-			System.out.println(count);
+			System.out.println("Count" + count);
 			
-			overdueList = new String[count][3];
 			
 			while(rs.next()){
 				bid = rs.getInt("borr_bid");
@@ -180,28 +179,35 @@ public class Borrowing {
 				String sCopyNo = Integer.toString(copyNo);
 				outDate = rs.getDate("borrowing_outDate");
 				inDate = rs.getDate("borrowing_inDate");
-				overdueList = new String[count][2];
+				overdueList = new String[count][3];
 				
-			
+
 				
 				//for(int i = 0; i < count; i++) {	
 					if(isOverdue(borid)){
-
+						System.out.println("Borid" + borid);
+						System.out.println(sBid);
 						overdueList[i][0] = sBid;
+						System.out.println(overdueList[i][0]);
+						System.out.println(sCallNo);
 						overdueList[i][1] = sCallNo;
-						//overdueList[i][2] = sCopyNo;
+						System.out.println(overdueList[i][1]);
+						System.out.println(sCopyNo);
+						overdueList[i][2] = sCopyNo;
+						System.out.println(overdueList[i][2]);	
 						i++;
 						
 				//}				
 				
 			}
 		
-					for(int k = 0; i < overdueList.length; i++){
-						for(int j = 0; j < 2; j++){
-							System.out.println(overdueList[k][j]);
-							System.out.println(" ");
-						}
-					}
+//					for(int k = 0; k < 3; k++){
+//						for(int j = 0; j < 3 ; j++){
+//							System.out.println(overdueList[k][j]);
+//
+//						}
+//						System.out.println(" ");
+//					}
 			
 			}
 		}
