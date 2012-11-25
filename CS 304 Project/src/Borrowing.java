@@ -189,7 +189,7 @@ public class Borrowing {
 
 						overdueList[i][0] = sBid;
 						overdueList[i][1] = sCallNo;
-						overdueList[i][2] = sCopyNo;
+						//overdueList[i][2] = sCopyNo;
 						i++;
 						
 				//}				
@@ -197,7 +197,7 @@ public class Borrowing {
 			}
 		
 					for(int k = 0; i < overdueList.length; i++){
-						for(int j = 0; j < 3; j++){
+						for(int j = 0; j < 2; j++){
 							System.out.println(overdueList[k][j]);
 							System.out.println(" ");
 						}
@@ -331,6 +331,7 @@ public class Borrowing {
 //                System.out.println(" ");
 //                System.out.println(testTable.findBorrowerOfBook(1, 10));
 //                System.out.println(testTable.findBoridOfBook(1, 10));
+                testTable.overdueBooksAndBor();
             }
         });
 	}
