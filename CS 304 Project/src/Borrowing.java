@@ -9,7 +9,7 @@ public class Borrowing {
 		
 	}
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	
+	private static int overdueListCount = 0;
 
 	CastDate newDate = new CastDate();
 	
@@ -139,11 +139,11 @@ public class Borrowing {
 	}
 	
 
-	public String[][] overdueBooksAndBor(){
+	//returns a list of overdue books
+	public String[][] getOverdueList(){
 		Statement stmt;
 		ResultSet rs = null;
-		//Vector<Vector<String>> overdueList = new Vector<Vector<String>>(10);
-		String[][] overdueList;
+		String[][] overdueList = null;
 		int bid;
 		int borid;
 		int callNo;
@@ -151,7 +151,6 @@ public class Borrowing {
 		Date outDate;
 		Date inDate;
 		int count = 0;
-		int i = 0;
 		
 		try{
 			stmt = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE,rs.CONCUR_READ_ONLY);
@@ -165,10 +164,7 @@ public class Borrowing {
 			catch(Exception ex) {
 				return null;
 			}
-			
-			System.out.println("Count" + count);
-			
-			
+				
 			while(rs.next()){
 				bid = rs.getInt("borr_bid");
 				String sBid = Integer.toString(bid);
@@ -182,33 +178,20 @@ public class Borrowing {
 				overdueList = new String[count][3];
 				
 
-				
-				//for(int i = 0; i < count; i++) {	
 					if(isOverdue(borid)){
-						System.out.println("Borid" + borid);
-						System.out.println(sBid);
-						overdueList[i][0] = sBid;
-						System.out.println(overdueList[i][0]);
-						System.out.println(sCallNo);
-						overdueList[i][1] = sCallNo;
-						System.out.println(overdueList[i][1]);
-						System.out.println(sCopyNo);
-						overdueList[i][2] = sCopyNo;
-						System.out.println(overdueList[i][2]);	
-						i++;
-						
-				//}				
-				
-			}
-		
-//					for(int k = 0; k < 3; k++){
-//						for(int j = 0; j < 3 ; j++){
-//							System.out.println(overdueList[k][j]);
-//
-//						}
-//						System.out.println(" ");
-//					}
-			
+						//System.out.println("Borid: " + borid);
+						//System.out.println(sBid);
+						overdueList[overdueListCount][0] = sBid;
+						//System.out.println(overdueList[i][0]);
+						//System.out.println(sCallNo);
+						overdueList[overdueListCount][1] = sCallNo;
+						//System.out.println(overdueList[i][1]);
+						//System.out.println(sCopyNo);
+						overdueList[overdueListCount][2] = sCopyNo;
+						//System.out.println(overdueList[i][2]);		
+						overdueListCount++;				
+					}				
+					return overdueList;		
 			}
 		}
 		catch(SQLException e){
@@ -216,7 +199,12 @@ public class Borrowing {
 		}
 		
 		return null;
-		
+	
+	}
+	// have to add returning book titles
+	//return the number for rows of the 2d array for getOverdueList method
+	public int getOverdueListCount(){
+		return overdueListCount;
 	}
 
 	public boolean isOverdue(int borid) {
@@ -337,7 +325,7 @@ public class Borrowing {
 //                System.out.println(" ");
 //                System.out.println(testTable.findBorrowerOfBook(1, 10));
 //                System.out.println(testTable.findBoridOfBook(1, 10));
-                testTable.overdueBooksAndBor();
+                testTable.getOverdueList();
             }
         });
 	}

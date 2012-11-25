@@ -47,7 +47,7 @@ public class Clerk {
 		borrowerTable newBorrower = new borrowerTable();
 
 		// check if SIN or St. No already exists
-		if (newBorrower.checkSinOrStNo(sinOrStNo) == true) {
+		if (newBorrower.checkSinOrStNo(sinOrStNo)) {
 			return false;
 		} else {
 
@@ -117,11 +117,21 @@ public class Clerk {
 
 	}
 
-	//unfinihsed
-	public Vector<Vector<String>> checkOverdue() {
-		Vector<Vector<String>> overdueList = new Vector<Vector<String>>(10);
-	
+	//unfinished - still have to print out book titles and info instead of callNo and copyNo
+	public String[][] checkOverdue() {
+		String[][] overdueList = null ;
+		Borrowing bor = new Borrowing();
 		
+		overdueList = bor.getOverdueList();
+		
+		for(int k = 0; k < bor.getOverdueListCount(); k++){
+			for(int j = 0; j < 3 ; j++){
+				System.out.print(overdueList[k][j] + " ");
+
+			}
+			System.out.println(" ");
+		}
+	
 		return overdueList;
 		
 	}
@@ -148,10 +158,11 @@ public class Clerk {
 				// "email@email.ubc.com", 12341, 1);
 				// borrower.displayBorrower();
 				//clerkTest.checkOut(10, callNo, copyNo);
-				clerkTest.returnBook(10, 1);
+				//clerkTest.returnBook(10, 1);
 				// borTest.displayBorrowing();
-				borTest.displayBorrowing();
-				bookC.displayBookCopy();
+				//borTest.displayBorrowing();
+				//bookC.displayBookCopy();
+				clerkTest.checkOverdue();
 
 			}
 		});
