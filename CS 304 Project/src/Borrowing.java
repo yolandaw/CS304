@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Vector;
 
 public class Borrowing {
 	
@@ -138,12 +139,71 @@ public class Borrowing {
 	}
 	
 
-	public ResultSet overdueBooksAndBor(){
-		PreparedStatement ps;
-		ResultSet rs;
+	public String[][] overdueBooksAndBor(){
+		Statement stmt;
+		ResultSet rs = null;
+		//Vector<Vector<String>> overdueList = new Vector<Vector<String>>(10);
+		String[][] overdueList;
+		int bid;
+		int borid;
+		int callNo;
+		int copyNo;
+		Date outDate;
+		Date inDate;
+		int count = 0;
+		int i = 0;
 		
 		try{
-			ps = con.prepareStatement("");
+			stmt = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE,rs.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT * FROM borrowing WHERE borrowing_inDate IS NULL");
+			
+			try {
+			  rs.last();
+			   count = rs.getRow();
+			    rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+			
+			System.out.println(count);
+			
+			overdueList = new String[count][3];
+			
+			while(rs.next()){
+				bid = rs.getInt("borr_bid");
+				String sBid = Integer.toString(bid);
+				borid = rs.getInt("borrowing_borid");
+				callNo = rs.getInt("book_callNo");
+				String sCallNo = Integer.toString(callNo);
+				copyNo = rs.getInt("bookcopy_copyNo");
+				String sCopyNo = Integer.toString(copyNo);
+				outDate = rs.getDate("borrowing_outDate");
+				inDate = rs.getDate("borrowing_inDate");
+				overdueList = new String[count][2];
+				
+			
+				
+				//for(int i = 0; i < count; i++) {	
+					if(isOverdue(borid)){
+
+						overdueList[i][0] = sBid;
+						overdueList[i][1] = sCallNo;
+						overdueList[i][2] = sCopyNo;
+						i++;
+						
+				//}				
+				
+			}
+		
+					for(int k = 0; i < overdueList.length; i++){
+						for(int j = 0; j < 3; j++){
+							System.out.println(overdueList[k][j]);
+							System.out.println(" ");
+						}
+					}
+			
+			}
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());

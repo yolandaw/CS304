@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Vector;
 
 
 
@@ -117,11 +118,11 @@ public class Clerk {
 	}
 
 	//unfinihsed
-	public ResultSet checkOverdue() {
-
-		ResultSet rs = null;
+	public Vector<Vector<String>> checkOverdue() {
+		Vector<Vector<String>> overdueList = new Vector<Vector<String>>(10);
+	
 		
-		return rs;
+		return overdueList;
 		
 	}
 
