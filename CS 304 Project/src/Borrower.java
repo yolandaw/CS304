@@ -23,7 +23,7 @@ public class Borrower{
 		ResultSet rs;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT book_title, book.book_callNo, bookCopy_copyNo, bookCopy_status FROM book, bookCopy, hasAuthor, hasSubject WHERE book.book_callNo=bookCopy.book_callNo AND (book_title LIKE '%" + keyword + "%' OR (hasAuthor_name LIKE '%" + keyword + "%' AND book.book_callNo=hasAuthor.book_callNo) OR (hasSubject_subject LIKE '%" + keyword + "%' AND book.book_callNo=hasSubject.book_callNo) )");
+			rs = stmt.executeQuery("SELECT book_title, book.book_callNo, bookCopy_copyNo, bookCopy_status FROM book, bookCopy, hasAuthor, hasSubject WHERE book.book_callNo=bookCopy.book_callNo AND (book_title LIKE '%" + keyword + "%' OR (hasAuthor_name LIKE '%" + keyword + "%' AND book.book_callNo=hasAuthor.book_callNo) OR (hasSubject_subject LIKE '%" + keyword + "%' AND book.book_callNo=hasSubject.book_callNo) OR book.book_mainAuthor LIKE '%" + keyword + "%' )");
 		
 			List<List<String>> colArray = new ArrayList<List<String>>(1);
 
