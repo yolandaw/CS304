@@ -1,7 +1,6 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Borrower{
 
@@ -11,9 +10,7 @@ public class Borrower{
 	public Borrower() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-	
+
 	java.sql.Connection con = Connection.getInstance().getConnection();
 
 	/*
@@ -21,46 +18,41 @@ public class Borrower{
 	 * The result is a list of books that match the search together with the number 
 	 * of copies that are in and out
 	 */
-	public void search() {
+	public List<List<String>> search(String keyword) {
 		Statement stmt;
 		ResultSet rs;
 		try {
-			System.out.println("\nKeywords: ");
-			String keyword = in.readLine();
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT b.book_title,b.book_callNo,bc.bookCopy_copyNo,bc.bookCopy_status FROM book b,bookCopy bc,hasAuthor h,hasSubject hs WHERE b.book_callNo=h.book_callNo AND b.book_callNo=hs.book_callNo AND b.book_callNo=bc.book_callNo AND (b.book_title='" + keyword + "' OR h.hasAuthor_name='" + keyword + "' OR hs.hasSubject_subject='" + keyword + "' )");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int numCols = rsmd.getColumnCount();
+			rs = stmt.executeQuery("SELECT book_title, book.book_callNo, bookCopy_copyNo, bookCopy_status FROM book, bookCopy, hasAuthor, hasSubject WHERE book.book_callNo=bookCopy.book_callNo AND (book_title LIKE '%" + keyword + "%' OR (hasAuthor_name LIKE '%" + keyword + "%' AND book.book_callNo=hasAuthor.book_callNo) OR (hasSubject_subject LIKE '%" + keyword + "%' AND book.book_callNo=hasSubject.book_callNo) )");
+		
+			List<List<String>> colArray = new ArrayList<List<String>>(1);
 
-			System.out.println(" ");
-			
-			for(int i=0; i < numCols; i++) {
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));
-			}
-			System.out.println(" ");
 			
 			while(rs.next()) {
-				String book_title = rs.getString("book_title");
-				System.out.printf("%-10.10s", book_title);
-				int book_callNo = rs.getInt("book_callNo");
-				System.out.printf("%-10.10s", book_callNo);
-				int bookCopy_copyNo = rs.getInt("bookCopy_copyNo");
-				System.out.printf("%-20.20s", bookCopy_copyNo);
-				String bookCopy_status = rs.getString("bookCopy_status");
-				System.out.printf("%-50.50s", bookCopy_status);
-				System.out.println(" ");
+				List<String> rowArray = new ArrayList<String>(1);
+				for (int i=0; i < 4; i++) {
+					rowArray.add(i, rs.getString(i+1));
+				}
+
+				colArray.add(rowArray);
 			}
 			stmt.close();
+			
+//			int numRows = colArray.size();
+//			for (int i=0; i < numRows; i++) {
+//				for (int k=0; k < 4; k++) {
+//					System.out.println(colArray.get(i).get(k));
+//				}
+//			}
+						
+			return colArray;
 		}
 		catch (SQLException ex)
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		    ex.printStackTrace();
 		}	
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
-		}
+		return null;
 	}
 
 	/*
@@ -68,37 +60,34 @@ public class Borrower{
 	 * currently borrowed and not yet returned, any outstanding fines and the hold 
 	 * requests that have been placed by the borrower
 	 */
-	public void checkAccount(int id) {
+	public List<List<String>> checkAccount(int id) {
 		Statement stmt;
 		ResultSet rs;
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT bc.book_callNo,bc.bookCopy_copyNo,f.fine_amount,h.holdRequest_hid FROM fine f,borrowing b,holdRequest h,bookCopy bc,borrower bo WHERE (bo.borr_bid=b.borr_bid AND b.book_callNo=bc.book_callNo AND b.bookCopy_copyNo=bc.bookCopy_copyNo AND b.borrowing_borid=f.borrowing_borid AND bo.borr_bid=h.borr_bid) AND bo.borr_bid=" + id + " ");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int numCols = rsmd.getColumnCount();
-			System.out.println(" ");
-			
-			for(int i=0; i < numCols; i++) {
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));
-			}
-			System.out.println(" ");
+				
+			List<List<String>> colArray = new ArrayList<List<String>>(1);
+
 			
 			while(rs.next()) {
-				int book_callNo = rs.getInt("book_callNo");
-				System.out.printf("\n%-10.10s", book_callNo);
-				int bookCopy_copyNo = rs.getInt("bookCopy_copyNo");
-				System.out.printf("\n%-20.20s", bookCopy_copyNo);
-				int fine_amount = rs.getInt("fine_amount");
-				System.out.printf("%-20.20s", fine_amount);
-				int holdRequest_hid = rs.getInt("holdRequest_hid");
-				System.out.printf("%-20.20s", holdRequest_hid);
+				List<String> rowArray = new ArrayList<String>(1);
+				for (int i=0; i < 4; i++) {
+					rowArray.add(i, rs.getString(i+1));
+				}
+
+				colArray.add(rowArray);
 			}
 			stmt.close();
+			
+			return colArray;
 		}
 		catch (SQLException ex)
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}
+		
+		return null;
 	}
 	
 	/*
@@ -133,8 +122,10 @@ public class Borrower{
 				//hr.displayHoldRequest();
 				Borrower borrower = new Borrower();
 				//borrower.payFine(10);
-				Fine f = new Fine();
-				f.displayBIDFines(10);
+//				Fine f = new Fine();
+//				f.displayBIDFines(10);
+				borrower.search("a");
+			
 			}
 		});
 	}

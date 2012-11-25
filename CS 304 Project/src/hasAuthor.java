@@ -8,7 +8,6 @@ public class hasAuthor {
 	}
 	
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table HasAuthor
 	public void insertHasAuthor(int callNo, String name) {
@@ -104,5 +103,17 @@ public class hasAuthor {
 		{
 		    System.out.println("Message: " + ex.getMessage());
 		}	
+	}
+	
+	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                hasAuthor testTable = new hasAuthor();
+                testTable.displayHasAuthor();
+            }
+        });
 	}
 }

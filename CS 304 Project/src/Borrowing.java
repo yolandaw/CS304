@@ -267,10 +267,10 @@ public class Borrowing {
                 //testTable.setInDate(1, 2);
                 testTable.displayBorrowing();
                 //testTable.insertBorrowing(1005, 15, 1, 10);
-                //testTable.displayBorrowing();
-                System.out.println(" ");
-                System.out.println(testTable.findBorrowerOfBook(1, 10));
-                System.out.println(testTable.findBoridOfBook(1, 10));
+//                testTable.displayBorrowing();
+//                System.out.println(" ");
+//                System.out.println(testTable.findBorrowerOfBook(1, 10));
+//                System.out.println(testTable.findBoridOfBook(1, 10));
             }
         });
 	}

@@ -104,9 +104,10 @@ public class hasSubject {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 hasSubject testTable = new hasSubject();
-                testTable.insertHasSubject(12345, "subject");
-                testTable.insertHasSubject(12345, "subject2");
-                testTable.deleteHasSubject(12345, "subject");
+//                testTable.insertHasSubject(12345, "subject");
+//                testTable.insertHasSubject(12345, "subject2");
+//                testTable.deleteHasSubject(12345, "subject");
+                testTable.displayHasSubject();
             }
         });
 	}
