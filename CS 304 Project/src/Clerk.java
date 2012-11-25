@@ -37,29 +37,28 @@ public class Clerk {
 		}
 		return type;
 
-	}
-
-	// adds a new borrower to the database
-	public void addBorrower(String name, String password, String address,
+	}	
+	
+	// adds a new borrower to the database. If a borrower with the given sinOrStNo already exists, the method returns false. Otherwise, the borrower is added successfully and returns true.
+	public boolean addBorrower(String name, String password, String address,
 			int phone, String email, int sinOrStNo, int type) {
 
 		borrowerTable newBorrower = new borrowerTable();
 
 		// check if SIN or St. No already exists
 		if (newBorrower.checkSinOrStNo(sinOrStNo) == true) {
-
-			System.out
-					.println("A borrower with the same SIN or Stu. No. already exists.");
-
+			return false;
 		} else {
 
 			newBorrower.insertBorrower(name, password, address, phone, email,
 					sinOrStNo, returnType(type));
+			return true;
 		}
 	}
 
 	// checks out a list of books - unfinished (still have to get return expiry dates)
-	public void checkOut(int bid, int[] callNo, int[] copyNo) {
+	// returns false if user has fines; otherwise, checkout is completed and returns true
+	public boolean checkOut(int bid, int[] callNo, int[] copyNo) {
 
 		Fine currFine = new Fine();
 		bookCopy bookCopy = new bookCopy();
@@ -67,8 +66,7 @@ public class Clerk {
 		Borrowing currBorr = new Borrowing();
 
 		if (currFine.checkHasFines(bid) == true) {
-			System.out
-					.println("Borrower has fines! Please pay fine before continuing.");
+			return false;
 			// prompt user with a pop up if they want to pay fines now or later
 			// and if true then return the payFine window
 		} else {
@@ -87,6 +85,7 @@ public class Clerk {
 
 				}
 			}
+			return true;
 		}
 
 	}
