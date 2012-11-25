@@ -14,11 +14,10 @@ public class GUI implements ActionListener{
     //components for Main Interface
 	private Librarian librarian;
 	private Borrower borrower;
+	private Clerk clerk;
 	private borrowerTable bt;
     private JFrame mainFrame;
-    private JPanel libPanel;
     private JPanel dataPanel;
-    private JPanel borrowerPanel;
     private JTextArea textArea;
     private JMenu menu1;
     private JMenu menu2;
@@ -38,6 +37,7 @@ public class GUI implements ActionListener{
 	public GUI() {
 		librarian = new Librarian();
 		borrower = new Borrower();
+		clerk = new Clerk();
 		bt = new borrowerTable();
 		textArea = new JTextArea();
 	}
@@ -46,20 +46,13 @@ public class GUI implements ActionListener{
 
 		mainFrame = new JFrame("Library System");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//libPanel = new JPanel (new GridLayout(1,1));
-		//borrowerPanel = new JPanel (new GridLayout(1,1));
 		initializeMenu();
 		dataPanel = new JPanel ();
-//		dataPanel.add(textArea);
 
-
-		
-		//mainFrame.getContentPane().add(libPanel, BorderLayout.PAGE_START);
-		//mainFrame.getContentPane().add(borrowerPanel, BorderLayout.SOUTH);
 		mainFrame.getContentPane().add(dataPanel, BorderLayout.NORTH);
 		
 		mainFrame.pack();
-		mainFrame.setSize(800, 600);
+		mainFrame.setSize(500, 500);
 		mainFrame.setVisible(true);
 		dataPanel.setVisible(true);
 
@@ -67,7 +60,6 @@ public class GUI implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		textArea.setEditable(false);
 	}
     
 	private void initializeMenu() {
@@ -87,6 +79,7 @@ public class GUI implements ActionListener{
 		menuItem3c = new JMenuItem("Popular Books");
 		textArea.setEditable(false);
 		
+		//Borrower - Search Books
 		menuItem1a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String keyword = inputPopUp("Enter keywords: ");
@@ -112,6 +105,7 @@ public class GUI implements ActionListener{
 //			}
 //		});
 		
+		//Borrower - Check Account
 		menuItem1b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = inputPopUp("Enter Borrower ID:");
@@ -130,6 +124,48 @@ public class GUI implements ActionListener{
 			}
 		});
 		
+		//Borrower - Pay Fines
+		menuItem1c.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String id = inputPopUp("Enter Borrower ID:");
+				if(borrower.payFine(Integer.parseInt(id))) {
+					popUp("Fines successfully paid!");
+				}
+				else {
+					popUp("No fines associated with Borrower ID" + id);
+				}
+			}
+		});
+		
+		//Clerk - Add Borrower
+		menuItem2a.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		//Clerk - Check Out Items
+		menuItem2b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		//Clerk - Process Returns
+		menuItem2c.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		//Clerk - Check Overdue Items
+		menuItem2d.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		//Librarian - Add Book
 		menuItem3a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int isbn = Integer.parseInt(GUI.inputPopUp("ISBN: "));
@@ -181,6 +217,7 @@ public class GUI implements ActionListener{
 //			}
 //		});
 		
+		//Librarian - Generate Book report
 		menuItem3b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 //				List<List<String>> libArray = new ArrayList<List<String>>(1);
@@ -191,23 +228,23 @@ public class GUI implements ActionListener{
 //				}
 //				textArea.setText(builder.toString());
 				
-				String columnNames[] = { "Column 1", "Column 2", "Column 3" };
+				String columnNames[] = { "Call Number", "Copy Number", "Out Date", "Overdue" };
 				String dataValues[][] =
 					{
-						{ "12", "234", "67" },
-						{ "-123", "43", "853" },
-						{ "93", "89.2", "109" },
-						{ "279", "9033", "3092" },
-						{ "279", "9033", "3092" },
+						{ "12", "234", "67", "" },
+						{ "-123", "43", "853", "" },
+						{ "93", "89.2", "109", "" },
+						{ "279", "9033", "3092", "" },
+						{ "279", "9033", "3092", "" },
 
 					};
 				JTable bookTable = new JTable(dataValues,columnNames);
-//				bookTable.setVisible(true);
 				dataPanel.add(new JScrollPane(bookTable));
 				mainFrame.validate();
 			}
 		});
 		
+		//Librarian - Generate popular books
 		menuItem3c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//dataPanel.removeAll();
