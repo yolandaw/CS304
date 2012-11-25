@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -58,7 +59,7 @@ public class Clerk {
 
 	// checks out a list of books - unfinished (still have to get return expiry dates)
 	// returns false if user has fines; otherwise, checkout is completed and returns true
-	public boolean checkOut(int bid, int[] callNo, int[] copyNo) {
+	public List<List<String>> checkOut(int bid, int[] callNo, int[] copyNo) {
 
 		Fine currFine = new Fine();
 		bookCopy bookCopy = new bookCopy();
@@ -66,7 +67,7 @@ public class Clerk {
 		Borrowing currBorr = new Borrowing();
 
 		if (currFine.checkHasFines(bid) == true) {
-			return false;
+			return null;
 			// prompt user with a pop up if they want to pay fines now or later
 			// and if true then return the payFine window
 		} else {
