@@ -59,7 +59,7 @@ public class GUI implements ActionListener{
 		mainFrame.getContentPane().add(dataPanel, BorderLayout.NORTH);
 		
 		mainFrame.pack();
-		mainFrame.setSize(600, 800);
+		mainFrame.setSize(800, 600);
 		mainFrame.setVisible(true);
 		dataPanel.setVisible(true);
 
@@ -197,7 +197,9 @@ public class GUI implements ActionListener{
 						{ "12", "234", "67" },
 						{ "-123", "43", "853" },
 						{ "93", "89.2", "109" },
-						{ "279", "9033", "3092" }
+						{ "279", "9033", "3092" },
+						{ "279", "9033", "3092" },
+
 					};
 				JTable bookTable = new JTable(dataValues,columnNames);
 //				bookTable.setVisible(true);
