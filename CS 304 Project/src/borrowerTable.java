@@ -222,6 +222,30 @@ public class borrowerTable {
 		return 0;
 		
 	}
+	
+	public boolean checkBid(int bid){
+		Statement stmt;
+		ResultSet rs;
+		int count = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM borrower WHERE borr_bid =" + bid);
+			
+			while(rs.next()){
+				count = rs.getInt(1);
+			}
+			
+			if(count > 0){
+				return true;
+			}
+			
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return false;
+	}
 
 	
 	public static void main(String[] args) {
@@ -237,8 +261,12 @@ public class borrowerTable {
            //  testTable.insertBorrower("tom", "abc", "home", 333444, "ubc@email.com", 123456, "student");
                //System.out.println(testTable.checkSinOrStNo(123456));
             testTable.displayBorrower();
-//            testTable.checkBorrowerType(20210);
+//            testTable.checkBorrowerType(20210);	
 //            testTable.getTimeLimit("student");
+            System.out.println(" ");
+            System.out.println(testTable.checkBid(10000));
+            System.out.println(testTable.checkBid(10));
+           
             }
         });
 	}
