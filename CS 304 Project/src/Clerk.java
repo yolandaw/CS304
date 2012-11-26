@@ -102,8 +102,8 @@ public class Clerk {
 		bookCopy bookCopy = new bookCopy();
 		holdRequest hr = new holdRequest();
 
-		bid = bor.findBorrowerOfBook(callNo, copyNo);
-		borid = bor.findBoridOfBook(callNo, copyNo);
+		bid = bor.getBidOfBook(callNo, copyNo);
+		borid = bor.getBoridOfBook(callNo, copyNo);
 		bor.setInDate(callNo, copyNo);
 		
 		if (bor.isOverdue(borid)) {

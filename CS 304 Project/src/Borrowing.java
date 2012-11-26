@@ -72,7 +72,7 @@ public class Borrowing {
 	}
 	
 	//find borrowing id of given book that has not been returned
-	public int findBoridOfBook(int callNo, int copyNo){
+	public int getBoridOfBook(int callNo, int copyNo){
 		Statement stmt;
 		ResultSet rs;
 		int borid = 0;
@@ -94,7 +94,7 @@ public class Borrowing {
 	}
 	
 	//find borrower of the retunred book
-	public int findBorrowerOfBook(int callNo, int copyNo){
+	public int getBidOfBook(int callNo, int copyNo){
 		Statement stmt;
 		ResultSet rs;
 		int bid = 0;
