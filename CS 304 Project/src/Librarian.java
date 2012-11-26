@@ -65,27 +65,42 @@ public class Librarian {
 
 
 
-	public List<List<String>> generateBookReport() {
+	public Object[][] generateBookReport() {
 
 		int borid;
+		int callNo;
+		int copyNo;
+		int count;
+		Date outDate;
 		String overdue;
 		Statement stmt;
+
+		Statement stmt2;
 		ResultSet rs;
+		ResultSet rs2;
+		String title;
 		Borrowing borrowing = new Borrowing();
 
-		try{
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borrowing_borid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
-			
-			List<List<String>> colArray = new ArrayList<List<String>>(1);
+		Object[][] bookList;
 
-			List<String> columnHeadingsArray = new ArrayList<String>(1);
-			columnHeadingsArray.add("Call Number");
-			columnHeadingsArray.add("Copy Number");
-			columnHeadingsArray.add("Out Date");
-			columnHeadingsArray.add("Overdue");
-			colArray.add(columnHeadingsArray);
-			
+		try{
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT borrowing_borid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL");
+
+
+			try {
+
+				rs.last();
+
+				count = rs.getRow();
+				rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+
+			bookList = new Object[count][5];
+			int i = 0;
 			while(rs.next()) {
 
 				borid = rs.getInt("borrowing_borid");
@@ -94,27 +109,33 @@ public class Librarian {
 				} else {
 					overdue = "";
 				}
-				
-				List<String> rowArray = new ArrayList<String>(1);
 
-				rowArray.add(rs.getString("book_callNo"));
-				rowArray.add(rs.getString("bookCopy_copyNo"));
-				rowArray.add(rs.getString("borrowing_outDate"));
-				rowArray.add(overdue);
-				colArray.add(rowArray);
+				callNo = rs.getInt("book_callNo");
+				copyNo = rs.getInt("bookCopy_copyNo");
+				outDate = rs.getDate("borrowing_outDate");
 
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
+
+				bookList[i][0] = callNo;
+				bookList[i][1] = copyNo;
+				bookList[i][2] = title;
+				bookList[i][3] = outDate;
+				bookList[i][4] = overdue;
+				i++;
 			}
-						
+
+			//			for (i=0;i<count;i++) {
+			//				for (int j=0;j<5;j++) {
+			//					System.out.println(bookList[i][j]);
+			//				}
+			//			}
+
 			stmt.close();
-			
-//			int numRows = colArray.size();
-//			for (int i=0; i < numRows; i++) {
-//				for (int k=0; k < 4; k++) {
-//					System.out.println(colArray.get(i).get(k));
-//				}
-//			}
-			
-			return colArray;
+
+			return bookList;
 		}
 
 		catch(SQLException e){
@@ -124,46 +145,60 @@ public class Librarian {
 
 	}
 
-	public List<List<String>> generatePopularBooksReport(int year, int n) {
+	public Object[][] generatePopularBooksReport(int year, int n) {
 
 		Statement stmt;
 		ResultSet rs;
 
+		int count;
+		int callNo;
+		String title;
+		int borrowCount;
+
+		Object[][] bookList;
+
+
 		try{
-			stmt = con.createStatement();
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			rs = stmt.executeQuery("SELECT * FROM ((SELECT book_callNo, COUNT(borrowing_borid) FROM borrowing WHERE EXTRACT(YEAR from borrowing_outDate) ='" + year + "' GROUP BY borrowing.book_callNo ORDER BY COUNT(borrowing_borid) DESC) borr JOIN (SELECT book_callNo, book_title from book) booktitle ON borr.book_callNo = booktitle.book_callNo)");
 
-			List<List<String>> colArray = new ArrayList<List<String>>(1);
+			try {
 
+				rs.last();
 
-			List<String> columnHeadingsArray = new ArrayList<String>(1);
-			columnHeadingsArray.add("Call Number");
-			columnHeadingsArray.add("Book Title");
-			columnHeadingsArray.add("Number of Times Borrowed");
-			colArray.add(columnHeadingsArray);
-			
-			int j = 1;
-			
-			while(rs.next() && j <= n) {
-				
-				List<String> rowArray = new ArrayList<String>(1);
-
-				rowArray.add(rs.getString("book_callNo"));
-				rowArray.add(rs.getString("book_title"));
-				rowArray.add(rs.getString("COUNT(borrowing_borid)"));
-				colArray.add(rowArray);
-				
+				count = rs.getRow();
+				rs.beforeFirst();
 			}
-			
-//			int numRows = colArray.size();
-//			for (int i=0; i < numRows; i++) {
-//				for (int k=0; k < 3; k++) {
-//					System.out.println(colArray.get(i).get(k));
-//				}
-//			}
+			catch(Exception ex) {
+				return null;
+			}
+
+			bookList = new Object[count][3];
+			int i = 0;
+			int j = 1;
+
+			while(rs.next() && j <= n) {
+
+				callNo = rs.getInt("book_callNo");
+				title = rs.getString("book_title");
+				borrowCount = rs.getInt("COUNT(borrowing_borid)");
+
+				bookList[i][0] = callNo;
+				bookList[i][1] = title;
+				bookList[i][2] = borrowCount;
+				i++;
+
+			}
+
 			stmt.close();
 
-			return colArray;
+//			for (int l=0;l<count;l++) {
+//				for (int k=0;k<3;k++) {
+//					System.out.println(bookList[l][k]);
+//				}
+//			}
+			
+			return bookList;
 		}
 
 		catch(SQLException e){
@@ -184,10 +219,10 @@ public class Librarian {
 
 				//		librarian.generatePopularBooksReport(2012, 1);
 
-			//	librarian.addBook(48, 0, "title", "mainAuthor", "publisher", 1939);
-			
-//			librarian.generateBookReport();
-//			librarian.generatePopularBooksReport(2012, 10);
+				//	librarian.addBook(48, 0, "title", "mainAuthor", "publisher", 1939);
+
+			//	librarian.generateBookReport();
+					//		librarian.generatePopularBooksReport(2012, 10);
 			}
 		});
 	}
