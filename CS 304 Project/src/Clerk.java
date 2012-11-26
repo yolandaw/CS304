@@ -11,6 +11,7 @@ public class Clerk {
 	private String staff = "staff";
 	private String general = "general";
 	java.sql.Connection con = Connection.getInstance().getConnection();
+	private static int overdueListCount;
 
 	// Fine currFine = new Fine();
 
@@ -59,7 +60,7 @@ public class Clerk {
 
 	// checks out a list of books - unfinished (still have to get return expiry dates)
 	// returns false if user has fines; otherwise, checkout is completed and returns true
-	public List<List<String>> checkOut(int bid, int[] callNo, int[] copyNo) {
+	public Object[][] checkOut(int bid, int[] callNo, int[] copyNo) {
 
 		Fine currFine = new Fine();
 		bookCopy bookCopy = new bookCopy();
@@ -86,8 +87,8 @@ public class Clerk {
 
 				}
 			}
-			return true;
 		}
+		return null;
 
 	}
 
@@ -119,21 +120,77 @@ public class Clerk {
 
 	//unfinished - still have to print out book titles and info instead of callNo and copyNo
 	public Object[][] checkOverdue() {
-		Object[][] overdueList = null ;
+		Statement stmt;
+		ResultSet rs = null;
+		Statement stmt2;
+		ResultSet rs2;
+		Object[][] overdueList = null;
+		int bid;
+		int borid;
+		int callNo;
+		int copyNo;
+		Date outDate;
+		String title = null;
+		int count = 0;
 		Borrowing bor = new Borrowing();
 		
-		overdueList = bor.getOverdueList();
+		try{
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT * FROM borrowing WHERE borrowing_inDate IS NULL");
+			
+			try {
+			  rs.last();
+			   count = rs.getRow();
+			    rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+			overdueList = new Object[count][5];
+			while(rs.next()){
+				bid = rs.getInt("borr_bid");
+				borid = rs.getInt("borrowing_borid");
+				callNo = rs.getInt("book_callNo");
+				copyNo = rs.getInt("bookcopy_copyNo");
+				outDate = rs.getDate("borrowing_outDate");
+
+				
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
+
+					if(bor.isOverdue(borid)){
+						overdueList[overdueListCount][0] = bid;
+						overdueList[overdueListCount][1] = outDate;
+						overdueList[overdueListCount][2] = callNo;	
+						overdueList[overdueListCount][3] = copyNo;
+						overdueList[overdueListCount][4] = title;
+						overdueListCount++;				
+					}				
+
+					return overdueList;		
+			}
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
 		
-		for(int k = 0; k < bor.getOverdueListCount(); k++){
+		
+		return null;
+		
+	}
+	
+	//checks array (testing method)
+	public void printArray(){
+		Object[][] overdueList = checkOverdue();
+		for(int k = 0; k < overdueListCount; k++){
 			for(int j = 0; j < 5 ; j++){
 				System.out.print(overdueList[k][j] + " ");
 
 			}
 			System.out.println(" ");
 		}
-	
-		return overdueList;
-		
 	}
 
 	public static void main(String[] args) {
@@ -162,7 +219,7 @@ public class Clerk {
 				// borTest.displayBorrowing();
 				//borTest.displayBorrowing();
 				//bookC.displayBookCopy();
-				clerkTest.checkOverdue();
+				clerkTest.printArray();
 
 			}
 		});
