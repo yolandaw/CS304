@@ -165,6 +165,7 @@ public class GUI implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				JTextField name = new JTextField();
 				JPasswordField password = new JPasswordField();
+				JPasswordField passwordVerify = new JPasswordField();
 				JTextField address = new JTextField();
 				JTextField phone = new JTextField();
 				JTextField email = new JTextField();
@@ -173,12 +174,17 @@ public class GUI implements ActionListener{
 				final JComponent[] inputs = new JComponent[] {
 						new JLabel("Name"),name,
 						new JLabel("Password"),password,
+						new JLabel("Verify Password"),passwordVerify,
 						new JLabel("Address"),address,
 						new JLabel("Phone"),phone,
 						new JLabel("E-mail"),email,
 						new JLabel("SIN or Student No."),sinOrStNo,
 						new JLabel("Type"),type
 				};
+				String insertPassword;
+				if(password.toString().equals(passwordVerify.toString())){
+					insertPassword = password.toString();
+				}
 				JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 //				if (clerk.addBorrower(name.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), Integer.parseInt(type.getText()))) {
 //					
