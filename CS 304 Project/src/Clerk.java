@@ -12,6 +12,7 @@ public class Clerk {
 	private String general = "general";
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	private static int overdueListCount;
+	private static int checkOutCount;
 
 	// Fine currFine = new Fine();
 
@@ -66,14 +67,14 @@ public class Clerk {
 		bookCopy bookCopy = new bookCopy();
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
-		Object[][] receipt = new Object[callNo.length][4];
+		Object[][] receipt = null;
 
 		if (currFine.checkHasFines(bid) == true) {
 			return null;
 			// prompt user with a pop up if they want to pay fines now or later
 			// and if true then return the payFine window
 		} else {
-
+			receipt = new Object[callNo.length][4];
 			for (int i = 0; i < callNo.length; i++) {
 				copyStatus = bookCopy.checkStatus(callNo[i], copyNo[i]);
 				if (copyStatus.equalsIgnoreCase("in")) {
@@ -81,7 +82,11 @@ public class Clerk {
 							copyNo[i]);
 					bookCopy.setStatusOut(callNo[i], copyNo[i]);
 					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
-					
+					receipt[checkOutCount][0] =
+					receipt[checkOutCount][1] =
+					receipt[checkOutCount][2] =
+					receipt[checkOutCount][3] =
+					checkOutCount ++;
 				} else {
 					System.out.println("Sorry, the book" + callNo[i] + " is "
 							+ copyStatus);
@@ -156,12 +161,8 @@ public class Clerk {
 				callNo = rs.getInt("book_callNo");
 				copyNo = rs.getInt("bookcopy_copyNo");
 				outDate = rs.getDate("borrowing_outDate");
-
+				title = getTitle(callNo);
 				
-				stmt2 = con.createStatement();
-				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
-				rs2.next();
-				title = rs2.getString("book_title");
 
 					if(bor.isOverdue(borid)){
 						overdueList[overdueListCount][0] = bid;
@@ -183,6 +184,26 @@ public class Clerk {
 		return null;
 		
 	}
+	
+	public String getTitle(int callNo){
+		Statement stmt;
+		ResultSet rs;
+		String title = null;
+		try{
+		stmt = con.createStatement();
+		rs = stmt.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+		rs.next();
+		title = rs.getString("book_title");
+		//return title;
+		}
+		catch(SQLException e){
+			System.out.println("Message : " + e.getMessage());
+		}
+		return title;
+
+	}
+	
+
 	
 	//checks array (testing method)
 	public void printArray(){
@@ -223,6 +244,7 @@ public class Clerk {
 				//borTest.displayBorrowing();
 				//bookC.displayBookCopy();
 				clerkTest.printArray();
+				//System.out.println(clerkTest.getTitle(1));
 
 			}
 		});

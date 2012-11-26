@@ -24,10 +24,10 @@ public class CastDate {
 	public Date addToDate(java.sql.Date date, int days){
 		
 		Calendar cal = new GregorianCalendar();
-
+		
 		cal.setTime(date);
 		
-		cal.add(cal.DAY_OF_YEAR, days);
+		cal.add(Calendar.DAY_OF_YEAR, days);
 		
 		java.util.Date utilDate = cal.getTime();
 		java.sql.Date SQLDate = new java.sql.Date(utilDate.getTime());
@@ -67,7 +67,7 @@ public class CastDate {
 				//System.out.println(newDate.getGDate(issueD));
 				cal.setTime(newDate.getGDate(issueD).getTime());
 				System.out.println(cal.getTime());
-				cal.add(cal.DATE, 20);
+				cal.add(Calendar.DATE, 20);
 				System.out.println(cal.getTime());
 
 			}
