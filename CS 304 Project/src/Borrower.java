@@ -143,11 +143,11 @@ public class Borrower{
 			}
 			stmt.close();
 
-			for (i=0;i<count;i++) {
-				for (int j=0;j<5;j++) {
-					System.out.println(currentLoans[i][j]);
-				}
-			}
+//			for (i=0;i<count;i++) {
+//				for (int j=0;j<5;j++) {
+//					System.out.println(currentLoans[i][j]);
+//				}
+//			}
 
 			return currentLoans;
 		}
@@ -187,9 +187,9 @@ public class Borrower{
 			catch(Exception ex) {
 				return null;
 			}
-			if (count > 0) {
+//			if (count > 0) {
 				currentFines = new Object[count][5];
-			}
+//			}
 
 			int i=0;
 			while(rs.next()) {
@@ -350,11 +350,12 @@ public class Borrower{
 				//				Fine f = new Fine();
 				//				f.displayBIDFines(10);
 				//				borrower.search("a");
-				//	borrower.checkLoans(15);
-				//				borrower.checkFines(10);
+//					borrower.checkLoans(15);
+								borrower.checkFines(10);
 
 				borrower.placeHold(10,2);
 				borrower.checkHolds(10);
+				
 			}
 		});
 	}
