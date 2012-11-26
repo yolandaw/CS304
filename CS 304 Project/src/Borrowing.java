@@ -9,7 +9,6 @@ public class Borrowing {
 		
 	}
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	private static int overdueListCount = 0;
 
 	CastDate newDate = new CastDate();
 	
@@ -138,72 +137,7 @@ public class Borrowing {
 		}
 	}
 	
-
-	//returns a list of overdue books
-	public Object[][] getOverdueList(){
-		Statement stmt;
-		ResultSet rs = null;
-		Statement stmt2;
-		ResultSet rs2;
-		Object[][] overdueList = null;
-		int bid;
-		int borid;
-		int callNo;
-		int copyNo;
-		Date outDate;
-		String title = null;
-		int count = 0;
-		
-		try{
-			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			rs = stmt.executeQuery("SELECT * FROM borrowing WHERE borrowing_inDate IS NULL");
-			
-			try {
-			  rs.last();
-			   count = rs.getRow();
-			    rs.beforeFirst();
-			}
-			catch(Exception ex) {
-				return null;
-			}
-			
-			while(rs.next()){
-				bid = rs.getInt("borr_bid");
-				borid = rs.getInt("borrowing_borid");
-				callNo = rs.getInt("book_callNo");
-				copyNo = rs.getInt("bookcopy_copyNo");
-				outDate = rs.getDate("borrowing_outDate");
-				overdueList = new Object[count][5];
-				
-				stmt2 = con.createStatement();
-				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
-				rs2.next();
-				title = rs2.getString("book_title");
-
-					if(isOverdue(borid)){
-						overdueList[overdueListCount][0] = bid;
-						overdueList[overdueListCount][1] = outDate;
-						overdueList[overdueListCount][2] = callNo;	
-						overdueList[overdueListCount][3] = copyNo;
-						overdueList[overdueListCount][4] = title;
-						overdueListCount++;				
-					}				
-					return overdueList;		
-			}
-		}
-		catch(SQLException e){
-			System.out.println("Message: " + e.getMessage());
-		}
-		
-		return null;
 	
-	}
-	// have to add returning book titles
-	//return the number for rows of the 2d array for getOverdueList method
-	public int getOverdueListCount(){
-		return overdueListCount;
-	}
-
 	public boolean isOverdue(int borid) {
 		
 		int bid;
@@ -322,7 +256,6 @@ public class Borrowing {
 //                System.out.println(" ");
 //                System.out.println(testTable.findBorrowerOfBook(1, 10));
 //                System.out.println(testTable.findBoridOfBook(1, 10));
-                testTable.getOverdueList();
             }
         });
 	}
