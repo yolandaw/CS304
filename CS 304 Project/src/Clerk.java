@@ -74,7 +74,7 @@ public class Clerk {
 			// prompt user with a pop up if they want to pay fines now or later
 			// and if true then return the payFine window
 		} else {
-			receipt = new Object[callNo.length][4];
+			receipt = new Object[callNo.length][5];
 			for (int i = 0; i < callNo.length; i++) {
 				copyStatus = bookCopy.checkStatus(callNo[i], copyNo[i]);
 				if (copyStatus.equalsIgnoreCase("in")) {
@@ -82,10 +82,11 @@ public class Clerk {
 							copyNo[i]);
 					bookCopy.setStatusOut(callNo[i], copyNo[i]);
 					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
-					receipt[checkOutCount][0] =
-					receipt[checkOutCount][1] =
-					receipt[checkOutCount][2] =
-					receipt[checkOutCount][3] =
+					receipt[checkOutCount][0] = currBorr.getBoridOfBook(callNo[i], copyNo[i]);
+					receipt[checkOutCount][1] = callNo[i];
+					receipt[checkOutCount][2] = copyNo[i];
+					receipt[checkOutCount][3] = getTitle(callNo[i]);
+					receipt[checkOutCount][4] = //duedate
 					checkOutCount ++;
 				} else {
 					System.out.println("Sorry, the book" + callNo[i] + " is "
@@ -124,7 +125,7 @@ public class Clerk {
 
 	}
 
-	//unfinished - still have to print out book titles and info instead of callNo and copyNo
+	//still have to print out book titles and info instead of callNo and copyNo
 	public Object[][] checkOverdue() {
 		Statement stmt;
 		ResultSet rs = null;
@@ -185,6 +186,7 @@ public class Clerk {
 		
 	}
 	
+	//getting title of book (helper method)
 	public String getTitle(int callNo){
 		Statement stmt;
 		ResultSet rs;
