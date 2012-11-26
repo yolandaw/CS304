@@ -237,7 +237,7 @@ public class Clerk {
 //				copyNo[1] = 2;
 //				copyNo[2] = 1;
 //				 borrower.displayBorrower();
-				 clerkTest.addBorrower("VI", "vip", "korea", 705, "yb@yg.com", 12345698, 1);
+				// clerkTest.addBorrower("VI", "vip", "korea", 705, "yb@yg.com", 12345698, 1);
 //				 "email@email.ubc.com", 12341, 1);
 //				 borrower.displayBorrower();
 //				clerkTest.checkOut(10, callNo, copyNo);
@@ -246,6 +246,7 @@ public class Clerk {
 //				borTest.displayBorrowing();
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
+				 System.out.println(clerkTest.returnBook(1, 7));
 
 
 			}
