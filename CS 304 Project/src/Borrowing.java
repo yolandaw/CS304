@@ -189,6 +189,33 @@ public class Borrowing {
 		return false;
 	}
 	
+	//gets the due date;
+	public java.sql.Date getDueDate(int bid, int borid){
+		Statement stmt;
+		ResultSet rs;
+		java.sql.Date outDate = null;
+		java.sql.Date dueDate = null;
+		int timeLimit;
+		CastDate dateObj = new CastDate();
+		borrowerTable borT = new borrowerTable();
+
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT borrowing_outDate FROM borrowing WHERE borrowing_borid = " + borid);
+			rs.next();
+			outDate= rs.getDate("borrowing_outDate");
+			timeLimit = borT.getTimeLimit(borT.checkBorrowerType(bid));
+			dueDate = dateObj.addToDate(outDate, timeLimit);
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		
+		return dueDate;
+		
+	}
+	
 	// Display all the rows of the table Borrowing
 	public void displayBorrowing() {
 		int borid;
@@ -253,10 +280,11 @@ public class Borrowing {
                 testTable.displayBorrowing();
                 //testTable.insertBorrowing(1005, 15, 1, 10);
 //                testTable.displayBorrowing();
-//                System.out.println(" ");
+                System.out.println(" ");
 //                System.out.println(testTable.findBorrowerOfBook(1, 10));
 //                System.out.println(testTable.findBoridOfBook(1, 10));
-            }
+                System.out.println(testTable.getDueDate(10, 1000));            
+               }
         });
 	}
 

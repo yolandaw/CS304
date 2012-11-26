@@ -56,6 +56,25 @@ public class Book {
 
 	}
 
+	//getting title of book
+	public String getTitle(int callNo){
+		Statement stmt;
+		ResultSet rs;
+		String title = null;
+		try{
+		stmt = con.createStatement();
+		rs = stmt.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+		rs.next();
+		title = rs.getString("book_title");
+		//return title;
+		}
+		catch(SQLException e){
+			System.out.println("Message : " + e.getMessage());
+		}
+		return title;
+
+	}
+	
 	// Insert a tuple into the table Book
 	public void insertBook(int callNo, int isbn, String title, String mainAuthor, String publisher, int year) {
 

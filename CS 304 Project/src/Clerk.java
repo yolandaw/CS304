@@ -59,12 +59,13 @@ public class Clerk {
 		}
 	}
 
-	// checks out a list of books - unfinished (still have to get return expiry dates)
+	// checks out a list of book
 	// returns false if user has fines; otherwise, checkout is completed and returns true
 	public Object[][] checkOut(int bid, int[] callNo, int[] copyNo) {
 
 		Fine currFine = new Fine();
 		bookCopy bookCopy = new bookCopy();
+		Book book = new Book();
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
 		Object[][] receipt = null;
@@ -78,15 +79,15 @@ public class Clerk {
 			for (int i = 0; i < callNo.length; i++) {
 				copyStatus = bookCopy.checkStatus(callNo[i], copyNo[i]);
 				if (copyStatus.equalsIgnoreCase("in")) {
-					currBorr.insertBorrowing(i + 1000, bid, callNo[i],
+					currBorr.insertBorrowing(i + 2000, bid, callNo[i],
 							copyNo[i]);
 					bookCopy.setStatusOut(callNo[i], copyNo[i]);
 					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
 					receipt[checkOutCount][0] = currBorr.getBoridOfBook(callNo[i], copyNo[i]);
 					receipt[checkOutCount][1] = callNo[i];
 					receipt[checkOutCount][2] = copyNo[i];
-					receipt[checkOutCount][3] = getTitle(callNo[i]);
-					receipt[checkOutCount][4] = //duedate
+					receipt[checkOutCount][3] = book.getTitle(callNo[i]);
+					receipt[checkOutCount][4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(callNo[i], copyNo[i]));
 					checkOutCount ++;
 				} else {
 					System.out.println("Sorry, the book" + callNo[i] + " is "
@@ -95,7 +96,7 @@ public class Clerk {
 				}
 			}
 		}
-		return null;
+		return receipt;
 
 	}
 
@@ -125,7 +126,7 @@ public class Clerk {
 
 	}
 
-	//still have to print out book titles and info instead of callNo and copyNo
+	//returns list of all overdue books and bids of borrowers who took them out 
 	public Object[][] checkOverdue() {
 		Statement stmt;
 		ResultSet rs = null;
@@ -140,6 +141,7 @@ public class Clerk {
 		String title = null;
 		int count = 0;
 		Borrowing bor = new Borrowing();
+		Book book = new Book();
 		
 		try{
 			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -162,7 +164,7 @@ public class Clerk {
 				callNo = rs.getInt("book_callNo");
 				copyNo = rs.getInt("bookcopy_copyNo");
 				outDate = rs.getDate("borrowing_outDate");
-				title = getTitle(callNo);
+				title = book.getTitle(callNo);
 				
 
 					if(bor.isOverdue(borid)){
@@ -186,31 +188,21 @@ public class Clerk {
 		
 	}
 	
-	//getting title of book (helper method)
-	public String getTitle(int callNo){
-		Statement stmt;
-		ResultSet rs;
-		String title = null;
-		try{
-		stmt = con.createStatement();
-		rs = stmt.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
-		rs.next();
-		title = rs.getString("book_title");
-		//return title;
-		}
-		catch(SQLException e){
-			System.out.println("Message : " + e.getMessage());
-		}
-		return title;
-
-	}
-	
 
 	
 	//checks array (testing method)
 	public void printArray(){
-		Object[][] overdueList = checkOverdue();
-		for(int k = 0; k < overdueListCount; k++){
+		int[] callNo = new int[3];
+		callNo[0] = 1;
+		callNo[1] = 102;
+		callNo[2] = 10;
+
+		int[] copyNo = new int[3];
+		copyNo[0] = 8;
+		copyNo[1] = 1;
+		copyNo[2] = 1;
+		Object[][] overdueList = checkOut(10, callNo, copyNo);
+		for(int k = 0; k < checkOutCount; k++){
 			for(int j = 0; j < 5 ; j++){
 				System.out.print(overdueList[k][j] + " ");
 
@@ -245,7 +237,7 @@ public class Clerk {
 				// borTest.displayBorrowing();
 				//borTest.displayBorrowing();
 				//bookC.displayBookCopy();
-				clerkTest.printArray();
+				//clerkTest.printArray();
 				//System.out.println(clerkTest.getTitle(1));
 
 			}

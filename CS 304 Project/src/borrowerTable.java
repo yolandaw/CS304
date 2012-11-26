@@ -223,34 +223,6 @@ public class borrowerTable {
 		
 	}
 	
-	//gets the due date;
-	public java.sql.Date getDueDate(int bid, int borid){
-		Statement stmt;
-		ResultSet rs;
-		java.sql.Date inDate = null;
-		java.sql.Date dueDate = null;
-		CastDate dateObj = new CastDate();
-		Calendar cal = new GregorianCalendar();
-		int timeLimit;
-		
-		try{
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borrowing_outDate FROM borrowing WHERE borrowing_borid = " + borid);
-			while(rs.next()){
-			java.sql.Date temp = rs.getDate("borrowing_outDate");
-//			cal.setTime(temp);
-			//inDate = dateObj.getSQLDate(cal) ;
-			timeLimit = getTimeLimit(checkBorrowerType(bid));
-			dueDate = dateObj.addToDate(temp, timeLimit);
-			}
-		}
-		catch(SQLException e){
-			System.out.println("Message: " + e.getMessage());
-		}
-		
-		return dueDate;
-		
-	}
 
 	
 	public boolean checkBid(int bid){
@@ -296,7 +268,6 @@ public class borrowerTable {
             System.out.println(" ");
             //System.out.println(testTable.checkBid(10000));
             //System.out.println(testTable.checkBid(10));
-            System.out.println(testTable.getDueDate(10, 1000));
            
             }
         });
