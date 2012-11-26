@@ -66,6 +66,7 @@ public class Clerk {
 		bookCopy bookCopy = new bookCopy();
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
+		Object[][] receipt = new Object[callNo.length][4];
 
 		if (currFine.checkHasFines(bid) == true) {
 			return null;
@@ -79,8 +80,8 @@ public class Clerk {
 					currBorr.insertBorrowing(i + 1000, bid, callNo[i],
 							copyNo[i]);
 					bookCopy.setStatusOut(callNo[i], copyNo[i]);
-					System.out.println("Book: " + callNo[i]
-							+ "has been checked out. \n return date: ");
+					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
+					
 				} else {
 					System.out.println("Sorry, the book" + callNo[i] + " is "
 							+ copyStatus);
@@ -145,8 +146,10 @@ public class Clerk {
 			}
 			catch(Exception ex) {
 				return null;
-			}
+			} 
+			if(count > 0){
 			overdueList = new Object[count][5];
+			}
 			while(rs.next()){
 				bid = rs.getInt("borr_bid");
 				borid = rs.getInt("borrowing_borid");
