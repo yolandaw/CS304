@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +19,6 @@ public class GUI implements ActionListener{
 	private borrowerTable bt;
     private JFrame mainFrame;
     private JPanel dataPanel;
-    private JTextArea textArea;
     private JMenu menu1;
     private JMenu menu2;
     private JMenu menu3;
@@ -39,7 +39,6 @@ public class GUI implements ActionListener{
 		borrower = new Borrower();
 		clerk = new Clerk();
 		bt = new borrowerTable();
-		textArea = new JTextArea();
 	}
 
 	public void showLibrary() {
@@ -47,8 +46,7 @@ public class GUI implements ActionListener{
 		mainFrame = new JFrame("Library System");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initializeMenu();
-		dataPanel = new JPanel ();
-
+		dataPanel = new JPanel (new GridLayout(3,1));
 		mainFrame.getContentPane().add(dataPanel, BorderLayout.NORTH);
 		
 		mainFrame.pack();
@@ -77,49 +75,68 @@ public class GUI implements ActionListener{
 		menuItem3a = new JMenuItem("Add Book");
 		menuItem3b = new JMenuItem("All Loans");
 		menuItem3c = new JMenuItem("Popular Books");
-		textArea.setEditable(false);
 		
 		//Borrower - Search Books
 		menuItem1a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String keyword = inputPopUp("Enter keywords: ");
-				List<List<String>> searchedBook = new ArrayList<List<String>>(1);
-				searchedBook = borrower.search(keyword);
-				StringBuilder builder = new StringBuilder();
-				for (List<String> searched : searchedBook) {
-					builder.append(searched).append("\n");
+				dataPanel.removeAll();
+				String columnNames[] = {"Title", "Call Number", "Copy Number", "Status"};
+				Object dataValues[][] = borrower.search(keyword);
+				if (dataValues == null) {
+					popUp("No results found for given keywords.");
 				}
-				textArea.setText(builder.toString());
-				JButton placeHold = new JButton ("Place Hold Request");
-				textArea.add(placeHold);
+				else {
+					JTable bookTable = new JTable (dataValues, columnNames);
+					dataPanel.add(new JScrollPane(bookTable));
+					JButton placeHold = new JButton ("Place Hold Request");
+					dataPanel.add(placeHold);					
+					placeHold.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							String id = inputPopUp("Enter Borrower ID:");
+							
+						}
+					});
+					mainFrame.validate();
+				}
 			}
 		});
 		
-//		
-//		JButton placeHold = new JButton ("Place Hold Request");
-//		borrowerPanel.add(placeHold);
-		
-//		placeHold.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				String id = inputPopUp("Enter Borrower ID:");
-//			}
-//		});
-		
 		//Borrower - Check Account
+		//TODO - Discuss with Shirley about her methods
 		menuItem1b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = inputPopUp("Enter Borrower ID:");
-				if (!bt.checkBid(Integer.parseInt(id))) {
-					popUp("Invalid Borrower ID! Please try again.");
+
+				String columnName[] = {"Books Out"};
+				String columnName2[] = {"Hold Requests"};
+				String columnName3[] = {"Outstanding Fines"};
+				Object dataValues[][] = borrower.checkHolds(Integer.parseInt(id));
+				Object dataValues2[][] = borrower.checkHolds(Integer.parseInt(id));
+				Object dataValues3[][] = borrower.checkFines(Integer.parseInt(id));
+
+				if (dataValues == null | dataValues2 == null | dataValues3 == null) {
+					popUp("No records associated with Borrower ID " + id + ".");
 				}
 				else {
-					List<List<String>> searchedID = new ArrayList<List<String>>(1);
-					searchedID = borrower.checkAccount(Integer.parseInt(id));
-					StringBuilder builder = new StringBuilder();
-					for (List<String> searchID : searchedID) {
-						builder.append(searchID).append("\n");
-					}
-					textArea.setText(builder.toString());
+					dataPanel.removeAll();
+					JTable table1 = new JTable(dataValues,columnName);
+					JTable table2 = new JTable(dataValues2,columnName2);
+					JTable table3 = new JTable(dataValues3,columnName3);
+					table1.setEnabled(false);
+					table2.setEnabled(false);
+					table3.setEnabled(false);
+					JScrollPane sp1 = new JScrollPane(table1);
+					JScrollPane sp2 = new JScrollPane(table2);
+					JScrollPane sp3 = new JScrollPane(table3);
+					sp1.setPreferredSize(new Dimension(200,150));
+					sp2.setPreferredSize(new Dimension(200,150));
+					sp3.setPreferredSize(new Dimension(200,150));
+					sp1.setCorner(JScrollPane.UPPER_LEFT_CORNER, table1.getTableHeader());
+					dataPanel.add(sp1);
+					dataPanel.add(sp2);
+					dataPanel.add(sp3);
+					mainFrame.revalidate();	
 				}
 			}
 		});
@@ -128,19 +145,44 @@ public class GUI implements ActionListener{
 		menuItem1c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = inputPopUp("Enter Borrower ID:");
-				if(borrower.payFine(Integer.parseInt(id))) {
-					popUp("Fines successfully paid!");
+				if (bt.checkBid(Integer.parseInt(id))) {
+					if(borrower.payFine(Integer.parseInt(id))) {
+						popUp("Fines successfully paid!");
+					}
+					else {
+						popUp("No fines associated with Borrower ID" + id);
+					}
 				}
 				else {
-					popUp("No fines associated with Borrower ID" + id);
+					popUp("Invalid Borrower ID " + id +".");
 				}
+			
 			}
 		});
 		
 		//Clerk - Add Borrower
 		menuItem2a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JTextField name = new JTextField();
+				JPasswordField password = new JPasswordField();
+				JTextField address = new JTextField();
+				JTextField phone = new JTextField();
+				JTextField email = new JTextField();
+				JTextField sinOrStNo = new JTextField();
+				JTextField type = new JTextField();
+				final JComponent[] inputs = new JComponent[] {
+						new JLabel("Name"),name,
+						new JLabel("Password"),password,
+						new JLabel("Address"),address,
+						new JLabel("Phone"),phone,
+						new JLabel("E-mail"),email,
+						new JLabel("SIN or Student No."),sinOrStNo,
+						new JLabel("Type"),type
+				};
+				JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
+//				if (clerk.addBorrower(name.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), Integer.parseInt(type.getText()))) {
+//					
+//				}
 			}
 		});
 		
@@ -187,6 +229,7 @@ public class GUI implements ActionListener{
 				}
 				else {
 					popUp("Book with ISBN " + isbn + " already exists! Try to add a copy instead.");
+					
 				}
 			}
 		});
@@ -220,24 +263,9 @@ public class GUI implements ActionListener{
 		//Librarian - Generate Book report
 		menuItem3b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				List<List<String>> libArray = new ArrayList<List<String>>(1);
-//				libArray = librarian.generateBookReport();
-//				StringBuilder builder = new StringBuilder();
-//				for (List<String> lib : libArray) {
-//					builder.append(lib).append("\n");
-//				}
-//				textArea.setText(builder.toString());
-				
-				String columnNames[] = { "Call Number", "Copy Number", "Out Date", "Overdue" };
-				String dataValues[][] =
-					{
-						{ "12", "234", "67", "" },
-						{ "-123", "43", "853", "" },
-						{ "93", "89.2", "109", "" },
-						{ "279", "9033", "3092", "" },
-						{ "279", "9033", "3092", "" },
-
-					};
+				dataPanel.removeAll();
+				String columnNames[] = { "Call Number", "Copy Number", "Title", "Out Date", "Overdue" };
+				Object dataValues[][] = librarian.generateBookReport();
 				JTable bookTable = new JTable(dataValues,columnNames);
 				dataPanel.add(new JScrollPane(bookTable));
 				mainFrame.validate();
@@ -247,7 +275,7 @@ public class GUI implements ActionListener{
 		//Librarian - Generate popular books
 		menuItem3c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//dataPanel.removeAll();
+				dataPanel.removeAll();
 				JTextField year = new JTextField();
 				JTextField numBooks = new JTextField();
 				final JComponent[] inputs = new JComponent[] {
@@ -255,13 +283,16 @@ public class GUI implements ActionListener{
 					new JLabel("Number of Books to Display"),numBooks
 				};
 				JOptionPane.showMessageDialog(null, inputs, "Generate Popular Books", JOptionPane.PLAIN_MESSAGE);
-				List<List<String>> popularArray = new ArrayList<List<String>>(1);
-				popularArray = librarian.generatePopularBooksReport(Integer.parseInt(year.getText()), Integer.parseInt(numBooks.getText()));
-				StringBuilder builder = new StringBuilder();
-				for (List<String> pop : popularArray) {
-					builder.append(pop).append("\n");
+				String columnNames[] = {"Call Number", "Title", "# of Times Borrowed" };
+				Object dataValues[][] = librarian.generatePopularBooksReport(Integer.parseInt(year.getText()), Integer.parseInt(numBooks.getText()));
+				if (dataValues == null) {
+					popUp("No results for given year");
 				}
-				textArea.setText(builder.toString());
+				else {
+					JTable bookTable = new JTable(dataValues,columnNames);
+					dataPanel.add(new JScrollPane(bookTable));
+					mainFrame.validate();
+				}
 			}
 		});
 
