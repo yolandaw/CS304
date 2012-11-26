@@ -81,7 +81,7 @@ public class Librarian {
 		String title;
 		Borrowing borrowing = new Borrowing();
 
-		Object[][] bookList;
+		Object[][] bookList = null;
 
 		try{
 			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -98,8 +98,10 @@ public class Librarian {
 			catch(Exception ex) {
 				return null;
 			}
+			if (count > 0) {
 
-			bookList = new Object[count][5];
+				bookList = new Object[count][5];
+			}
 			int i = 0;
 			while(rs.next()) {
 
@@ -176,7 +178,7 @@ public class Librarian {
 
 			int i = 0;
 			int j = 1;
-			
+
 			if (count > 0) {
 
 				bookList = new Object[count][3];
@@ -197,12 +199,12 @@ public class Librarian {
 
 			stmt.close();
 
-//			for (int l=0;l<count;l++) {
-//				for (int k=0;k<3;k++) {
-//					System.out.println(bookList[l][k]);
-//				}
-//			}
-			
+			//			for (int l=0;l<count;l++) {
+			//				for (int k=0;k<3;k++) {
+			//					System.out.println(bookList[l][k]);
+			//				}
+			//			}
+
 			return bookList;
 		}
 
@@ -226,8 +228,8 @@ public class Librarian {
 
 				//	librarian.addBook(48, 0, "title", "mainAuthor", "publisher", 1939);
 
-			//	librarian.generateBookReport();
-//							librarian.generatePopularBooksReport(2012, 10);
+				//	librarian.generateBookReport();
+				//							librarian.generatePopularBooksReport(2012, 10);
 			}
 		});
 	}
