@@ -155,7 +155,7 @@ public class Librarian {
 		String title;
 		int borrowCount;
 
-		Object[][] bookList;
+		Object[][] bookList = null;
 
 
 		try{
@@ -169,7 +169,6 @@ public class Librarian {
 				count = rs.getRow();
 				rs.beforeFirst();
 
-				bookList = new Object[count][3];
 			}
 			catch(Exception ex) {
 				return null;
@@ -177,6 +176,11 @@ public class Librarian {
 
 			int i = 0;
 			int j = 1;
+			
+			if (count > 0) {
+
+				bookList = new Object[count][3];
+			}
 
 			while(rs.next() && j <= n) {
 
@@ -223,7 +227,7 @@ public class Librarian {
 				//	librarian.addBook(48, 0, "title", "mainAuthor", "publisher", 1939);
 
 			//	librarian.generateBookReport();
-					//		librarian.generatePopularBooksReport(2012, 10);
+//							librarian.generatePopularBooksReport(2012, 10);
 			}
 		});
 	}
