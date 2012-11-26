@@ -87,8 +87,8 @@ public class Clerk {
 
 				}
 			}
-			return true;
 		}
+		return null;
 
 	}
 
