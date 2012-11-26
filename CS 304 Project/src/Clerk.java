@@ -231,7 +231,7 @@ public class Clerk {
 //				borTest.displayBorrowing();
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
-//				System.out.println(clerkTest.getTitle(1));
+
 
 			}
 		});

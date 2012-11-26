@@ -405,7 +405,7 @@ public class Fine {
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-//				Fine runFine = new Fine();
+				Fine runFine = new Fine();
 //				Calendar cal = Calendar.getInstance();
 //				 runFine.connect("ora_v2e7","a75190090");
 //				 runFine.insertFine(100, 20, "2012-12-12", null, 23);
@@ -434,8 +434,8 @@ public class Fine {
 //				 runFine.payAllFines(10);
 //				 runFine.displayUnPaidFines(10);
 //				 runFine.displayFine();
-//				 java.sql.Date dueDate = java.sql.Date.valueOf("2012-11-11");
-//				System.out.println(runFine.calculateFine(dueDate));
+				 java.sql.Date dueDate = java.sql.Date.valueOf("2012-11-11");
+			System.out.println(runFine.calculateFine(dueDate));
 
 			}
 		});
