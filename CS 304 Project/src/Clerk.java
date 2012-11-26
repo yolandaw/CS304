@@ -107,18 +107,22 @@ public class Clerk {
 
 	// takes in callNo and copyNo and sets bookCopy as in if no hold requests, 
 	//else on hold. If it is overdue, a fine of 50 cents per day is added
-	public void returnBook(int callNo, int copyNo) {
+	public String returnBook(int callNo, int copyNo) {
 		int bid;
 		int borid;
 		Borrowing bor = new Borrowing();
 		Fine fine = new Fine();
 		bookCopy bookCopy = new bookCopy();
 		holdRequest hr = new holdRequest();
+		String msg = null;
 
 		bid = bor.getBidOfBook(callNo, copyNo);
 		borid = bor.getBoridOfBook(callNo, copyNo);
 		bor.setInDate(callNo, copyNo);
-		
+		if(bookCopy.checkStatus(callNo, copyNo).equals("in")){
+			msg = "Book Copy has already been returned previously.";
+			return msg;
+		}
 		if (bor.isOverdue(borid)) {
 			fine.insertFine(callNo + copyNo, fine.calculateFine(bor.getDueDate(bid, borid)), borid);
 		}
@@ -126,7 +130,9 @@ public class Clerk {
 			bookCopy.setStatusHold(callNo, copyNo);
 		} else {
 			bookCopy.setStatusIn(callNo, copyNo);
+			msg = "Book is returned.";
 		}
+		return msg;
 
 	}
 
