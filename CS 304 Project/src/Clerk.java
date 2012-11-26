@@ -118,14 +118,14 @@ public class Clerk {
 	}
 
 	//unfinished - still have to print out book titles and info instead of callNo and copyNo
-	public String[][] checkOverdue() {
-		String[][] overdueList = null ;
+	public Object[][] checkOverdue() {
+		Object[][] overdueList = null ;
 		Borrowing bor = new Borrowing();
 		
 		overdueList = bor.getOverdueList();
 		
 		for(int k = 0; k < bor.getOverdueListCount(); k++){
-			for(int j = 0; j < 3 ; j++){
+			for(int j = 0; j < 5 ; j++){
 				System.out.print(overdueList[k][j] + " ");
 
 			}

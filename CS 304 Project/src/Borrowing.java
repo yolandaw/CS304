@@ -140,20 +140,22 @@ public class Borrowing {
 	
 
 	//returns a list of overdue books
-	public String[][] getOverdueList(){
+	public Object[][] getOverdueList(){
 		Statement stmt;
 		ResultSet rs = null;
-		String[][] overdueList = null;
+		Statement stmt2;
+		ResultSet rs2;
+		Object[][] overdueList = null;
 		int bid;
 		int borid;
 		int callNo;
 		int copyNo;
 		Date outDate;
-		Date inDate;
+		String title = null;
 		int count = 0;
 		
 		try{
-			stmt = con.createStatement(rs.TYPE_SCROLL_INSENSITIVE,rs.CONCUR_READ_ONLY);
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			rs = stmt.executeQuery("SELECT * FROM borrowing WHERE borrowing_inDate IS NULL");
 			
 			try {
@@ -164,31 +166,26 @@ public class Borrowing {
 			catch(Exception ex) {
 				return null;
 			}
-				
+			
 			while(rs.next()){
 				bid = rs.getInt("borr_bid");
-				String sBid = Integer.toString(bid);
 				borid = rs.getInt("borrowing_borid");
 				callNo = rs.getInt("book_callNo");
-				String sCallNo = Integer.toString(callNo);
 				copyNo = rs.getInt("bookcopy_copyNo");
-				String sCopyNo = Integer.toString(copyNo);
 				outDate = rs.getDate("borrowing_outDate");
-				inDate = rs.getDate("borrowing_inDate");
-				overdueList = new String[count][3];
+				overdueList = new Object[count][5];
 				
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
 
 					if(isOverdue(borid)){
-						//System.out.println("Borid: " + borid);
-						//System.out.println(sBid);
-						overdueList[overdueListCount][0] = sBid;
-						//System.out.println(overdueList[i][0]);
-						//System.out.println(sCallNo);
-						overdueList[overdueListCount][1] = sCallNo;
-						//System.out.println(overdueList[i][1]);
-						//System.out.println(sCopyNo);
-						overdueList[overdueListCount][2] = sCopyNo;
-						//System.out.println(overdueList[i][2]);		
+						overdueList[overdueListCount][0] = bid;
+						overdueList[overdueListCount][1] = outDate;
+						overdueList[overdueListCount][2] = callNo;	
+						overdueList[overdueListCount][3] = copyNo;
+						overdueList[overdueListCount][4] = title;
 						overdueListCount++;				
 					}				
 					return overdueList;		
