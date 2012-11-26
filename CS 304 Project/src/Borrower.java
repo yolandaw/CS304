@@ -18,78 +18,281 @@ public class Borrower{
 	 * The result is a list of books that match the search together with the number 
 	 * of copies that are in and out
 	 */
-	public List<List<String>> search(String keyword) {
+	public Object[][] search(String keyword) {
 		Statement stmt;
 		ResultSet rs;
+
+		int count;
+
+		String title;
+		int callNo;
+		int copyNo;
+		String status;
+
+		Object[][] searchResult = null;
+
 		try {
-			stmt = con.createStatement();
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			rs = stmt.executeQuery("SELECT book_title, book.book_callNo, bookCopy_copyNo, bookCopy_status FROM book, bookCopy, hasAuthor, hasSubject WHERE book.book_callNo=bookCopy.book_callNo AND (book_title LIKE '%" + keyword + "%' OR (hasAuthor_name LIKE '%" + keyword + "%' AND book.book_callNo=hasAuthor.book_callNo) OR (hasSubject_subject LIKE '%" + keyword + "%' AND book.book_callNo=hasSubject.book_callNo) OR book.book_mainAuthor LIKE '%" + keyword + "%' )");
-		
-			List<List<String>> colArray = new ArrayList<List<String>>(1);
 
-			
+			try {
+
+				rs.last();
+
+				count = rs.getRow();
+				rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+
+			if (count > 0) {
+				searchResult = new Object[count][4];
+			}
+
+			int i=0;
 			while(rs.next()) {
-				List<String> rowArray = new ArrayList<String>(1);
-				for (int i=0; i < 4; i++) {
-					rowArray.add(i, rs.getString(i+1));
-				}
 
-				colArray.add(rowArray);
+				title = rs.getString("book_title");
+				callNo = rs.getInt("book_callNo");
+				copyNo = rs.getInt("bookCopy_copyNo");
+				status = rs.getString("bookCopy_status");
+
+				searchResult[i][0] = title;
+				searchResult[i][1] = callNo;
+				searchResult[i][2] = copyNo;
+				searchResult[i][3] = status;
+				i++;
+
 			}
 			stmt.close();
-			
-//			int numRows = colArray.size();
-//			for (int i=0; i < numRows; i++) {
-//				for (int k=0; k < 4; k++) {
-//					System.out.println(colArray.get(i).get(k));
-//				}
-//			}
-						
-			return colArray;
+
+			//			for (int l=0;l<count;l++) {
+			//				for (int k=0;k<4;k++) {
+			//					System.out.println(searchResult[l][k]);
+			//				}
+			//			}
+
+			return searchResult;
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
-		    ex.printStackTrace();
+			System.out.println("Message: " + ex.getMessage());
+			ex.printStackTrace();
 		}	
 		return null;
 	}
 
-	/*
-	 * Check his/her account. The system will display the items the borrower has 
-	 * currently borrowed and not yet returned, any outstanding fines and the hold 
-	 * requests that have been placed by the borrower
-	 */
-	public List<List<String>> checkAccount(int id) {
+	public Object[][] checkLoans(int id) {
 		Statement stmt;
+		Statement stmt2;
 		ResultSet rs;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT bc.book_callNo,bc.bookCopy_copyNo,f.fine_amount,h.holdRequest_hid FROM fine f,borrowing b,holdRequest h,bookCopy bc,borrower bo WHERE (bo.borr_bid=b.borr_bid AND b.book_callNo=bc.book_callNo AND b.bookCopy_copyNo=bc.bookCopy_copyNo AND b.borrowing_borid=f.borrowing_borid AND bo.borr_bid=h.borr_bid) AND bo.borr_bid=" + id + " ");
-				
-			List<List<String>> colArray = new ArrayList<List<String>>(1);
+		ResultSet rs2;
+		int count;
+		int borid;
+		int callNo;
+		int copyNo;
+		String title;
+		Date outDate;
 
-			
+		Borrowing borrowing = new Borrowing();
+		String overdue;
+
+		Object[][] currentLoans = null;
+		try {
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT borrowing_borid, book_callNo, bookCopy_copyNo, borrowing_outDate, borrowing_inDate FROM borrowing WHERE borrowing_inDate IS NULL AND borr_bid = '" + id + "'");
+
+			try {
+
+				rs.last();
+				count = rs.getRow();
+				rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+			if (count > 0) {
+				currentLoans = new Object[count][5];
+			}
+
+			int i=0;
 			while(rs.next()) {
-				List<String> rowArray = new ArrayList<String>(1);
-				for (int i=0; i < 4; i++) {
-					rowArray.add(i, rs.getString(i+1));
+				borid = rs.getInt("borrowing_borid");
+				if (borrowing.isOverdue(borid)) {
+					overdue = "Overdue";	
+				} else {
+					overdue = "";
 				}
 
-				colArray.add(rowArray);
+				callNo = rs.getInt("book_callNo");
+				copyNo = rs.getInt("bookCopy_copyNo");
+				outDate = rs.getDate("borrowing_outDate");
+
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
+
+				currentLoans[i][0] = callNo;
+				currentLoans[i][1] = copyNo;
+				currentLoans[i][2] = title;
+				currentLoans[i][3] = outDate;
+				currentLoans[i][4] = overdue;
+				i++;
 			}
 			stmt.close();
-			
-			return colArray;
+
+			for (i=0;i<count;i++) {
+				for (int j=0;j<5;j++) {
+					System.out.println(currentLoans[i][j]);
+				}
+			}
+
+			return currentLoans;
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
+			System.out.println("Message: " + ex.getMessage());
 		}
-		
+
 		return null;
+
 	}
-	
+
+	public Object[][] checkFines(int id) {
+		Statement stmt;
+		Statement stmt2;
+		ResultSet rs;
+		ResultSet rs2;
+		int count;
+		int borid;
+		int callNo;
+		int fineAmount;
+		String title;
+		Date issueDate;
+		Date dueDate;
+
+		Object[][] currentFines = null;
+		try {
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT fine.borrowing_borid, fine_amount, fine_issueDate, book_callNo FROM borrowing, fine WHERE fine_paidDate IS NULL AND borrowing.borrowing_borid = fine.borrowing_borid AND borr_bid = '" + id + "'");
+
+			try {
+				rs.last();
+				count = rs.getRow();
+				rs.beforeFirst();
+			}
+
+			catch(Exception ex) {
+				return null;
+			}
+			if (count > 0) {
+				currentFines = new Object[count][5];
+			}
+
+			int i=0;
+			while(rs.next()) {
+
+				callNo = rs.getInt("book_callNo");
+				issueDate = rs.getDate("fine_issueDate");
+				fineAmount = rs.getInt("fine_amount");
+
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
+
+				currentFines[i][0] = issueDate;
+				currentFines[i][1] = fineAmount;
+				currentFines[i][2] = callNo;
+				currentFines[i][3] = title;
+				currentFines[i][4] = ""; //dueDate;
+				i++;
+			}
+			stmt.close();
+
+			for (i=0;i<count;i++) {
+				for (int j=0;j<5;j++) {
+					System.out.println(currentFines[i][j]);
+				}
+			}
+
+			return currentFines;
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		}
+
+		return null;
+
+	}
+
+	public Object[][] checkHolds(int id) {
+		Statement stmt;
+		Statement stmt2;
+		ResultSet rs;
+		ResultSet rs2;
+		int count;
+		int callNo;
+		String title;
+		Date issueDate;
+
+		Borrowing borrowing = new Borrowing();
+
+		Object[][] currentHolds = null;
+		try {
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			rs = stmt.executeQuery("SELECT holdRequest_issueDate, book_callNo FROM holdRequest WHERE borr_bid = '" + id + "'");
+
+			try {
+				rs.last();
+				count = rs.getRow();
+				rs.beforeFirst();
+			}
+			catch(Exception ex) {
+				return null;
+			}
+			if (count > 0) {
+				currentHolds = new Object[count][3];
+			}
+
+			int i=0;
+			while(rs.next()) {
+
+				callNo = rs.getInt("book_callNo");
+				issueDate = rs.getDate("holdRequest_issueDate");
+
+				stmt2 = con.createStatement();
+				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
+				rs2.next();
+				title = rs2.getString("book_title");
+
+				currentHolds[i][0] = callNo;
+				currentHolds[i][1] = title;
+				currentHolds[i][2] = issueDate;
+				i++;
+			}
+			stmt.close();
+
+			for (i=0;i<count;i++) {
+				for (int j=0;j<3;j++) {
+					System.out.println(currentHolds[i][j]);
+				}
+			}
+
+			return currentHolds;
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		}
+
+		return null;
+
+	}
+
 	/*
 	 * Place a hold request for a book that is out. When the item is returned, 
 	 * the system sends an email to the borrower and informs the library clerk 
@@ -97,9 +300,31 @@ public class Borrower{
 	 */
 	public void placeHold(int bid, int callNo) {
 		holdRequest hr = new holdRequest();
-		hr.insertHoldRequest(bid, callNo);
+		Statement stmt;
+		ResultSet rs;
+		String status;
+
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT bookCopy_status FROM bookCopy WHERE book_callNo = '" + callNo + "'");
+			
+			while (rs.next()) {
+				status = rs.getString("bookCopy_status");
+
+				if (!status.equals("out")) {
+					return;
+				}
+			}
+
+			hr.insertHoldRequest(bid, callNo);
+		
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		}
 	}
-	
+
 	/*
 	 * Pay a fine
 	 */
@@ -113,7 +338,7 @@ public class Borrower{
 			return false;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		//Schedule a job for the event-dispatching thread:
 		//creating and showing this application's GUI.
@@ -122,10 +347,14 @@ public class Borrower{
 				//hr.displayHoldRequest();
 				Borrower borrower = new Borrower();
 				//borrower.payFine(10);
-//				Fine f = new Fine();
-//				f.displayBIDFines(10);
-				borrower.search("a");
-			
+				//				Fine f = new Fine();
+				//				f.displayBIDFines(10);
+				//				borrower.search("a");
+				//	borrower.checkLoans(15);
+				//				borrower.checkFines(10);
+
+				borrower.placeHold(10,2);
+				borrower.checkHolds(10);
 			}
 		});
 	}
