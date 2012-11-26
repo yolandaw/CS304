@@ -19,7 +19,7 @@ public class borrowerTable {
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
 		//TODO: generate of bid and expiryDate
-		int bid = 20018;
+		int bid = 222223;
 		
 		//getting current day borrower was created and then setting the expiry date to 2 years later
 		cal.getTime();
@@ -152,17 +152,43 @@ public class borrowerTable {
 	
 	
 	//checks if SIN or Stu. No. alreadt exists in database, if exists returns true, else false.
-	public boolean checkSinOrStNo(int sinOrStNo){
+	public boolean checkSin(int sinOrStNo){
 		
 		Statement stmt;
 		ResultSet rs;
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borr_sinorstno FROM borrower WHERE borr_sinorstno = " + sinOrStNo );
+			//rs = stmt.executeQuery("SELECT borr_sinorstno FROM borrower WHERE borr_sinorstno = " + sinOrStNo );
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM BORROWER WHERE borr_sinorstno = " + sinOrStNo + "AND bt_type <> 'student'");
 			
 			while(rs.next()){
-				if (rs.getInt(1) == sinOrStNo){
+				if (rs.getInt(1) > 0){
+					return true;
+				}
+			}
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return false;
+		
+	}
+	
+	//checks if SIN or Stu. No. alreadt exists in database, if exists returns true, else false.
+	public boolean checkSID(int sinOrStNo){
+		
+		Statement stmt;
+		ResultSet rs;
+
+		try{
+			stmt = con.createStatement();
+			//rs = stmt.executeQuery("SELECT borr_sinorstno FROM borrower WHERE borr_sinorstno = " + sinOrStNo );
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM BORROWER WHERE borr_sinorstno = " + sinOrStNo + "AND bt_type = 'student'");
+			
+			
+			while(rs.next()){
+				if (rs.getInt(1) > 0){
 					return true;
 				}
 			}

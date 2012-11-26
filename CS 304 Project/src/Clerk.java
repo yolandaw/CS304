@@ -45,9 +45,18 @@ public class Clerk {
 		borrowerTable newBorrower = new borrowerTable();
 
 		// check if SIN or St. No already exists
-		if (newBorrower.checkSinOrStNo(sinOrStNo)) {
+		System.out.println(newBorrower.checkSID(sinOrStNo));
+		if (type == 1 && newBorrower.checkSID(sinOrStNo)) {
+			System.out.println("Could not add 1");
 			return false;
-		} else {
+		}
+		System.out.println(newBorrower.checkSin(sinOrStNo));
+		System.out.println((type == 2 || type == 3 || type == 4));
+		if ((type == 2 || type == 3 || type == 4) && newBorrower.checkSin(sinOrStNo)){
+			System.out.println("Could not add 2");
+			return false;
+		}
+		else {
 
 			newBorrower.insertBorrower(name, password, address, phone, email,
 					sinOrStNo, returnType(type));
@@ -208,7 +217,7 @@ public class Clerk {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-//				Clerk clerkTest = new Clerk();
+				Clerk clerkTest = new Clerk();
 //				Borrowing borTest = new Borrowing();
 //				borrowerTable borrower = new borrowerTable();
 //				bookCopy bookC = new bookCopy();
@@ -222,7 +231,7 @@ public class Clerk {
 //				copyNo[1] = 2;
 //				copyNo[2] = 1;
 //				 borrower.displayBorrower();
-//				 clerkTest.addBorrower("nam", "pass", "address", 9090,
+				 clerkTest.addBorrower("VI", "vip", "korea", 705, "yb@yg.com", 12345698, 1);
 //				 "email@email.ubc.com", 12341, 1);
 //				 borrower.displayBorrower();
 //				clerkTest.checkOut(10, callNo, copyNo);
