@@ -224,22 +224,21 @@ public class borrowerTable {
 	}
 	
 	//gets the due date;
-	public java.util.Date getDueDate(int bid, int borid){
+	public java.sql.Date getDueDate(int bid, int borid){
 		Statement stmt;
 		ResultSet rs;
-		Date inDate = null;
-		Calendar dueDate = new GregorianCalendar();
+		java.sql.Date inDate = null;
+		java.sql.Date dueDate = null;
+
 		CastDate dateObj = new CastDate();
 		int timeLimit;
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT borrowing_inDate FROM borrowing WHERE borrowing_borid = " + borid);
+			rs = stmt.executeQuery("SELECT borrowing_indate FROM borrowing WHERE borrowing_borid = " + borid);
 			rs.next();
-			inDate = rs.getDate(1);
-			timeLimit = getTimeLimit(checkBorrowerType(bid));
-			java.sql.Date sqlDate = dateObj.addToDate(inDate, timeLimit);
-			dueDate = dateObj.getGDate(sqlDate);
+			inDate = rs.getDate("borrowing_indate");
+
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -248,7 +247,10 @@ public class borrowerTable {
 
 		
 		
-		return dueDate.getTime();
+		timeLimit = getTimeLimit(checkBorrowerType(bid));
+		dueDate = dateObj.addToDate(inDate, timeLimit);
+		dateObj.getGDate(dueDate);
+		return dueDate;
 		
 	}
 
