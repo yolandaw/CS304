@@ -168,12 +168,13 @@ public class Librarian {
 
 				count = rs.getRow();
 				rs.beforeFirst();
+
+				bookList = new Object[count][3];
 			}
 			catch(Exception ex) {
 				return null;
 			}
 
-			bookList = new Object[count][3];
 			int i = 0;
 			int j = 1;
 
