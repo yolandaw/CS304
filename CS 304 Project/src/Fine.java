@@ -1,16 +1,12 @@
 //unfinished class - need to add if/else cases in some of the sql queries and double check -Yolanda
 
 import java.sql.*;
-import java.io.*;
 import java.sql.Date;
-import java.lang.Object;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Fine {
 
-	private BufferedReader in = new BufferedReader(new InputStreamReader(
-			System.in));
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	CastDate newDate = new CastDate();
 
@@ -327,6 +323,23 @@ public class Fine {
 		}
 
 	}
+	
+	//fine increases y 50 cents per day
+	public float calculateFine(java.sql.Date dueDate){
+		CastDate dateObj = new CastDate();
+		Calendar cal = new GregorianCalendar();
+		Calendar currCal = GregorianCalendar.getInstance();
+
+		
+		cal = dateObj.getGDate(dueDate);
+		int dueDateInt =  cal.get(Calendar.DAY_OF_YEAR);
+		int currDateInt = currCal.get(Calendar.DAY_OF_YEAR);
+			
+		int days = currDateInt - dueDateInt;
+				
+		return (float) (0.5 * days);
+		
+	}
 
 	// Display all the rows of the table Fine
 	public void displayFine() {
@@ -392,35 +405,37 @@ public class Fine {
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Fine runFine = new Fine();
-				Calendar cal = Calendar.getInstance();
-				// runFine.connect("ora_v2e7","a75190090");
-				// runFine.insertFine(100, 20, "2012-12-12", null, 23);
-				// runFine.deleteFine(11);
-				// System.out.print(runFine.getBorrowingFineID(10));
-				// runFine.getFines(10);
-				// runFine.setPaidDate(100);
-				// runFine.setPaidDate(2);
-				// runFine.setPaidDate(99);
-				// runFine.setPaidDate(10);
-				// System.out.println("All rows");
-				// runFine.displayFine();
-				// java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
-				// System.out.println(runFine.getGDate(issueD));
-				// cal.setTime(runFine.getGDate(issueD).getTime());
-				// System.out.println(cal.getTime());a
-				// cal.add(cal.DATE, 20);
-				// System.out.println(cal.getTime());
-				// System.out.println("Null rows");
-				// runFine.displayBIDFines(10);
-				// runFine.displayUnPaidFines(10);
-				// runFine.payAllFines(10);
-				// runFine.setPaidDateToNull(10);
-				// runFine.displayFine();
-				// System.out.println(runFine.checkHasFines(10));
-				// runFine.payAllFines(10);
-				// runFine.displayUnPaidFines(10);
-				// runFine.displayFine();
+//				Fine runFine = new Fine();
+//				Calendar cal = Calendar.getInstance();
+//				 runFine.connect("ora_v2e7","a75190090");
+//				 runFine.insertFine(100, 20, "2012-12-12", null, 23);
+//				 runFine.deleteFine(11);
+//				 System.out.print(runFine.getBorrowingFineID(10));
+//				 runFine.getFines(10);
+//				 runFine.setPaidDate(100);
+//				 runFine.setPaidDate(2);
+//				 runFine.setPaidDate(99);
+//				 runFine.setPaidDate(10);
+//				 System.out.println("All rows");
+//				 runFine.displayFine();
+//				 java.sql.Date issueD = java.sql.Date.valueOf("2012-12-12");
+//				 System.out.println(runFine.getGDate(issueD));
+//				 cal.setTime(runFine.getGDate(issueD).getTime());
+//				 System.out.println(cal.getTime());a
+//				 cal.add(cal.DATE, 20);
+//				 System.out.println(cal.getTime());
+//				 System.out.println("Null rows");
+//				 runFine.displayBIDFines(10);
+//				 runFine.displayUnPaidFines(10);
+//				 runFine.payAllFines(10);
+//				 runFine.setPaidDateToNull(10);
+//				 runFine.displayFine();
+//				 System.out.println(runFine.checkHasFines(10));
+//				 runFine.payAllFines(10);
+//				 runFine.displayUnPaidFines(10);
+//				 runFine.displayFine();
+//				 java.sql.Date dueDate = java.sql.Date.valueOf("2012-11-11");
+//				System.out.println(runFine.calculateFine(dueDate));
 
 			}
 		});

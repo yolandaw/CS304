@@ -94,6 +94,7 @@ public class Borrower{
 		int copyNo;
 		String title;
 		Date outDate;
+		Borrowing borr = new Borrowing();
 
 		Borrowing borrowing = new Borrowing();
 		String overdue;
@@ -113,7 +114,7 @@ public class Borrower{
 				return null;
 			}
 			if (count > 0) {
-				currentLoans = new Object[count][5];
+				currentLoans = new Object[count][6];
 			}
 
 			int i=0;
@@ -128,6 +129,7 @@ public class Borrower{
 				callNo = rs.getInt("book_callNo");
 				copyNo = rs.getInt("bookCopy_copyNo");
 				outDate = rs.getDate("borrowing_outDate");
+				borid = rs.getInt("borrowing_borid");
 
 				stmt2 = con.createStatement();
 				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
@@ -139,6 +141,7 @@ public class Borrower{
 				currentLoans[i][2] = title;
 				currentLoans[i][3] = outDate;
 				currentLoans[i][4] = overdue;
+				currentLoans[i][5] = borr.getDueDate(id, borid);
 				i++;
 			}
 			stmt.close();
@@ -171,7 +174,7 @@ public class Borrower{
 		int fineAmount;
 		String title;
 		Date issueDate;
-		Date dueDate;
+		Borrowing borr = new Borrowing();
 
 		Object[][] currentFines = null;
 		try {
@@ -197,6 +200,7 @@ public class Borrower{
 				callNo = rs.getInt("book_callNo");
 				issueDate = rs.getDate("fine_issueDate");
 				fineAmount = rs.getInt("fine_amount");
+				borid = rs.getInt("borrowing_borid");
 
 				stmt2 = con.createStatement();
 				rs2 = stmt2.executeQuery("SELECT book_title FROM book WHERE book_callno =" + callNo);
@@ -207,7 +211,7 @@ public class Borrower{
 				currentFines[i][1] = fineAmount;
 				currentFines[i][2] = callNo;
 				currentFines[i][3] = title;
-				currentFines[i][4] = ""; //dueDate;
+				currentFines[i][4] = borr.getDueDate(id, borid); //dueDate;
 				i++;
 			}
 			stmt.close();
@@ -353,8 +357,8 @@ public class Borrower{
 //					borrower.checkLoans(15);
 								borrower.checkFines(10);
 
-				borrower.placeHold(10,2);
-				borrower.checkHolds(10);
+				//borrower.placeHold(10,2);
+				//borrower.checkHolds(10);
 				
 			}
 		});

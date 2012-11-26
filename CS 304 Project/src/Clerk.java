@@ -1,8 +1,4 @@
 import java.sql.*;
-import java.util.List;
-import java.util.Vector;
-
-
 
 public class Clerk {
 
@@ -100,9 +96,8 @@ public class Clerk {
 
 	}
 
-	//how do we determine the amount we fine the borrower?
 	// takes in callNo and copyNo and sets bookCopy as in if no hold requests, 
-	//else on hold. If it is overdue, a fine of $1 is added
+	//else on hold. If it is overdue, a fine of 50 cents per day is added
 	public void returnBook(int callNo, int copyNo) {
 		int bid;
 		int borid;
@@ -116,7 +111,7 @@ public class Clerk {
 		bor.setInDate(callNo, copyNo);
 		
 		if (bor.isOverdue(borid)) {
-			fine.insertFine(callNo + copyNo, 1, borid);
+			fine.insertFine(callNo + copyNo, fine.calculateFine(bor.getDueDate(bid, borid)), borid);
 		}
 		if (hr.hasHold(callNo)) {
 			bookCopy.setStatusHold(callNo, copyNo);
@@ -130,8 +125,6 @@ public class Clerk {
 	public Object[][] checkOverdue() {
 		Statement stmt;
 		ResultSet rs = null;
-		Statement stmt2;
-		ResultSet rs2;
 		Object[][] overdueList = null;
 		int bid;
 		int borid;
@@ -215,30 +208,30 @@ public class Clerk {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Clerk clerkTest = new Clerk();
-				Borrowing borTest = new Borrowing();
-				borrowerTable borrower = new borrowerTable();
-				bookCopy bookC = new bookCopy();
-				int[] callNo = new int[3];
-				callNo[0] = 1;
-				callNo[1] = 1;
-				callNo[2] = 10;
-
-				int[] copyNo = new int[3];
-				copyNo[0] = 1;
-				copyNo[1] = 2;
-				copyNo[2] = 1;
-				// borrower.displayBorrower();
-				// clerkTest.addBorrower("nam", "pass", "address", 9090,
-				// "email@email.ubc.com", 12341, 1);
-				// borrower.displayBorrower();
-				//clerkTest.checkOut(10, callNo, copyNo);
-				//clerkTest.returnBook(10, 1);
-				// borTest.displayBorrowing();
-				//borTest.displayBorrowing();
-				//bookC.displayBookCopy();
-				//clerkTest.printArray();
-				//System.out.println(clerkTest.getTitle(1));
+//				Clerk clerkTest = new Clerk();
+//				Borrowing borTest = new Borrowing();
+//				borrowerTable borrower = new borrowerTable();
+//				bookCopy bookC = new bookCopy();
+//				int[] callNo = new int[3];
+//				callNo[0] = 1;
+//				callNo[1] = 1;
+//				callNo[2] = 10;
+//
+//				int[] copyNo = new int[3];
+//				copyNo[0] = 1;
+//				copyNo[1] = 2;
+//				copyNo[2] = 1;
+//				 borrower.displayBorrower();
+//				 clerkTest.addBorrower("nam", "pass", "address", 9090,
+//				 "email@email.ubc.com", 12341, 1);
+//				 borrower.displayBorrower();
+//				clerkTest.checkOut(10, callNo, copyNo);
+//				clerkTest.returnBook(10, 1);
+//				 borTest.displayBorrowing();
+//				borTest.displayBorrowing();
+//				bookC.displayBookCopy();
+//				clerkTest.printArray();
+//				System.out.println(clerkTest.getTitle(1));
 
 			}
 		});
