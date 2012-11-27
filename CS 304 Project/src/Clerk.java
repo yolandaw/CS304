@@ -59,44 +59,37 @@ public class Clerk {
 			return true;
 		}
 	}
+	
+	//first use fine table's checkHasFines(bid)
 
 	// checks out a list of book
 	// returns false if user has fines; otherwise, checkout is completed and returns true
-	public Object[][] checkOut(int bid, int[] callNo, int[] copyNo) {
+	public Object[] checkOut(int bid, int callNo, int copyNo) {
 
-		Fine currFine = new Fine();
 		bookCopy bookCopy = new bookCopy();
 		Book book = new Book();
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
-		Object[][] receipt = null;
-
-		if (currFine.checkHasFines(bid) == true) {
-			return null;
-			// prompt user with a pop up if they want to pay fines now or later
-			// and if true then return the payFine window
-		} else {
-			receipt = new Object[callNo.length][5];
-			for (int i = 0; i < callNo.length; i++) {
-				copyStatus = bookCopy.checkStatus(callNo[i], copyNo[i]);
+		Object[] receipt = null;
+	
+			receipt = new Object[5];
+				copyStatus = bookCopy.checkStatus(callNo, copyNo);
 				if (copyStatus.equalsIgnoreCase("in")) {
-					currBorr.insertBorrowing(i + 2000, bid, callNo[i],
-							copyNo[i]);
-					bookCopy.setStatusOut(callNo[i], copyNo[i]);
+					currBorr.insertBorrowing(bid, callNo, copyNo);
+					bookCopy.setStatusOut(callNo, copyNo);
 					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
-					receipt[checkOutCount][0] = currBorr.getBoridOfBook(callNo[i], copyNo[i]);
-					receipt[checkOutCount][1] = callNo[i];
-					receipt[checkOutCount][2] = copyNo[i];
-					receipt[checkOutCount][3] = book.getTitle(callNo[i]);
-					receipt[checkOutCount][4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(callNo[i], copyNo[i]));
+					receipt[0] = currBorr.getBoridOfBook(callNo, copyNo);
+					receipt[1] = callNo;
+					receipt[2] = copyNo;
+					receipt[3] = book.getTitle(callNo);
+					receipt[4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(callNo, copyNo));
 					checkOutCount ++;
 				} else {
-					System.out.println("Sorry, the book" + callNo[i] + " is "
-							+ copyStatus);
+					return null;
 
 				}
-			}
-		}
+			
+		
 		return receipt;
 
 	}
@@ -195,32 +188,32 @@ public class Clerk {
 
 	
 	//checks array (testing method)
-	public void printArray(){
-		int[] callNo = new int[3];
-		callNo[0] = 1;
-		callNo[1] = 102;
-		callNo[2] = 10;
-
-		int[] copyNo = new int[3];
-		copyNo[0] = 8;
-		copyNo[1] = 1;
-		copyNo[2] = 1;
-		Object[][] overdueList = checkOut(10, callNo, copyNo);
-		for(int k = 0; k < checkOutCount; k++){
-			for(int j = 0; j < 5 ; j++){
-				System.out.print(overdueList[k][j] + " ");
-
-			}
-			System.out.println(" ");
-		}
-	}
+//	public void printArray(){
+//		int[] callNo = new int[3];
+//		callNo[0] = 1;
+//		callNo[1] = 102;
+//		callNo[2] = 10;
+//
+//		int[] copyNo = new int[3];
+//		copyNo[0] = 8;
+//		copyNo[1] = 1;
+//		copyNo[2] = 1;
+//		Object[][] overdueList = checkOut(10, callNo, copyNo);
+//		for(int k = 0; k < checkOutCount; k++){
+//			for(int j = 0; j < 5 ; j++){
+//				System.out.print(overdueList[k][j] + " ");
+//
+//			}
+//			System.out.println(" ");
+//		}
+//	}
 
 	public static void main(String[] args) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Clerk clerkTest = new Clerk();
-//				Borrowing borTest = new Borrowing();
+			Borrowing borTest = new Borrowing();
 //				borrowerTable borrower = new borrowerTable();
 //				bookCopy bookC = new bookCopy();
 //				int[] callNo = new int[3];
@@ -243,7 +236,9 @@ public class Clerk {
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
 				 System.out.println(clerkTest.returnBook(1, 7));
-
+				 borTest.displayBorrowing();
+				System.out.println(clerkTest.checkOut(10, 1, 4));
+				 borTest.displayBorrowing();
 
 			}
 		});

@@ -13,14 +13,13 @@ public class Borrowing {
 	CastDate newDate = new CastDate();
 	
 	// Insert a tuple into the table Borrowing
-	public void insertBorrowing(int borid, int bid, int callNo, int copyNo) {
+	public void insertBorrowing(int bid, int callNo, int copyNo) {
 		try {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(?,?,?,?,?,NULL)");
-			ps.setInt(1, borid);
-			ps.setInt(2, bid);
-			ps.setInt(3, callNo);
-			ps.setInt(4, copyNo);
-			ps.setDate(5, newDate.currentDate());
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrowing VALUES(borid_counter.nextval,?,?,?,?,NULL)");
+			ps.setInt(1, bid);
+			ps.setInt(2, callNo);
+			ps.setInt(3, copyNo);
+			ps.setDate(4, newDate.currentDate());
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
@@ -278,8 +277,10 @@ public class Borrowing {
                 Borrowing testTable = new Borrowing();
                 //testTable.setInDate(1, 2);
                 testTable.displayBorrowing();
-                //testTable.insertBorrowing(1005, 15, 1, 10);
-//                testTable.displayBorrowing();
+                testTable.insertBorrowing(15, 1, 8);
+                testTable.displayBorrowing();
+
+                //                testTable.displayBorrowing();
                 System.out.println(" ");
 //                System.out.println(testTable.findBorrowerOfBook(1, 10));
 //                System.out.println(testTable.findBoridOfBook(1, 10));

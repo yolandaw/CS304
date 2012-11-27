@@ -29,16 +29,16 @@ public class borrowerTable {
 		
 	
 		try {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES(?,?,?,?,?,?,?,?,?)");
-			ps.setInt(1, bid);
-			ps.setString(2, password);
-			ps.setString(3, name);
-			ps.setString(4, address);
-			ps.setInt(5, phone);
-			ps.setString(6, email);
-			ps.setInt(7, sinOrStNo);
-			ps.setDate(8, newDate.addToDate(issueD, 2000)); //newDate.getSQLDate(cal)
-			ps.setString(9, borrowerType);
+			PreparedStatement ps = con.prepareStatement("INSERT INTO borrower VALUES(bid_counter.nextval,?,?,?,?,?,?,?,?)");
+
+			ps.setString(1, password);
+			ps.setString(2, name);
+			ps.setString(3, address);
+			ps.setInt(4, phone);
+			ps.setString(5, email);
+			ps.setInt(6, sinOrStNo);
+			ps.setDate(7, newDate.addToDate(issueD, 2000)); //newDate.getSQLDate(cal)
+			ps.setString(8, borrowerType);
 			ps.executeUpdate();
 			con.commit();		
 		}
@@ -282,7 +282,7 @@ public class borrowerTable {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerTable testTable = new borrowerTable();
-               // testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "student");
+                testTable.insertBorrower("name", "password", "address", 1234567, "email@email.com", 11111111, "student");
                 //testTable.displayBorrower();
    //             testTable.deleteBorrower(12345);
                 
