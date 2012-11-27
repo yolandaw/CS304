@@ -8,6 +8,7 @@ public class Clerk {
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	private static int overdueListCount;
 	private static int checkOutCount;
+	private Object[][] receipt = new Object[30][5];
 
 	// Fine currFine = new Fine();
 
@@ -59,41 +60,46 @@ public class Clerk {
 			return true;
 		}
 	}
-	
-	//first use fine table's checkHasFines(bid)
 
 	// checks out a list of book
 	// returns false if user has fines; otherwise, checkout is completed and returns true
-	public Object[] checkOut(int bid, int callNo, int copyNo) {
+	public boolean checkOut(int bid, int[] input) {
 
 		bookCopy bookCopy = new bookCopy();
 		Book book = new Book();
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
-		Object[] receipt = null;
-	
-			receipt = new Object[5];
-				copyStatus = bookCopy.checkStatus(callNo, copyNo);
-				if (copyStatus.equalsIgnoreCase("in")) {
-					currBorr.insertBorrowing(bid, callNo, copyNo);
-					bookCopy.setStatusOut(callNo, copyNo);
-					//System.out.println("Book: " + callNo[i] + "has been checked out. \n return date: ");
-					receipt[0] = currBorr.getBoridOfBook(callNo, copyNo);
-					receipt[1] = callNo;
-					receipt[2] = copyNo;
-					receipt[3] = book.getTitle(callNo);
-					receipt[4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(callNo, copyNo));
-					checkOutCount ++;
-				} else {
-					return null;
-
-				}
+//			receipt = new Object[callNo.length][5];
 			
-		
+				copyStatus = bookCopy.checkStatus(input[0], input[1]);
+				if (copyStatus.equalsIgnoreCase("in")) {
+					currBorr.insertBorrowing(bid, input[0], input[1]);
+					bookCopy.setStatusOut(input[0], input[1]);
+					receipt[checkOutCount][0] = currBorr.getBoridOfBook(input[0], input[1]);
+					receipt[checkOutCount][1] = input[0];
+					receipt[checkOutCount][2] = input[1];
+					receipt[checkOutCount][3] = book.getTitle(input[0]);
+					receipt[checkOutCount][4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(input[0], input[1]));
+					checkOutCount ++;
+					return true;
+				} else {
+					return false;
+
+				
+			}
+		}
+
+	public Object[][] getReceipt(){
 		return receipt;
-
 	}
+	
+	public void clearReceipt(){
+		receipt = new Object[30][5];
+		checkOutCount = 0;
+	}
+	
 
+	
 	// takes in callNo and copyNo and sets bookCopy as in if no hold requests, 
 	//else on hold. If it is overdue, a fine of 50 cents per day is added
 	public String returnBook(int callNo, int copyNo) {
@@ -188,32 +194,32 @@ public class Clerk {
 
 	
 	//checks array (testing method)
-//	public void printArray(){
-//		int[] callNo = new int[3];
-//		callNo[0] = 1;
-//		callNo[1] = 102;
-//		callNo[2] = 10;
-//
-//		int[] copyNo = new int[3];
-//		copyNo[0] = 8;
-//		copyNo[1] = 1;
-//		copyNo[2] = 1;
-//		Object[][] overdueList = checkOut(10, callNo, copyNo);
-//		for(int k = 0; k < checkOutCount; k++){
-//			for(int j = 0; j < 5 ; j++){
-//				System.out.print(overdueList[k][j] + " ");
-//
-//			}
-//			System.out.println(" ");
-//		}
-//	}
+	public void printArray(){
+		int[] callNo = new int[3];
+		callNo[0] = 1;
+		callNo[1] = 102;
+		callNo[2] = 10;
+
+		int[] copyNo = new int[3];
+		copyNo[0] = 8;
+		copyNo[1] = 1;
+		copyNo[2] = 1;
+		Object[][] overdueList = checkOut(10, callNo, copyNo);
+		for(int k = 0; k < checkOutCount; k++){
+			for(int j = 0; j < 5 ; j++){
+				System.out.print(overdueList[k][j] + " ");
+
+			}
+			System.out.println(" ");
+		}
+	}
 
 	public static void main(String[] args) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Clerk clerkTest = new Clerk();
-			Borrowing borTest = new Borrowing();
+//				Borrowing borTest = new Borrowing();
 //				borrowerTable borrower = new borrowerTable();
 //				bookCopy bookC = new bookCopy();
 //				int[] callNo = new int[3];
@@ -236,9 +242,7 @@ public class Clerk {
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
 				 System.out.println(clerkTest.returnBook(1, 7));
-				 borTest.displayBorrowing();
-				System.out.println(clerkTest.checkOut(10, 1, 4));
-				 borTest.displayBorrowing();
+
 
 			}
 		});
