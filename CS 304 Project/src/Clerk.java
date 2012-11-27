@@ -6,7 +6,7 @@ public class Clerk {
 	private String faculty = "faculty";
 	private String staff = "staff";
 	java.sql.Connection con = Connection.getInstance().getConnection();
-	private static int overdueListCount;
+	private int overdueListCount = 0;
 	private static int checkOutCount;
 	private  static Object[][] receipt = new Object[30][5];
 
@@ -173,9 +173,11 @@ public class Clerk {
 			catch(Exception ex) {
 				return null;
 			} 
+			System.out.println(count);
 			if(count > 0){
-			overdueList = new Object[count][5];
+			overdueList = new Object[5][5];
 			}
+			
 			while(rs.next()){
 				bid = rs.getInt("borr_bid");
 				borid = rs.getInt("borrowing_borid");
@@ -183,19 +185,18 @@ public class Clerk {
 				copyNo = rs.getInt("bookcopy_copyNo");
 				outDate = rs.getDate("borrowing_outDate");
 				title = book.getTitle(callNo);
-				
 
-					if(bor.isOverdue(borid)){
-						overdueList[overdueListCount][0] = bid;
-						overdueList[overdueListCount][1] = callNo;
-						overdueList[overdueListCount][2] = copyNo;	
-						overdueList[overdueListCount][3] = title;
-						overdueList[overdueListCount][4] = outDate;
-						overdueListCount++;				
-					}				
+				if(bor.isOverdue(borid)){
+					overdueList[overdueListCount][0] = bid;
+					overdueList[overdueListCount][1] = callNo;
+					overdueList[overdueListCount][2] = copyNo;	
+					overdueList[overdueListCount][3] = title;
+					overdueList[overdueListCount][4] = outDate;
+					overdueListCount++;				
 
-					return overdueList;		
+				}				
 			}
+			return overdueList;		
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -250,19 +251,20 @@ public class Clerk {
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
 //				 System.out.println(clerkTest.returnBook(1, 7));
-				int[] input = new int[2];
-				input[0] = 1;
-				input[1] = 1;
-				int[] input2 = new int[2];
-				input2[0] = 1;
-				input2[1] = 2;
-				int[] input3 = new int[2];
-				input3[0] = 1;
-				input3[1] = 3;
-				System.out.println(clerkTest.checkOut(10, input2));
-				System.out.println(clerkTest.checkOut(10, input2));
-				System.out.println(clerkTest.checkOut(10, input3));
-				clerkTest.printArray();
+//				int[] input = new int[2];
+//				input[0] = 1;
+//				input[1] = 1;
+//				int[] input2 = new int[2];
+//				input2[0] = 1;
+//				input2[1] = 2;
+//				int[] input3 = new int[2];
+//				input3[0] = 1;
+//				input3[1] = 3;
+//				System.out.println(clerkTest.checkOut(10, input2));
+//				System.out.println(clerkTest.checkOut(10, input2));
+//				System.out.println(clerkTest.checkOut(10, input3));
+//				clerkTest.printArray();
+				clerkTest.checkOverdue();
 
 			}
 		});
