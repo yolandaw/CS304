@@ -187,10 +187,10 @@ public class Clerk {
 
 					if(bor.isOverdue(borid)){
 						overdueList[overdueListCount][0] = bid;
-						overdueList[overdueListCount][1] = outDate;
-						overdueList[overdueListCount][2] = callNo;	
-						overdueList[overdueListCount][3] = copyNo;
-						overdueList[overdueListCount][4] = title;
+						overdueList[overdueListCount][1] = callNo;
+						overdueList[overdueListCount][2] = copyNo;	
+						overdueList[overdueListCount][3] = title;
+						overdueList[overdueListCount][4] = outDate;
 						overdueListCount++;				
 					}				
 
