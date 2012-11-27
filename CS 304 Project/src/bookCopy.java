@@ -30,6 +30,32 @@ public class bookCopy {
 		return "Unavailable";
 		
 	}
+	public boolean noBook(int callNo, int copyNo){
+		Statement stmt;
+		ResultSet rs;
+		int count = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM bookCopy WHERE book_callNo =" + callNo + "AND bookCopy_copyNo =" + copyNo);
+			while(rs.next()){
+				count = rs.getInt(1);
+
+			}
+			stmt.close();
+		}
+
+		catch(SQLException e){
+			System.out.print("Message: " + e.getMessage());
+		}
+
+		if (count > 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 	
 	//set book copy to out status
 	public void setStatusOut(int callNo, int copyNo){

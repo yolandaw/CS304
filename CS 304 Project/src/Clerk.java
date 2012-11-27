@@ -125,6 +125,10 @@ public class Clerk {
 		bid = bor.getBidOfBook(callNo, copyNo);
 		borid = bor.getBoridOfBook(callNo, copyNo);
 		bor.setInDate(callNo, copyNo);
+		if(bookCopy.noBook(callNo, copyNo)){
+			msg = "Invalid callNo and copyNo.";
+			return msg;
+		}
 		if(bookCopy.checkStatus(callNo, copyNo).equals("in")){
 			msg = "Book Copy has already been returned previously.";
 			return msg;
@@ -248,14 +252,14 @@ public class Clerk {
 //				 System.out.println(clerkTest.returnBook(1, 7));
 				int[] input = new int[2];
 				input[0] = 1;
-				input[1] = 3;
+				input[1] = 1;
 				int[] input2 = new int[2];
-				input2[0] = 10;
-				input2[1] = 1;
+				input2[0] = 1;
+				input2[1] = 2;
 				int[] input3 = new int[2];
 				input3[0] = 1;
-				input3[1] = 10;
-//				System.out.println(clerkTest.checkOut(10, input2));
+				input3[1] = 3;
+				System.out.println(clerkTest.checkOut(10, input2));
 				System.out.println(clerkTest.checkOut(10, input2));
 				System.out.println(clerkTest.checkOut(10, input3));
 				clerkTest.printArray();
