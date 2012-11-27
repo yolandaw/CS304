@@ -8,7 +8,7 @@ public class Clerk {
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	private static int overdueListCount;
 	private static int checkOutCount;
-	private Object[][] receipt = new Object[30][5];
+	private  static Object[][] receipt = new Object[30][5];
 
 	// Fine currFine = new Fine();
 
@@ -70,17 +70,24 @@ public class Clerk {
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
 //			receipt = new Object[callNo.length][5];
-			
+			System.out.println("checkoutcount before borrowing is " + checkOutCount);
 				copyStatus = bookCopy.checkStatus(input[0], input[1]);
+				System.out.println("status is" + copyStatus);
 				if (copyStatus.equalsIgnoreCase("in")) {
 					currBorr.insertBorrowing(bid, input[0], input[1]);
 					bookCopy.setStatusOut(input[0], input[1]);
 					receipt[checkOutCount][0] = currBorr.getBoridOfBook(input[0], input[1]);
+//					System.out.println(receipt[checkOutCount][0]);
 					receipt[checkOutCount][1] = input[0];
+//					System.out.println(receipt[checkOutCount][1]);
 					receipt[checkOutCount][2] = input[1];
+//					System.out.println(receipt[checkOutCount][2]);
 					receipt[checkOutCount][3] = book.getTitle(input[0]);
+//					System.out.println(receipt[checkOutCount][3]);
 					receipt[checkOutCount][4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(input[0], input[1]));
-					checkOutCount ++;
+//					System.out.println(receipt[checkOutCount][4]);
+					checkOutCount++;
+					System.out.println("checkoutcount after borrowing is " + checkOutCount);
 					return true;
 				} else {
 					return false;
@@ -93,10 +100,14 @@ public class Clerk {
 		return receipt;
 	}
 	
-	public void clearReceipt(){
-		receipt = new Object[30][5];
-		checkOutCount = 0;
+	public int getCount(){
+		return checkOutCount;
 	}
+	
+//	public void clearReceipt(){
+//		receipt = new Object[30][5];
+//		checkOutCount = 0;
+//	}
 	
 
 	
@@ -195,19 +206,12 @@ public class Clerk {
 	
 	//checks array (testing method)
 	public void printArray(){
-		int[] callNo = new int[3];
-		callNo[0] = 1;
-		callNo[1] = 102;
-		callNo[2] = 10;
 
-		int[] copyNo = new int[3];
-		copyNo[0] = 8;
-		copyNo[1] = 1;
-		copyNo[2] = 1;
-		Object[][] overdueList = checkOut(10, callNo, copyNo);
+		System.out.println("checkoutcount in printarray is " + checkOutCount);
 		for(int k = 0; k < checkOutCount; k++){
 			for(int j = 0; j < 5 ; j++){
-				System.out.print(overdueList[k][j] + " ");
+				
+				System.out.println(receipt[k][j] + " ");
 
 			}
 			System.out.println(" ");
@@ -241,8 +245,20 @@ public class Clerk {
 //				borTest.displayBorrowing();
 //				bookC.displayBookCopy();
 //				clerkTest.printArray();
-				 System.out.println(clerkTest.returnBook(1, 7));
-
+//				 System.out.println(clerkTest.returnBook(1, 7));
+				int[] input = new int[2];
+				input[0] = 1;
+				input[1] = 3;
+				int[] input2 = new int[2];
+				input2[0] = 10;
+				input2[1] = 1;
+				int[] input3 = new int[2];
+				input3[0] = 1;
+				input3[1] = 10;
+//				System.out.println(clerkTest.checkOut(10, input2));
+				System.out.println(clerkTest.checkOut(10, input2));
+				System.out.println(clerkTest.checkOut(10, input3));
+				clerkTest.printArray();
 
 			}
 		});
