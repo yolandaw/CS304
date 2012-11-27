@@ -341,6 +341,27 @@ public class Borrower{
 			return false;
 		}
 	}
+	
+	//get total fines
+	public float getTotalFines(int bid){
+		float totalFines = 0;
+		Statement stmt;
+		ResultSet rs;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT DISTINCT f.fine_amount FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
+					+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL" );
+			
+			while(rs.next()){
+				totalFines = totalFines + rs.getFloat(1);
+			}
+		}
+		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		return totalFines;
+	}
 
 	public static void main(String[] args) {
 		//Schedule a job for the event-dispatching thread:
@@ -354,10 +375,12 @@ public class Borrower{
 				//				f.displayBIDFines(10);
 				//				borrower.search("a");
 //					borrower.checkLoans(15);
-								borrower.checkFines(10);
+				//				borrower.checkFines(10);
 
 				//borrower.placeHold(10,2);
 				//borrower.checkHolds(10);
+								
+				System.out.println(borrower.getTotalFines(10));
 				
 			}
 		});

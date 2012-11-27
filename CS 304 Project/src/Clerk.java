@@ -43,13 +43,13 @@ public class Clerk {
 		// check if SIN or St. No already exists
 		System.out.println(newBorrower.checkSID(sinOrStNo));
 		if (type == 1 && newBorrower.checkSID(sinOrStNo)) {
-			System.out.println("Could not add 1");
+			System.out.println("SID exists.");
 			return false;
 		}
 		System.out.println(newBorrower.checkSin(sinOrStNo));
 		System.out.println((type == 2 || type == 3 || type == 4));
 		if ((type == 2 || type == 3) && newBorrower.checkSin(sinOrStNo)){
-			System.out.println("Could not add 2");
+			System.out.println("SIN exists.");
 			return false;
 		}
 		else {
