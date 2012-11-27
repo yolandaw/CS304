@@ -18,8 +18,6 @@ public class borrowerTable {
 	// Insert a borrower into the table Borrower
 	public void insertBorrower(String name, String password, String address, int phone, String email, int sinOrStNo, String borrowerType) {
 		
-		//TODO: generate of bid and expiryDate
-		int bid = 222223;
 		
 		//getting current day borrower was created and then setting the expiry date to 2 years later
 		cal.getTime();
