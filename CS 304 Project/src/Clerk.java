@@ -5,7 +5,6 @@ public class Clerk {
 	private String student = "student";
 	private String faculty = "faculty";
 	private String staff = "staff";
-	private String general = "general";
 	java.sql.Connection con = Connection.getInstance().getConnection();
 	private static int overdueListCount;
 	private static int checkOutCount;
@@ -30,9 +29,6 @@ public class Clerk {
 		case 3:
 			type = staff;
 			break;
-		case 4:
-			type = general;
-			break;
 		}
 		return type;
 
@@ -52,7 +48,7 @@ public class Clerk {
 		}
 		System.out.println(newBorrower.checkSin(sinOrStNo));
 		System.out.println((type == 2 || type == 3 || type == 4));
-		if ((type == 2 || type == 3 || type == 4) && newBorrower.checkSin(sinOrStNo)){
+		if ((type == 2 || type == 3) && newBorrower.checkSin(sinOrStNo)){
 			System.out.println("Could not add 2");
 			return false;
 		}
