@@ -139,9 +139,9 @@ public class Borrower{
 				currentLoans[i][1] = copyNo;
 				currentLoans[i][2] = title;
 				currentLoans[i][3] = outDate;
-				currentLoans[i][4] = overdue;
-				currentLoans[i][5] = borr.getDueDate(id, borid);
-				i++;
+				currentLoans[i][4] = borr.getDueDate(id, borid);
+				currentLoans[i][5] = overdue;
+						i++;
 			}
 			stmt.close();
 
