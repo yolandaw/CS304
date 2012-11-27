@@ -173,9 +173,8 @@ public class Clerk {
 			catch(Exception ex) {
 				return null;
 			} 
-			System.out.println(count);
 			if(count > 0){
-			overdueList = new Object[5][5];
+			overdueList = new Object[count][5];
 			}
 			
 			while(rs.next()){
