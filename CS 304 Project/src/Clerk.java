@@ -131,13 +131,14 @@ public class Clerk {
 		}
 		if(bookCopy.checkStatus(callNo, copyNo).equals("in")){
 			msg = "Book Copy has already been returned previously.";
-			return msg;
 		}
 		if (bor.isOverdue(borid)) {
 			fine.insertFine(callNo + copyNo, fine.calculateFine(bor.getDueDate(bid, borid)), borid);
+			msg = "Book returned successfully but is overdue. A fine has been issued.";
 		}
 		if (hr.hasHold(callNo)) {
 			bookCopy.setStatusHold(callNo, copyNo);
+			msg = "This copy is currently on hold.";
 		} else {
 			bookCopy.setStatusIn(callNo, copyNo);
 			msg = "Book is returned successfully.";
