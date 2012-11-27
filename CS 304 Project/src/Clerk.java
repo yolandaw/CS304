@@ -126,7 +126,7 @@ public class Clerk {
 		borid = bor.getBoridOfBook(callNo, copyNo);
 		bor.setInDate(callNo, copyNo);
 		if(bookCopy.noBook(callNo, copyNo)){
-			msg = "Invalid callNo and copyNo.";
+			msg = "Invalid Call Number or Copy Number.";
 			return msg;
 		}
 		if(bookCopy.checkStatus(callNo, copyNo).equals("in")){
@@ -140,7 +140,7 @@ public class Clerk {
 			bookCopy.setStatusHold(callNo, copyNo);
 		} else {
 			bookCopy.setStatusIn(callNo, copyNo);
-			msg = "Book is returned.";
+			msg = "Book is returned successfully.";
 		}
 		return msg;
 
