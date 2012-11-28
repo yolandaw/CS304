@@ -66,6 +66,12 @@ public class Borrower{
 			}
 			stmt.close();
 
+			//			for (int l=0;l<count;l++) {
+			//				for (int k=0;k<4;k++) {
+			//					System.out.println(searchResult[l][k]);
+			//				}
+			//			}
+
 			return searchResult;
 		}
 		catch (SQLException ex)
