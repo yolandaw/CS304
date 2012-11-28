@@ -248,9 +248,13 @@ public class GUI implements ActionListener{
 					JTextField phone = new JTextField();
 					JTextField email = new JTextField();
 					JTextField sinOrStNo = new JTextField();
+					ButtonGroup borrowerGroup = new ButtonGroup();
 					JRadioButton type1 = new JRadioButton("Student");
 					JRadioButton type2 = new JRadioButton("Faculty");
 					JRadioButton type3 = new JRadioButton("Staff");
+					borrowerGroup.add(type1);
+					borrowerGroup.add(type2);
+					borrowerGroup.add(type3);
 					final JComponent[] inputs = new JComponent[] {
 							new JLabel("Name"),name,
 							new JLabel("Password"),password,
@@ -510,9 +514,15 @@ public class GUI implements ActionListener{
 
 	private int addCopyHelper() {
 
+		
 		JRadioButton status1 = new JRadioButton("In");
 		JRadioButton status2 = new JRadioButton("Out");
 		JRadioButton status3 = new JRadioButton("On Hold");
+		
+		ButtonGroup buttonGroup1 = new ButtonGroup();
+		buttonGroup1.add(status1);
+		buttonGroup1.add(status2);
+		buttonGroup1.add(status3);
 	
 		final JComponent[] inputs = new JComponent[] {
 				new JLabel ("Select Status of Book Copy"),status1,status2,status3};
@@ -520,32 +530,12 @@ public class GUI implements ActionListener{
 		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
-			ButtonGroup buttonGroup1 = new ButtonGroup();
-			buttonGroup1.add(status2);
-			buttonGroup1.add(status3);
-			buttonGroup1.clearSelection();
-//			status2.setEnabled(false);
-//			status3.setEnabled(false);
 		}
 		else if (status2.isSelected()) {
 			status = 1;
-			ButtonGroup buttonGroup1 = new ButtonGroup();
-			buttonGroup1.add(status1);
-			buttonGroup1.add(status3);
-			buttonGroup1.clearSelection();
-
-//			status1
-//			status3.setEnabled(false);
 		}
 		else if (status3.isSelected()) {
 			status = 2;
-			ButtonGroup buttonGroup1 = new ButtonGroup();
-			buttonGroup1.add(status1);
-			buttonGroup1.add(status2);
-			buttonGroup1.clearSelection();
-
-//			status1.setEnabled(false);
-//			status2.setEnabled(false);
 		}	
 		else {
 			popUp("Please select an option.");
