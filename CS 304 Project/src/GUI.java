@@ -21,6 +21,7 @@ public class GUI implements ActionListener{
 	private borrowerTable bt;
 	private Book book;
 	private Fine fine;
+	private bookCopy bc;
     private JFrame mainFrame;
     private JPanel dataPanel;
     private JMenu menu1;
@@ -45,6 +46,7 @@ public class GUI implements ActionListener{
 		bt = new borrowerTable();
 		fine = new Fine();
 		book = new Book();
+		bc = new bookCopy();
 	}
 
 	public void showLibrary() {
@@ -110,8 +112,14 @@ public class GUI implements ActionListener{
 								try {
 									if (bt.checkBid(Integer.parseInt(id))) {
 										String callNo = inputPopUp("Enter Call Number:");
-										borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
-										popUp("Hold placed successfully!");
+										if (bc.bookExist(Integer.parseInt(callNo))) {
+											borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
+											popUp("Hold placed successfully!");
+										}
+										else {
+											popUp("Error: Call Number does not exist.");
+										}
+
 									}
 									else {
 										popUp("Invalid Borrower ID " + id + ".");
