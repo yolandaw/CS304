@@ -399,8 +399,7 @@ public class Borrower{
 
 				//borrower.placeHold(10,2);
 				//				borrower.checkHolds(15);
-				
-				borrower.placeHold()
+			
 
 				//				System.out.println(borrower.getTotalFines(10));
 
