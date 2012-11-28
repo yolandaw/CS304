@@ -286,7 +286,7 @@ public class GUI implements ActionListener{
 						popUp("Borrower added successfully!");
 					}
 					else {
-						popUp("SIN or Student Number " + sinOrStNo + " already exists!");
+						popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
 					}
 				}
 				catch (NumberFormatException nm2) {
