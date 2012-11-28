@@ -526,7 +526,17 @@ public class GUI implements ActionListener{
 	
 		final JComponent[] inputs = new JComponent[] {
 				new JLabel ("Select Status of Book Copy"),status1,status2,status3};
-		JOptionPane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
+		final JOptionPane pane = new JOptionPane();
+		pane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
+		JDialog dia = pane.createDialog(null);
+		dia.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dia.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent we) {
+				pane.setValue(JOptionPane.CANCEL_OPTION);
+			}
+		});
+		
+		
 		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
