@@ -215,11 +215,11 @@ public class Borrower{
 			}
 			stmt.close();
 
-			for (i=0;i<count;i++) {
-				for (int j=0;j<5;j++) {
-					System.out.println(currentFines[i][j]);
-				}
-			}
+//			for (i=0;i<count;i++) {
+//				for (int j=0;j<5;j++) {
+//					System.out.println(currentFines[i][j]);
+//				}
+//			}
 
 			return currentFines;
 		}
@@ -279,11 +279,11 @@ public class Borrower{
 			}
 			stmt.close();
 
-			for (i=0;i<count;i++) {
-				for (int j=0;j<3;j++) {
-					System.out.println(currentHolds[i][j]);
-				}
-			}
+//			for (i=0;i<count;i++) {
+//				for (int j=0;j<3;j++) {
+//					System.out.println(currentHolds[i][j]);
+//				}
+//			}
 
 			return currentHolds;
 		}
