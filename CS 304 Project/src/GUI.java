@@ -13,8 +13,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GUI implements ActionListener{
-    
-    //components for Main Interface
+
+	//components for Main Interface
 	private Librarian librarian;
 	private Borrower borrower;
 	private Clerk clerk;
@@ -22,22 +22,22 @@ public class GUI implements ActionListener{
 	private Book book;
 	private Fine fine;
 	private bookCopy bc;
-    private JFrame mainFrame;
-    private JPanel dataPanel;
-    private JMenu menu1;
-    private JMenu menu2;
-    private JMenu menu3;
-    private JMenuItem menuItem1a;
-    private JMenuItem menuItem1b;
-    private JMenuItem menuItem1c;
-    private JMenuItem menuItem2a;
-    private JMenuItem menuItem2b;
-    private JMenuItem menuItem2c;
-    private JMenuItem menuItem2d;
-    private JMenuItem menuItem3a;
-    private JMenuItem menuItem3b;
-    private JMenuItem menuItem3c;
-    private JMenuBar menuBar;
+	private JFrame mainFrame;
+	private JPanel dataPanel;
+	private JMenu menu1;
+	private JMenu menu2;
+	private JMenu menu3;
+	private JMenuItem menuItem1a;
+	private JMenuItem menuItem1b;
+	private JMenuItem menuItem1c;
+	private JMenuItem menuItem2a;
+	private JMenuItem menuItem2b;
+	private JMenuItem menuItem2c;
+	private JMenuItem menuItem2d;
+	private JMenuItem menuItem3a;
+	private JMenuItem menuItem3b;
+	private JMenuItem menuItem3c;
+	private JMenuBar menuBar;
 
 	public GUI() {
 		librarian = new Librarian();
@@ -56,7 +56,7 @@ public class GUI implements ActionListener{
 		initializeMenu();
 		dataPanel = new JPanel (new GridLayout(4,1));
 		mainFrame.getContentPane().add(dataPanel, BorderLayout.NORTH);
-		
+
 		mainFrame.pack();
 		mainFrame.setSize(600, 600);
 		mainFrame.setVisible(true);
@@ -67,12 +67,12 @@ public class GUI implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		System.exit(0);
 	}
-    
+
 	private void initializeMenu() {
 		menu1 = new JMenu ("Borrower");
 		menu2 = new JMenu ("Clerk");
 		menu3 = new JMenu ("Librarian");
-		
+
 		menuItem1a = new JMenuItem("Search Books");
 		menuItem1b = new JMenuItem("Check Account");
 		menuItem1c = new JMenuItem("Pay Fine");
@@ -83,7 +83,7 @@ public class GUI implements ActionListener{
 		menuItem3a = new JMenuItem("Add Book");
 		menuItem3b = new JMenuItem("All Loans");
 		menuItem3c = new JMenuItem("Popular Books");
-		
+
 		//Borrower - Search Books
 		menuItem1a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -110,23 +110,39 @@ public class GUI implements ActionListener{
 							public void actionPerformed(ActionEvent e) {
 								String id = inputPopUp("Enter Borrower ID:");
 								try {
-									if (bt.checkBid(Integer.parseInt(id))) {
+									if (bt.checkBid(Integer.parseInt(id))) 
+									{
 										String callNo = inputPopUp("Enter Call Number:");
-										if (bc.bookExist(Integer.parseInt(callNo))) {
-											borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
-											popUp("Hold placed successfully!");
+										if (bc.bookExist(Integer.parseInt(callNo))) 
+										{
+											if(borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo)) == 1) 
+											{
+												popUp("Books is already in. Cannot place hold.");
+											}
+											else if (borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo)) == 2) 
+											{
+												popUp("Book is already on hold. Cannot place hold.");
+											}
+											else 
+											{
+												popUp("Hold placed successfully!");
+											}
 										}
-										else {
+										else 
+										{
 											popUp("Error: Call Number does not exist.");
 										}
 
 									}
-									else {
+
+									else 
+									{
 										popUp("Invalid Borrower ID " + id + ".");
 									}
-								}
+
+								}	
 								catch (NumberFormatException nm8) {
-									
+
 								}
 							}
 						});
@@ -134,11 +150,11 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm) {
-						
+
 				}
 			}
 		});
-		
+
 		//Borrower - Check Account
 		menuItem1b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,7 +163,7 @@ public class GUI implements ActionListener{
 					dataPanel.removeAll();
 					if (bt.checkBid(Integer.parseInt(id))) {
 						String columnName[] = {"Call Number", "Copy Number", "Title", "Out Date", "Due Date"
-						, "Overdue Status"	};
+								, "Overdue Status"	};
 						String columnName2[] = {"Call Number", "Title", "Issued Date"};
 						String columnName3[] = {"Issued Date", "Fine Amount", "Call Number", "Book Title", "Due Date"};
 						Object dataValues[][] = borrower.checkLoans(Integer.parseInt(id));
@@ -168,22 +184,22 @@ public class GUI implements ActionListener{
 							table1.setEnabled(false);
 							table2.setEnabled(false);
 							table3.setEnabled(false);
-					
+
 							JScrollPane sp1 = new JScrollPane(table1);
 							JPanel table1Panel = new JPanel(new BorderLayout());
 							table1Panel.add(table1Label, BorderLayout.NORTH);
 							table1Panel.add(sp1);
-					
+
 							JScrollPane sp2 = new JScrollPane(table2);
 							JPanel table2Panel = new JPanel(new BorderLayout());
 							table2Panel.add(table2Label, BorderLayout.NORTH);
 							table2Panel.add(sp2);
-					
+
 							JScrollPane sp3 = new JScrollPane(table3);
 							JPanel table3Panel = new JPanel(new BorderLayout());
 							table3Panel.add(table3Label, BorderLayout.NORTH);
 							table3Panel.add(sp3);
-							
+
 							sp1.setPreferredSize(new Dimension(200,150));
 							sp2.setPreferredSize(new Dimension(50,150));
 							sp3.setPreferredSize(new Dimension(150,150));
@@ -199,11 +215,11 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm) {
-				
+
 				}
 			}
 		});
-		
+
 		//Borrower - Pay Fines
 		menuItem1c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -222,11 +238,11 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm) {
-					
+
 				}
 			}
 		});
-		
+
 		//Clerk - Add Borrower
 		menuItem2a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -241,31 +257,31 @@ public class GUI implements ActionListener{
 					JRadioButton type2 = new JRadioButton("Faculty");
 					JRadioButton type3 = new JRadioButton("Staff");
 					final JComponent[] inputs = new JComponent[] {
-						new JLabel("Name"),name,
-						new JLabel("Password"),password,
-						//new JLabel("Verify Password"),passwordVerify,
-						new JLabel("Address"),address,
-						new JLabel("Phone"),phone,
-						new JLabel("E-mail"),email,
-						new JLabel("SIN or Student No."),sinOrStNo,
-						new JLabel("Type"),type1,type2,type3
+							new JLabel("Name"),name,
+							new JLabel("Password"),password,
+							//new JLabel("Verify Password"),passwordVerify,
+							new JLabel("Address"),address,
+							new JLabel("Phone"),phone,
+							new JLabel("E-mail"),email,
+							new JLabel("SIN or Student No."),sinOrStNo,
+							new JLabel("Type"),type1,type2,type3
 					};
 					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 
 					int index = 0;
-	
+
 					if (type1.isSelected()) {
 						index = 1;
 					}
-				
+
 					else if (type2.isSelected()) {
 						index = 2;
 					}
-				
+
 					else if (type3.isSelected()) {
 						index = 3;
 					}
-				
+
 					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 						popUp("Borrower added successfully!");
 					}
@@ -274,11 +290,11 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm2) {
-					
+
 				}
 			}
 		});
-		
+
 		//Clerk - Check Out Items
 		menuItem2b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -302,7 +318,7 @@ public class GUI implements ActionListener{
 							}
 							String columnNames[] = {"Borrowing ID", "Call Number", "Copy Number", "Book Title", "Due Date"};
 							Object[][] receipt = new Object[clerk.getCount()][5];
-							
+
 							if (clerk.getCount() > 0) {
 								receipt = clerk.getReceipt();
 								JTable receiptTable = new JTable(receipt, columnNames);
@@ -319,16 +335,16 @@ public class GUI implements ActionListener{
 						}
 					}
 					else {
-					
+
 						popUp("Invalid Borrower ID " + bid + ".");
 					}
 				}
 				catch (NumberFormatException nm) {
-					
+
 				}
 			}
 		});
-		
+
 		//Clerk - Process Returns
 		menuItem2c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -344,11 +360,11 @@ public class GUI implements ActionListener{
 					popUp(result);
 				}
 				catch (NumberFormatException nm3) {
-					
+
 				}
 			}
 		});
-		
+
 		//Clerk - Check Overdue Items
 		menuItem2d.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -361,10 +377,10 @@ public class GUI implements ActionListener{
 				sp.setCorner(JScrollPane.UPPER_LEFT_CORNER, overdueTable.getTableHeader());
 				dataPanel.add(sp);
 				mainFrame.revalidate();
-				
+
 			}
 		});
-		
+
 		//Librarian - Add Book
 		menuItem3a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -377,11 +393,11 @@ public class GUI implements ActionListener{
 						JTextField publisher = new JTextField();
 						JTextField year = new JTextField();
 						final JComponent[] inputs = new JComponent[] {
-							new JLabel ("Call Number"),callNo,
-							new JLabel ("Title"),title,
-							new JLabel ("Main Author"),mainAuthor,
-							new JLabel ("Publisher"),publisher,
-							new JLabel ("Year"),year};
+								new JLabel ("Call Number"),callNo,
+								new JLabel ("Title"),title,
+								new JLabel ("Main Author"),mainAuthor,
+								new JLabel ("Publisher"),publisher,
+								new JLabel ("Year"),year};
 						JOptionPane.showMessageDialog(null, inputs, "Add Book", JOptionPane.PLAIN_MESSAGE);
 						if (book.checkCallNo(Integer.parseInt(callNo.getText()))) {
 							popUp("The Call Number " + callNo.getText() + " already exists. Please try a different Call Number.");
@@ -406,11 +422,11 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm2) {
-					
+
 				}
 			}
 		});
-		
+
 		//Librarian - Generate Book report
 		menuItem3b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -423,7 +439,7 @@ public class GUI implements ActionListener{
 				mainFrame.validate();
 			}
 		});
-		
+
 		//Librarian - Generate popular books
 		menuItem3c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -449,7 +465,7 @@ public class GUI implements ActionListener{
 					}
 				}
 				catch (NumberFormatException nm2) {
-					
+
 				}
 			}
 		});
@@ -469,34 +485,34 @@ public class GUI implements ActionListener{
 		menuBar.add(menu2);
 		menuBar.add(menu3);
 		mainFrame.setJMenuBar(menuBar);
-		
+
 	}
-	
+
 	private static String inputPopUp(String message)
 	{
 		return JOptionPane.showInputDialog(null, message);
 	}
-	
+
 	private static void popUp(String message)
 	{
 		JOptionPane.showMessageDialog(null, message);
 	}
-	
+
 	private int[] checkOutHelper() {
 		JTextField callNo = new JTextField();
 		JTextField copyNo = new JTextField();
 		final JComponent[] inputs = new JComponent[] {
-			new JLabel("Call Number"), callNo,
-			new JLabel("Copy Number"), copyNo
+				new JLabel("Call Number"), callNo,
+				new JLabel("Copy Number"), copyNo
 		};
-		
+
 		JOptionPane.showMessageDialog(null, inputs, "Check Out Items", JOptionPane.PLAIN_MESSAGE);
 		int[] result = new int[2];
 		result[0] = Integer.parseInt(callNo.getText());
 		result[1] = Integer.parseInt(copyNo.getText());
 		return result;
 	}
-	
+
 	private int addCopyHelper() {
 
 		JRadioButton status1 = new JRadioButton("In");
@@ -507,8 +523,8 @@ public class GUI implements ActionListener{
 		JOptionPane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
 		int status = 0;
 		if (status1.isSelected()) {
-				status = 0;
-				//status2.set
+			status = 0;
+			//status2.set
 		}
 		else if (status2.isSelected()) {
 			status = 1;
@@ -522,28 +538,28 @@ public class GUI implements ActionListener{
 		}
 		return status;
 	}
-    
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
+		//Schedule a job for the event-dispatching thread:
+		//creating and showing this application's GUI.
 		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
+			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
 		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
+			// If Nimbus is not available, you can set the GUI to another look and feel.
 		}
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GUI gui = new GUI();
-                gui.showLibrary();
-            }
-        });
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				GUI gui = new GUI();
+				gui.showLibrary();
+			}
+		});
 	}
 }
