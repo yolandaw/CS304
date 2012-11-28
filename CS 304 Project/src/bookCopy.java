@@ -57,6 +57,33 @@ public class bookCopy {
 		}
 	}
 	
+	public boolean bookExist(int callNo){
+		Statement stmt;
+		ResultSet rs;
+		int count = 0;
+		
+		try{
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM bookCopy WHERE book_callNo =" + callNo);
+			while(rs.next()){
+				count = rs.getInt(1);
+
+			}
+			stmt.close();
+		}
+
+		catch(SQLException e){
+			System.out.print("Message: " + e.getMessage());
+		}
+
+		if (count > 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
 	//set book copy to out status
 	public void setStatusOut(int callNo, int copyNo){
 		PreparedStatement ps;
