@@ -42,15 +42,15 @@ public class Clerk {
 		borrowerTable newBorrower = new borrowerTable();
 
 		// check if SIN or St. No already exists
-		System.out.println(newBorrower.checkSID(sinOrStNo));
+//		System.out.println(newBorrower.checkSID(sinOrStNo));
 		if (type == 1 && newBorrower.checkSID(sinOrStNo)) {
-			System.out.println("SID exists.");
+//			System.out.println("SID exists.");
 			return false;
 		}
-		System.out.println(newBorrower.checkSin(sinOrStNo));
-		System.out.println((type == 2 || type == 3 || type == 4));
+//		System.out.println(newBorrower.checkSin(sinOrStNo));
+//		System.out.println((type == 2 || type == 3 || type == 4));
 		if ((type == 2 || type == 3) && newBorrower.checkSin(sinOrStNo)){
-			System.out.println("SIN exists.");
+//			System.out.println("SIN exists.");
 			return false;
 		}
 		else {
@@ -70,9 +70,9 @@ public class Clerk {
 		String copyStatus = null;
 		Borrowing currBorr = new Borrowing();
 //			receipt = new Object[callNo.length][5];
-			System.out.println("checkoutcount before borrowing is " + checkOutCount);
+//			System.out.println("checkoutcount before borrowing is " + checkOutCount);
 				copyStatus = bookCopy.checkStatus(input[0], input[1]);
-				System.out.println("status is" + copyStatus);
+//				System.out.println("status is" + copyStatus);
 				if (copyStatus.equalsIgnoreCase("in")) {
 					currBorr.insertBorrowing(bid, input[0], input[1]);
 					bookCopy.setStatusOut(input[0], input[1]);
@@ -87,7 +87,7 @@ public class Clerk {
 					receipt[checkOutCount][4] = currBorr.getDueDate(bid, currBorr.getBoridOfBook(input[0], input[1]));
 //					System.out.println(receipt[checkOutCount][4]);
 					checkOutCount++;
-					System.out.println("checkoutcount after borrowing is " + checkOutCount);
+//					System.out.println("checkoutcount after borrowing is " + checkOutCount);
 					return true;
 				} else {
 					return false;
