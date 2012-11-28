@@ -320,6 +320,7 @@ public class Borrower{
 			}
 
 			hr.insertHoldRequest(bid, callNo);
+			stmt.close();
 		
 		}
 		catch (SQLException ex)
@@ -356,6 +357,7 @@ public class Borrower{
 			while(rs.next()){
 				totalFines = totalFines + rs.getFloat(1);
 			}
+			stmt.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -380,7 +382,7 @@ public class Borrower{
 				//borrower.placeHold(10,2);
 				//borrower.checkHolds(10);
 								
-				System.out.println(borrower.getTotalFines(10));
+//				System.out.println(borrower.getTotalFines(10));
 				
 			}
 		});
