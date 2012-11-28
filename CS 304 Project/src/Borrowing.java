@@ -206,6 +206,7 @@ public class Borrowing {
 			outDate= rs.getDate("borrowing_outDate");
 			timeLimit = borT.getTimeLimit(borT.checkBorrowerType(bid));
 			dueDate = dateObj.addToDate(outDate, timeLimit);
+			stmt.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
