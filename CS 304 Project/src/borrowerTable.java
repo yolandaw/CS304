@@ -35,7 +35,7 @@ public class borrowerTable {
 			ps.setInt(4, phone);
 			ps.setString(5, email);
 			ps.setInt(6, sinOrStNo);
-			ps.setDate(7, newDate.addToDate(issueD, 2000)); //newDate.getSQLDate(cal)
+			ps.setDate(7, newDate.getSQLDate(cal)); //
 			ps.setString(8, borrowerType);
 			ps.executeUpdate();
 			con.commit();	
