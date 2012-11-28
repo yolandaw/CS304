@@ -11,13 +11,13 @@ public class borrowerType {
 	private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	// Insert a tuple into the table BorrowerType
-	public void insertBorrowerType(String type, Date bookTimeLimit) {
+	public void insertBorrowerType(String type, int bookTimeLimit) {
 		PreparedStatement ps;
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO borrowerType VALUES (?,?)");
 			ps.setString(1, type);
-			ps.setDate(2, bookTimeLimit);			
+			ps.setInt(2, bookTimeLimit);			
 			ps.executeUpdate();
 			con.commit();
 			ps.close();
@@ -113,6 +113,8 @@ public class borrowerType {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 borrowerType testTable = new borrowerType();
+               // testTable.insertBorrowerType("staff", 42);
+               // testTable.insertBorrowerType("faculty", 14);
                 
                 testTable.displayBorrowerType();
             }

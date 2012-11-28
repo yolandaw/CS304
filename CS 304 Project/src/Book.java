@@ -45,6 +45,8 @@ public class Book {
 				stmt.close();
 				return count;
 			}
+			
+			stmt.close();
 
 		}
 		catch (SQLException ex)
@@ -67,6 +69,7 @@ public class Book {
 		rs.next();
 		title = rs.getString("book_title");
 		//return title;
+		stmt.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message : " + e.getMessage());

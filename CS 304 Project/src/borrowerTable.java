@@ -38,7 +38,8 @@ public class borrowerTable {
 			ps.setDate(7, newDate.addToDate(issueD, 2000)); //newDate.getSQLDate(cal)
 			ps.setString(8, borrowerType);
 			ps.executeUpdate();
-			con.commit();		
+			con.commit();	
+			ps.close();
 		}
 		catch (SQLException ex)
 		{
@@ -63,7 +64,8 @@ public class borrowerTable {
 			PreparedStatement ps = con.prepareStatement("DELETE FROM borrower WHERE borr_bid = ?");
 			ps.setInt(1, bid);
 			ps.executeUpdate();
-			con.commit();		
+			con.commit();	
+			ps.close();
 		}
 		catch (SQLException ex)
 		{
