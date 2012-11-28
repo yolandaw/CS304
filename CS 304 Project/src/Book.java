@@ -8,6 +8,31 @@ public class Book {
 
 	}
 
+	public boolean checkCallNo(int callNo) {
+		Statement stmt;
+		ResultSet rs;
+
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM book WHERE book_callNo = " + callNo);
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			stmt.close();
+
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+		}
+		return false;
+	}
+	
 	public int checkBook(int isbn) {
 
 		Statement stmt;
@@ -52,6 +77,7 @@ public class Book {
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
+			
 		}
 		return 0;
 
