@@ -115,22 +115,17 @@ public class GUI implements ActionListener{
 										String callNo = inputPopUp("Enter Call Number:");
 										if (bc.bookExist(Integer.parseInt(callNo))) 
 										{
-											if(borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo)) == 1) 
-											{
-												popUp("Books is already in. Cannot place hold.");
-											}
-											else if (borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo)) == 2) 
-											{
-												popUp("Book is already on hold. Cannot place hold.");
-											}
-											else 
+											if(borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo))) 
 											{
 												popUp("Hold placed successfully!");
+											}
+											else {
+												popUp("Hold not placed. There are still available copies in the library.");
 											}
 										}
 										else 
 										{
-											popUp("Error: Call Number does not exist.");
+											popUp("Call Number does not exist.");
 										}
 
 									}
@@ -312,7 +307,7 @@ public class GUI implements ActionListener{
 									response = JOptionPane.showConfirmDialog(null, "Check out more books?", "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 								}
 								else {
-									popUp("Error: This book is already checked out by another user.");
+									popUp("This book is already checked out by another user.");
 									response = 0;
 								}
 							}
@@ -518,19 +513,25 @@ public class GUI implements ActionListener{
 		JRadioButton status1 = new JRadioButton("In");
 		JRadioButton status2 = new JRadioButton("Out");
 		JRadioButton status3 = new JRadioButton("On Hold");
+	
 		final JComponent[] inputs = new JComponent[] {
 				new JLabel ("Select Status of Book Copy"),status1,status2,status3};
 		JOptionPane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
 		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
-			//status2.set
+			status2.setSelected(false);
+			status3.setSelected(false);
 		}
 		else if (status2.isSelected()) {
 			status = 1;
+			status1.setSelected(false);
+			status3.setSelected(false);
 		}
 		else if (status3.isSelected()) {
 			status = 2;
+			status1.setSelected(false);
+			status2.setSelected(false);
 		}	
 		else {
 			popUp("Please select an option.");
