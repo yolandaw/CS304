@@ -87,26 +87,26 @@ public class GUI implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				String keyword = inputPopUp("Enter keywords: ");
 				dataPanel.removeAll();
-				String columnNames[] = {"Title", "Call Number", "Copy Number", "Status"};
-				Object dataValues[][] = borrower.search(keyword);
-				if (dataValues == null) {
-					popUp("No results found for given keywords.");
-				}
-				else {
-					JTable bookTable = new JTable (dataValues, columnNames);
-					bookTable.setEnabled(false);
-					JScrollPane sp = new JScrollPane(bookTable);
-					sp.setPreferredSize(new Dimension (200,150));
-					sp.setCorner(JScrollPane.UPPER_LEFT_CORNER, bookTable.getTableHeader());
-					dataPanel.add(sp);
-					JButton placeHold = new JButton ("Place Hold Request");
-					placeHold.setSize(50, 50);
-					dataPanel.add(placeHold, BorderLayout.SOUTH);
-					mainFrame.revalidate();
-					placeHold.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							String id = inputPopUp("Enter Borrower ID:");
-							try {
+				try {
+					String columnNames[] = {"Title", "Call Number", "Copy Number", "Status"};
+					Object dataValues[][] = borrower.search(keyword);
+					if (dataValues == null) {
+						popUp("No results found for given keywords.");
+					}
+					else {
+						JTable bookTable = new JTable (dataValues, columnNames);
+						bookTable.setEnabled(false);
+						JScrollPane sp = new JScrollPane(bookTable);
+						sp.setPreferredSize(new Dimension (200,150));
+						sp.setCorner(JScrollPane.UPPER_LEFT_CORNER, bookTable.getTableHeader());
+						dataPanel.add(sp);
+						JButton placeHold = new JButton ("Place Hold Request");
+						placeHold.setSize(50, 50);
+						dataPanel.add(placeHold, BorderLayout.SOUTH);
+						mainFrame.revalidate();
+						placeHold.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								String id = inputPopUp("Enter Borrower ID:");
 								if (bt.checkBid(Integer.parseInt(id))) {
 									String callNo = inputPopUp("Enter Call Number:");
 									borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
@@ -116,12 +116,12 @@ public class GUI implements ActionListener{
 									popUp("Invalid Borrower ID " + id + ".");
 								}
 							}
-							catch (NumberFormatException nm) {
-								
-							}
-						}
-					});
-					mainFrame.validate();
+						});
+						mainFrame.validate();
+					}
+				}
+				catch (NumberFormatException nm) {
+						
 				}
 			}
 		});
@@ -130,53 +130,58 @@ public class GUI implements ActionListener{
 		menuItem1b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = inputPopUp("Enter Borrower ID:");
-				dataPanel.removeAll();
-				if (bt.checkBid(Integer.parseInt(id))) {
-				String columnName[] = {"Call Number", "Copy Number", "Title", "Out Date", "Due Date"
-						, "Overdue Status"	};
-				String columnName2[] = {"Call Number", "Title", "Issued Date"};
-				String columnName3[] = {"Outstanding Fines"};
-				Object dataValues[][] = borrower.checkLoans(Integer.parseInt(id));
-				Object dataValues2[][] = borrower.checkHolds(Integer.parseInt(id));
-				Object dataValues3[][] = borrower.checkFines(Integer.parseInt(id));
-
-				if (dataValues == null && dataValues2 == null && dataValues3 == null) {
-					popUp("No records associated with Borrower ID " + id + ".");
-				}
-				else {
+				try {
 					dataPanel.removeAll();
-					JLabel table1Label = new JLabel ("Books Out");
-					JLabel table2Label = new JLabel ("Hold Requests");
-					JTable table1 = new JTable(dataValues,columnName);
-					JTable table2 = new JTable(dataValues2,columnName2);
-					JTable table3 = new JTable(dataValues3,columnName3);
-					table1.setEnabled(false);
-					table2.setEnabled(false);
-					table3.setEnabled(false);
-					
-					JScrollPane sp1 = new JScrollPane(table1);
-					JPanel table1Panel = new JPanel(new BorderLayout());
-					table1Panel.add(table1Label, BorderLayout.NORTH);
-					table1Panel.add(sp1);
-					
-					JScrollPane sp2 = new JScrollPane(table2);
-					JPanel table2Panel = new JPanel(new BorderLayout());
-					table2Panel.add(table2Label, BorderLayout.NORTH);
-					table2Panel.add(sp2);
-					
-					JScrollPane sp3 = new JScrollPane(table3);
-					sp1.setPreferredSize(new Dimension(200,150));
-					sp2.setPreferredSize(new Dimension(200,150));
-					sp3.setPreferredSize(new Dimension(200,150));
+					if (bt.checkBid(Integer.parseInt(id))) {
+						String columnName[] = {"Call Number", "Copy Number", "Title", "Out Date", "Due Date"
+						, "Overdue Status"	};
+						String columnName2[] = {"Call Number", "Title", "Issued Date"};
+						String columnName3[] = {"Outstanding Fines"};
+						Object dataValues[][] = borrower.checkLoans(Integer.parseInt(id));
+						Object dataValues2[][] = borrower.checkHolds(Integer.parseInt(id));
+						Object dataValues3[][] = borrower.checkFines(Integer.parseInt(id));
 
-					dataPanel.add(table1Panel);
-					dataPanel.add(table2Panel);
-					dataPanel.add(sp3);
-					mainFrame.revalidate();	
+						if (dataValues == null && dataValues2 == null && dataValues3 == null) {
+							popUp("No records associated with Borrower ID " + id + ".");
+						}
+						else {
+							dataPanel.removeAll();
+							JLabel table1Label = new JLabel ("Books Out");
+							JLabel table2Label = new JLabel ("Hold Requests");
+							JTable table1 = new JTable(dataValues,columnName);
+							JTable table2 = new JTable(dataValues2,columnName2);
+							JTable table3 = new JTable(dataValues3,columnName3);
+							table1.setEnabled(false);
+							table2.setEnabled(false);
+							table3.setEnabled(false);
+					
+							JScrollPane sp1 = new JScrollPane(table1);
+							JPanel table1Panel = new JPanel(new BorderLayout());
+							table1Panel.add(table1Label, BorderLayout.NORTH);
+							table1Panel.add(sp1);
+					
+							JScrollPane sp2 = new JScrollPane(table2);
+							JPanel table2Panel = new JPanel(new BorderLayout());
+							table2Panel.add(table2Label, BorderLayout.NORTH);
+							table2Panel.add(sp2);
+					
+							JScrollPane sp3 = new JScrollPane(table3);
+							sp1.setPreferredSize(new Dimension(200,150));
+							sp2.setPreferredSize(new Dimension(200,150));
+							sp3.setPreferredSize(new Dimension(200,150));
+
+							dataPanel.add(table1Panel);
+							dataPanel.add(table2Panel);
+							dataPanel.add(sp3);
+							mainFrame.revalidate();	
+						}
+					}
+					else {
+						popUp("Invalid Borrower ID" + id + ".");
+					}
 				}
-				}
-				else {
-					popUp("Invalid Borrower ID" + id + ".");
+				catch (NumberFormatException nm) {
+				
 				}
 			}
 		});
@@ -185,18 +190,22 @@ public class GUI implements ActionListener{
 		menuItem1c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = inputPopUp("Enter Borrower ID:");
-				if (bt.checkBid(Integer.parseInt(id))) {
-					if(borrower.payFine(Integer.parseInt(id))) {
-						popUp("Fines successfully paid!");
+				try {
+					if (bt.checkBid(Integer.parseInt(id))) {
+						if(borrower.payFine(Integer.parseInt(id))) {
+							popUp("Fines successfully paid!");
+						}
+						else {
+							popUp("No fines associated with Borrower ID " + id);
+						}
 					}
 					else {
-						popUp("No fines associated with Borrower ID " + id);
+						popUp("Invalid Borrower ID " + id +".");
 					}
 				}
-				else {
-					popUp("Invalid Borrower ID " + id +".");
+				catch (NumberFormatException nm) {
+					
 				}
-			
 			}
 		});
 		
@@ -263,42 +272,48 @@ public class GUI implements ActionListener{
 		menuItem2b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String bid = inputPopUp("Enter Borrower ID:");
-				if (bt.checkBid(Integer.parseInt(bid))) {
-					if (fine.checkHasFines(Integer.parseInt(bid))) {
-						popUp("This borrower has outstanding fines. Please pay fines before continuing.");
-					}
-					else {
-						int response = 0;
-						while (response == 0) {
-							int[] info = checkOutHelper();
-							if (clerk.checkOut(Integer.parseInt(bid), info)) {
-								response = JOptionPane.showConfirmDialog(null, "Check out more books?", "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-							}
-							else {
-								popUp("Error: This book is already checked out by another user.");
-								response = 0;
-							}
-						}
-						String columnNames[] = {"Borrowing ID", "Call Number", "Copy Number", "Book Title", "Due Date"};
-						Object[][] receipt = new Object[clerk.getCount()][5];
-						
-						if (clerk.getCount() > 0) {
-							receipt = clerk.getReceipt();
-							JTable receiptTable = new JTable(receipt, columnNames);
-							receiptTable.setEnabled(false);
-							JScrollPane sp = new JScrollPane(receiptTable);
-							sp.setPreferredSize(new Dimension (200,150));
-							sp.setCorner(JScrollPane.UPPER_LEFT_CORNER, receiptTable.getTableHeader());
-							dataPanel.add(sp);
-							mainFrame.revalidate();
+				try {
+					if (bt.checkBid(Integer.parseInt(bid))) {
+						if (fine.checkHasFines(Integer.parseInt(bid))) {
+							popUp("This borrower has outstanding fines. Please pay fines before continuing.");
 						}
 						else {
-							popUp("No books were checked out.");
-						}						
+							int response = 0;
+							while (response == 0) {
+								int[] info = checkOutHelper();
+								if (clerk.checkOut(Integer.parseInt(bid), info)) {
+									response = JOptionPane.showConfirmDialog(null, "Check out more books?", "Select an Option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+								}
+								else {
+									popUp("Error: This book is already checked out by another user.");
+									response = 0;
+								}
+							}
+							String columnNames[] = {"Borrowing ID", "Call Number", "Copy Number", "Book Title", "Due Date"};
+							Object[][] receipt = new Object[clerk.getCount()][5];
+							
+							if (clerk.getCount() > 0) {
+								receipt = clerk.getReceipt();
+								JTable receiptTable = new JTable(receipt, columnNames);
+								receiptTable.setEnabled(false);
+								JScrollPane sp = new JScrollPane(receiptTable);
+								sp.setPreferredSize(new Dimension (200,150));
+								sp.setCorner(JScrollPane.UPPER_LEFT_CORNER, receiptTable.getTableHeader());
+								dataPanel.add(sp);
+								mainFrame.revalidate();
+							}
+							else {
+								popUp("No books were checked out.");
+							}						
+						}
+					}
+					else {
+					
+						popUp("Invalid Borrower ID " + bid + ".");
 					}
 				}
-				else {
-					popUp("Invalid Borrower ID " + bid + ".");
+				catch (NumberFormatException nm) {
+					
 				}
 			}
 		});
