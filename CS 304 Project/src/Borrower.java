@@ -66,12 +66,6 @@ public class Borrower{
 			}
 			stmt.close();
 
-			//			for (int l=0;l<count;l++) {
-			//				for (int k=0;k<4;k++) {
-			//					System.out.println(searchResult[l][k]);
-			//				}
-			//			}
-
 			return searchResult;
 		}
 		catch (SQLException ex)
@@ -160,7 +154,7 @@ public class Borrower{
 			System.out.println("Message: " + ex.getMessage());
 		}
 		currentLoans = new Object[1][6];
-		currentLoans[0][0] = "helo";
+		currentLoans[0][0] = "";
 		currentLoans[0][1] = "";
 		currentLoans[0][2] = "";
 		currentLoans[0][3] = "";
@@ -238,17 +232,12 @@ public class Borrower{
 
 
 		currentFines = new Object[1][5];
-		currentFines[0][0] = "hello";
+		currentFines[0][0] = "";
 		currentFines[0][1] = "";
 		currentFines[0][2] = "";
 		currentFines[0][3] = "";
 		currentFines[0][4] = "";
 
-					for (int i=0;i<1;i++) {
-						for (int j=0;j<5;j++) {
-							System.out.println(currentFines[i][j]);
-						}
-					}
 		return currentFines;
 
 	}
