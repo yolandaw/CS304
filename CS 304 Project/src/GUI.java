@@ -280,6 +280,9 @@ public class GUI implements ActionListener{
 					else if (type3.isSelected()) {
 						index = 3;
 					}
+					else {
+						popUp("Please select an option");
+					}
 
 					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 						popUp("Borrower added successfully!");
@@ -412,9 +415,11 @@ public class GUI implements ActionListener{
 						int response = JOptionPane.showConfirmDialog(null, "Book already exists! Add a copy instead?", "Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 						if (response == 0 ) {
 							int resp = addCopyHelper();
-							int callNo = book.checkBook(isbn);
-							librarian.addCopy(callNo, resp);
-							popUp("Copy successfully added!");
+							if (resp == 1 | resp == 2 | resp == 3) {
+								int callNo = book.checkBook(isbn);
+								librarian.addCopy(callNo, resp);
+								popUp("Copy successfully added!");
+							}
 						}
 						else if (response == 1) {
 						}
@@ -537,7 +542,7 @@ public class GUI implements ActionListener{
 		});
 		
 		
-		int status = 0;
+		int status = 4;
 		if (status1.isSelected()) {
 			status = 0;
 		}
