@@ -315,7 +315,7 @@ public class Borrower{
 	 * the system sends an email to the borrower and informs the library clerk 
 	 * to keep the book out of the shelves.
 	 */
-	public boolean placeHold(int bid, int callNo) {
+	public int placeHold(int bid, int callNo) {
 		holdRequest hr = new holdRequest();
 		Statement stmt;
 		ResultSet rs;
@@ -328,8 +328,10 @@ public class Borrower{
 			while (rs.next()) {
 				status = rs.getString("bookCopy_status");
 
-				if (!status.equals("out")) {
-					return false;
+				if (status.equals("in")) {
+					return 1;
+				} else if (status.equals("on-hold")) {
+					return 2;
 				}
 			}
 
@@ -342,7 +344,7 @@ public class Borrower{
 			System.out.println("Message: " + ex.getMessage());
 		}
 		
-		return true;
+		return 0;
 	}
 
 	/*
