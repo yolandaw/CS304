@@ -107,13 +107,18 @@ public class GUI implements ActionListener{
 						placeHold.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								String id = inputPopUp("Enter Borrower ID:");
-								if (bt.checkBid(Integer.parseInt(id))) {
-									String callNo = inputPopUp("Enter Call Number:");
-									borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
-									popUp("Hold placed successfully!");
+								try {
+									if (bt.checkBid(Integer.parseInt(id))) {
+										String callNo = inputPopUp("Enter Call Number:");
+										borrower.placeHold(Integer.parseInt(id), Integer.parseInt(callNo));
+										popUp("Hold placed successfully!");
+									}
+									else {
+										popUp("Invalid Borrower ID " + id + ".");
+									}
 								}
-								else {
-									popUp("Invalid Borrower ID " + id + ".");
+								catch (NumberFormatException nm8) {
+									
 								}
 							}
 						});
