@@ -241,20 +241,16 @@ public class GUI implements ActionListener{
 		//Clerk - Add Borrower
 		menuItem2a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JTextField name = new JTextField();
-				JTextField password = new JTextField();
-				JTextField address = new JTextField();
-				JTextField phone = new JTextField();
-				JTextField email = new JTextField();
-				JTextField sinOrStNo = new JTextField();
-				ButtonGroup borrowerGroup = new ButtonGroup();
-				JRadioButton type1 = new JRadioButton("Student");
-				JRadioButton type2 = new JRadioButton("Faculty");
-				JRadioButton type3 = new JRadioButton("Staff");
-				borrowerGroup.add(type1);
-				borrowerGroup.add(type2);
-				borrowerGroup.add(type3);
-				try {					
+				try {
+					JTextField name = new JTextField();
+					JTextField password = new JTextField();
+					JTextField address = new JTextField();
+					JTextField phone = new JTextField();
+					JTextField email = new JTextField();
+					JTextField sinOrStNo = new JTextField();
+					JRadioButton type1 = new JRadioButton("Student");
+					JRadioButton type2 = new JRadioButton("Faculty");
+					JRadioButton type3 = new JRadioButton("Staff");
 					final JComponent[] inputs = new JComponent[] {
 							new JLabel("Name"),name,
 							new JLabel("Password"),password,
@@ -265,43 +261,27 @@ public class GUI implements ActionListener{
 							new JLabel("SIN or Student No."),sinOrStNo,
 							new JLabel("Type"),type1,type2,type3
 					};
-					if (bt.checkSID(Integer.parseInt(sinOrStNo.getText()))) {
-						popUp("SIN or Student No. already exists");
+					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
+
+					int index = 0;
+
+					if (type1.isSelected()) {
+						index = 1;
+					}
+
+					else if (type2.isSelected()) {
+						index = 2;
+					}
+
+					else if (type3.isSelected()) {
+						index = 3;
+					}
+
+					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
+						popUp("Borrower added successfully!");
 					}
 					else {
-						int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.CLOSED_OPTION);
-					
-						int index = 0;
-
-						if (type1.isSelected()) {
-							index = 1;
-						}
-
-						else if (type2.isSelected()) {
-							index = 2;
-						}
-
-						else if (type3.isSelected()) {
-							index = 3;
-						}
-						else {
-							popUp("Please select an option");
-						}
-						
-						if ( rp == JOptionPane.CLOSED_OPTION ) {
-							index = 4;
-						}
-						else if (rp == JOptionPane.OK_OPTION && (index != 1 | index != 2 | index != 3)) {
-							popUp("Pleas select an option.");
-						}
-
-						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
-							popUp("Borrower added successfully!");
-						}
-						else {
-							popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
-						}
-
+						popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
 					}
 				}
 				catch (NumberFormatException nm2) {
