@@ -268,14 +268,14 @@ public class GUI implements ActionListener{
 							new JLabel("SIN or Student No."),sinOrStNo,
 							new JLabel("Type"),type1,type2,type3
 					};
-					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
+					int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 
 					if (bt.checkSID(Integer.parseInt(sinOrStNo.getText()))) {
 						popUp("SIN or Student No. already exists");
 					}
 					else {
 						
-						int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.CLOSED_OPTION);
+						//int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.CLOSED_OPTION);
 						
 						int index = 0;
 
@@ -294,16 +294,9 @@ public class GUI implements ActionListener{
 						if ( rp == JOptionPane.CLOSED_OPTION ) {
 							index = 4;
 						}
-						else if (rp == JOptionPane.OK_OPTION && (index != 1 | index != 2 | index != 3)) {
+						else if (rp == JOptionPane.OK_OPTION && (index == 0)) {
 							popUp("Please select an option.");
 						}
-//						else {
-//							System.out.println("wer");
-//						}
-//
-//						if (rp == JOptionPane.OK_OPTION && (sinOrStNo.getText() == "" | sinOrStNo.getText() == null)) {
-//							popUp("Please enter a SIN or Student Number.");
-//						}
 						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 							popUp("Borrower added successfully!");
 						}
