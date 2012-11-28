@@ -241,20 +241,20 @@ public class GUI implements ActionListener{
 		//Clerk - Add Borrower
 		menuItem2a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					JTextField name = new JTextField();
-					JTextField password = new JTextField();
-					JTextField address = new JTextField();
-					JTextField phone = new JTextField();
-					JTextField email = new JTextField();
-					JTextField sinOrStNo = new JTextField();
-					ButtonGroup borrowerGroup = new ButtonGroup();
-					JRadioButton type1 = new JRadioButton("Student");
-					JRadioButton type2 = new JRadioButton("Faculty");
-					JRadioButton type3 = new JRadioButton("Staff");
-					borrowerGroup.add(type1);
-					borrowerGroup.add(type2);
-					borrowerGroup.add(type3);
+				JTextField name = new JTextField();
+				JTextField password = new JTextField();
+				JTextField address = new JTextField();
+				JTextField phone = new JTextField();
+				JTextField email = new JTextField();
+				JTextField sinOrStNo = new JTextField();
+				ButtonGroup borrowerGroup = new ButtonGroup();
+				JRadioButton type1 = new JRadioButton("Student");
+				JRadioButton type2 = new JRadioButton("Faculty");
+				JRadioButton type3 = new JRadioButton("Staff");
+				borrowerGroup.add(type1);
+				borrowerGroup.add(type2);
+				borrowerGroup.add(type3);
+				try {					
 					final JComponent[] inputs = new JComponent[] {
 							new JLabel("Name"),name,
 							new JLabel("Password"),password,
@@ -269,8 +269,8 @@ public class GUI implements ActionListener{
 						popUp("SIN or Student No. already exists");
 					}
 					else {
-						JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
-
+						int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.CLOSED_OPTION);
+					
 						int index = 0;
 
 						if (type1.isSelected()) {
@@ -287,6 +287,13 @@ public class GUI implements ActionListener{
 						else {
 							popUp("Please select an option");
 						}
+						
+						if ( rp == JOptionPane.CLOSED_OPTION ) {
+							index = 4;
+						}
+						else if (rp == JOptionPane.OK_OPTION && (index != 1 | index != 2 | index != 3)) {
+							popUp("Pleas select an option.");
+						}
 
 						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 							popUp("Borrower added successfully!");
@@ -294,6 +301,7 @@ public class GUI implements ActionListener{
 						else {
 							popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
 						}
+
 					}
 				}
 				catch (NumberFormatException nm2) {
