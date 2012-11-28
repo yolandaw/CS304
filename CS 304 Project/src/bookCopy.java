@@ -73,7 +73,16 @@ public class bookCopy {
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
-			
+		    try 
+		    {
+			// undo the update
+			con.rollback();	
+		    }
+		    catch (SQLException ex2)
+		    {
+			System.out.println("Message: " + ex2.getMessage());
+			System.exit(-1);
+		    }
 		}
 	}
 	
@@ -93,7 +102,16 @@ public class bookCopy {
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
-			
+		    try 
+		    {
+			// undo the update
+			con.rollback();	
+		    }
+		    catch (SQLException ex2)
+		    {
+			System.out.println("Message: " + ex2.getMessage());
+			System.exit(-1);
+		    }
 		}
 	}
 	
@@ -112,7 +130,16 @@ public class bookCopy {
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
-			
+		    try 
+		    {
+			// undo the update
+			con.rollback();	
+		    }
+		    catch (SQLException ex2)
+		    {
+			System.out.println("Message: " + ex2.getMessage());
+			System.exit(-1);
+		    }
 		}
 	}
 	
