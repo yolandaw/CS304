@@ -225,18 +225,17 @@ public class GUI implements ActionListener{
 		//Clerk - Add Borrower
 		menuItem2a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JTextField name = new JTextField();
-//				JPasswordField password = new JPasswordField();
-//				JPasswordField passwordVerify = new JPasswordField();
-				JTextField password = new JTextField();
-				JTextField address = new JTextField();
-				JTextField phone = new JTextField();
-				JTextField email = new JTextField();
-				JTextField sinOrStNo = new JTextField();
-				JRadioButton type1 = new JRadioButton("Student");
-				JRadioButton type2 = new JRadioButton("Faculty");
-				JRadioButton type3 = new JRadioButton("Staff");
-				final JComponent[] inputs = new JComponent[] {
+				try {
+					JTextField name = new JTextField();
+					JTextField password = new JTextField();
+					JTextField address = new JTextField();
+					JTextField phone = new JTextField();
+					JTextField email = new JTextField();
+					JTextField sinOrStNo = new JTextField();
+					JRadioButton type1 = new JRadioButton("Student");
+					JRadioButton type2 = new JRadioButton("Faculty");
+					JRadioButton type3 = new JRadioButton("Staff");
+					final JComponent[] inputs = new JComponent[] {
 						new JLabel("Name"),name,
 						new JLabel("Password"),password,
 						//new JLabel("Verify Password"),passwordVerify,
@@ -245,39 +244,33 @@ public class GUI implements ActionListener{
 						new JLabel("E-mail"),email,
 						new JLabel("SIN or Student No."),sinOrStNo,
 						new JLabel("Type"),type1,type2,type3
-				};
-				JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
-//				String insertPassword = "";
-//				for (int i = 0; i < password.; i++)
-//				
-//				if(password.toString().equals(passwordVerify.toString())){
-//					insertPassword = password.toString();
-				
-				int index = 0;
-	
-				if (type1.isSelected()) {
-					index = 1;
-				}
-				
-				else if (type2.isSelected()) {
-					index = 2;
-				}
-				
-				else if (type3.isSelected()) {
-					index = 3;
-				}
-				
-				if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
-					popUp("Borrower added successfully!");
-				}
-				else {
-					popUp("SIN or Student Number " + sinOrStNo + " already exists!");
-				}
-//}
-//				else {
-//					popUp("Error: Passwords do not match");
-//				}
+					};
+					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 
+					int index = 0;
+	
+					if (type1.isSelected()) {
+						index = 1;
+					}
+				
+					else if (type2.isSelected()) {
+						index = 2;
+					}
+				
+					else if (type3.isSelected()) {
+						index = 3;
+					}
+				
+					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
+						popUp("Borrower added successfully!");
+					}
+					else {
+						popUp("SIN or Student Number " + sinOrStNo + " already exists!");
+					}
+				}
+				catch (NumberFormatException nm2) {
+					
+				}
 			}
 		});
 		
@@ -334,15 +327,20 @@ public class GUI implements ActionListener{
 		//Clerk - Process Returns
 		menuItem2c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JTextField callNo = new JTextField();
-				JTextField copyNo = new JTextField();
-				final JComponent[] inputs = new JComponent[] {
-					new JLabel ("Call Number"),callNo,
-					new JLabel ("Copy Number"),copyNo
-				};
-				JOptionPane.showMessageDialog(null, inputs, "Process Returns", JOptionPane.PLAIN_MESSAGE);
-				String result = clerk.returnBook(Integer.parseInt(callNo.getText()), Integer.parseInt(copyNo.getText()));
-				popUp(result);
+				try {
+					JTextField callNo = new JTextField();
+					JTextField copyNo = new JTextField();
+					final JComponent[] inputs = new JComponent[] {
+							new JLabel ("Call Number"),callNo,
+							new JLabel ("Copy Number"),copyNo
+					};
+					JOptionPane.showMessageDialog(null, inputs, "Process Returns", JOptionPane.PLAIN_MESSAGE);
+					String result = clerk.returnBook(Integer.parseInt(callNo.getText()), Integer.parseInt(copyNo.getText()));
+					popUp(result);
+				}
+				catch (NumberFormatException nm3) {
+					
+				}
 			}
 		});
 		
@@ -365,35 +363,45 @@ public class GUI implements ActionListener{
 		//Librarian - Add Book
 		menuItem3a.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int isbn = Integer.parseInt(GUI.inputPopUp("ISBN: "));
-				if (!librarian.checkISBN(isbn)) {
-					JTextField callNo = new JTextField();
-					JTextField title = new JTextField();
-					JTextField mainAuthor = new JTextField();
-					JTextField publisher = new JTextField();
-					JTextField year = new JTextField();
-					final JComponent[] inputs = new JComponent[] {
+				try {
+					int isbn = Integer.parseInt(GUI.inputPopUp("ISBN: "));
+					if (!librarian.checkISBN(isbn)) {
+						JTextField callNo = new JTextField();
+						JTextField title = new JTextField();
+						JTextField mainAuthor = new JTextField();
+						JTextField publisher = new JTextField();
+						JTextField year = new JTextField();
+						final JComponent[] inputs = new JComponent[] {
 							new JLabel ("Call Number"),callNo,
 							new JLabel ("Title"),title,
 							new JLabel ("Main Author"),mainAuthor,
 							new JLabel ("Publisher"),publisher,
 							new JLabel ("Year"),year};
-					JOptionPane.showMessageDialog(null, inputs, "Add Book", JOptionPane.PLAIN_MESSAGE);
-					librarian.addBook(Integer.parseInt(callNo.getText()), isbn, title.getText(), mainAuthor.getText(), publisher.getText(), Integer.parseInt(year.getText()));
-					int resp = addCopyHelper();
-					librarian.addCopy(Integer.parseInt(callNo.getText()), resp);
-					popUp("Book successfully added!");
+						JOptionPane.showMessageDialog(null, inputs, "Add Book", JOptionPane.PLAIN_MESSAGE);
+						if (book.checkCallNo(Integer.parseInt(callNo.getText()))) {
+							popUp("The Call Number " + callNo + " already exists. Please try a different Call Number.");
+						}
+						else {
+							librarian.addBook(Integer.parseInt(callNo.getText()), isbn, title.getText(), mainAuthor.getText(), publisher.getText(), Integer.parseInt(year.getText()));
+							int resp = addCopyHelper();
+							librarian.addCopy(Integer.parseInt(callNo.getText()), resp);
+							popUp("Book successfully added!");
+						}
+					}
+					else {
+						int response = JOptionPane.showConfirmDialog(null, "Book already exists! Add a copy instead?", "Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						if (response == 0 ) {
+							int resp = addCopyHelper();
+							int callNo = book.checkBook(isbn);
+							librarian.addCopy(callNo, resp);
+							popUp("Copy successfully added!");
+						}
+						else if (response == 1) {
+						}
+					}
 				}
-				else {
-					int response = JOptionPane.showConfirmDialog(null, "Book already exists! Add a copy instead?", "Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					if (response == 0 ) {
-						int resp = addCopyHelper();
-						int callNo = book.checkBook(isbn);
-						librarian.addCopy(callNo, resp);
-						popUp("Copy successfully added!");
-					}
-					else if (response == 1) {
-					}
+				catch (NumberFormatException nm2) {
+					
 				}
 			}
 		});
@@ -413,23 +421,28 @@ public class GUI implements ActionListener{
 		//Librarian - Generate popular books
 		menuItem3c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dataPanel.removeAll();
-				JTextField year = new JTextField();
-				JTextField numBooks = new JTextField();
-				final JComponent[] inputs = new JComponent[] {
-					new JLabel("Year"),year,
-					new JLabel("Number of Books to Display"),numBooks
-				};
-				JOptionPane.showMessageDialog(null, inputs, "Generate Popular Books", JOptionPane.PLAIN_MESSAGE);
-				String columnNames[] = {"Call Number", "Title", "# of Times Borrowed" };
-				Object dataValues[][] = librarian.generatePopularBooksReport(Integer.parseInt(year.getText()), Integer.parseInt(numBooks.getText()));
-				if (dataValues == null) {
-					popUp("No results for given year");
+				try {
+					dataPanel.removeAll();
+					JTextField year = new JTextField();
+					JTextField numBooks = new JTextField();
+					final JComponent[] inputs = new JComponent[] {
+							new JLabel("Year"),year,
+							new JLabel("Number of Books to Display"),numBooks
+					};
+					JOptionPane.showMessageDialog(null, inputs, "Generate Popular Books", JOptionPane.PLAIN_MESSAGE);
+					String columnNames[] = {"Call Number", "Title", "# of Times Borrowed" };
+					Object dataValues[][] = librarian.generatePopularBooksReport(Integer.parseInt(year.getText()), Integer.parseInt(numBooks.getText()));
+					if (dataValues == null) {
+						popUp("No results for given year");
+					}
+					else {
+						JTable bookTable = new JTable(dataValues,columnNames);
+						dataPanel.add(new JScrollPane(bookTable));
+						mainFrame.validate();
+					}
 				}
-				else {
-					JTable bookTable = new JTable(dataValues,columnNames);
-					dataPanel.add(new JScrollPane(bookTable));
-					mainFrame.validate();
+				catch (NumberFormatException nm2) {
+					
 				}
 			}
 		});
