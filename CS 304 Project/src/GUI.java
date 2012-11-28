@@ -263,26 +263,34 @@ public class GUI implements ActionListener{
 					};
 					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 
-					int index = 0;
-
-					if (type1.isSelected()) {
-						index = 1;
-					}
-
-					else if (type2.isSelected()) {
-						index = 2;
-					}
-
-					else if (type3.isSelected()) {
-						index = 3;
-					}
-
-					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
-						popUp("Borrower added successfully!");
+					if (bt.checkSID(Integer.parseInt(sinOrStNo.getText()))) {
+						popUp("SIN or Student No. already exists");
 					}
 					else {
-						popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
+						int index = 0;
+
+						if (type1.isSelected()) {
+							index = 1;
+						}
+
+						else if (type2.isSelected()) {
+							index = 2;
+						}
+
+						else if (type3.isSelected()) {
+							index = 3;
+						}
+
+						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
+							popUp("Borrower added successfully!");
+						}
+						else {
+							popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
+						}
 					}
+
+					
+					
 				}
 				catch (NumberFormatException nm2) {
 
