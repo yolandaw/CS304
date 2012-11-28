@@ -379,7 +379,7 @@ public class GUI implements ActionListener{
 							new JLabel ("Year"),year};
 						JOptionPane.showMessageDialog(null, inputs, "Add Book", JOptionPane.PLAIN_MESSAGE);
 						if (book.checkCallNo(Integer.parseInt(callNo.getText()))) {
-							popUp("The Call Number " + callNo + " already exists. Please try a different Call Number.");
+							popUp("The Call Number " + callNo.getText() + " already exists. Please try a different Call Number.");
 						}
 						else {
 							librarian.addBook(Integer.parseInt(callNo.getText()), isbn, title.getText(), mainAuthor.getText(), publisher.getText(), Integer.parseInt(year.getText()));
