@@ -265,30 +265,35 @@ public class GUI implements ActionListener{
 							new JLabel("SIN or Student No."),sinOrStNo,
 							new JLabel("Type"),type1,type2,type3
 					};
-					JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
-
-					int index = 0;
-
-					if (type1.isSelected()) {
-						index = 1;
-					}
-
-					else if (type2.isSelected()) {
-						index = 2;
-					}
-
-					else if (type3.isSelected()) {
-						index = 3;
+					if (bt.checkSID(Integer.parseInt(sinOrStNo.getText()))) {
+						popUp("SIN or Student No. already exists");
 					}
 					else {
-						popUp("Please select an option");
-					}
+						JOptionPane.showMessageDialog(null, inputs, "Add Borrower", JOptionPane.PLAIN_MESSAGE);
 
-					if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
-						popUp("Borrower added successfully!");
-					}
-					else {
-						popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
+						int index = 0;
+
+						if (type1.isSelected()) {
+							index = 1;
+						}
+
+						else if (type2.isSelected()) {
+							index = 2;
+						}
+
+						else if (type3.isSelected()) {
+							index = 3;
+						}
+						else {
+							popUp("Please select an option");
+						}
+
+						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
+							popUp("Borrower added successfully!");
+						}
+						else {
+							popUp("SIN or Student Number " + sinOrStNo.getText() + " already exists!");
+						}
 					}
 				}
 				catch (NumberFormatException nm2) {
@@ -416,6 +421,7 @@ public class GUI implements ActionListener{
 						if (response == 0 ) {
 							int resp = addCopyHelper();
 							if (resp == 1 | resp == 2 | resp == 3) {
+								System.out.println(resp + "");
 								int callNo = book.checkBook(isbn);
 								librarian.addCopy(callNo, resp);
 								popUp("Copy successfully added!");
@@ -542,7 +548,7 @@ public class GUI implements ActionListener{
 		});
 		
 		
-		int status = 4;
+		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
 		}
@@ -556,6 +562,7 @@ public class GUI implements ActionListener{
 			popUp("Please select an option.");
 			addCopyHelper();
 		}
+		
 		return status;
 	}
 
