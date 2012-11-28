@@ -64,7 +64,7 @@ public class bookCopy {
 		
 		try{
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT COUNT(*) FROM bookCopy WHERE book_callNo =" + callNo);
+			rs = stmt.executeQuery("SELECT COUNT(*) FROM book WHERE book_callNo =" + callNo);
 			while(rs.next()){
 				count = rs.getInt(1);
 
