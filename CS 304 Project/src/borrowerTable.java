@@ -165,6 +165,7 @@ public class borrowerTable {
 					return true;
 				}
 			}
+			stmt.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -190,6 +191,7 @@ public class borrowerTable {
 					return true;
 				}
 			}
+			stmt.close();
 		}
 		catch(SQLException e){
 			System.out.println("Message: " + e.getMessage());
@@ -265,9 +267,14 @@ public class borrowerTable {
 			if(count > 0){
 				return true;
 			}
+			stmt.close();
 			
 		}
 		catch(SQLException e){
+			System.out.println("Message: " + e.getMessage());
+		}
+		catch(NumberFormatException e) {
+
 			System.out.println("Message: " + e.getMessage());
 		}
 		return false;
