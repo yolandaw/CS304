@@ -29,9 +29,7 @@ public class Fine {
 			ps.setInt(4, borid);
 
 			ps.executeUpdate();
-
 			con.commit();
-
 			ps.close();
 		}
 
@@ -65,7 +63,6 @@ public class Fine {
 			}
 
 			con.commit();
-
 			ps.close();
 		}
 

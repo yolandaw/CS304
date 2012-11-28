@@ -133,6 +133,7 @@ public class holdRequest {
 			while(rs.next()){
 				hid = rs.getInt(1);
 			}
+			stmt.close();
 		}
 
 		catch(SQLException e){
@@ -154,6 +155,7 @@ public class holdRequest {
 				while(rs.next()){
 					bid = rs.getInt(1);
 				}
+				stmt.close();
 			}
 
 			catch(SQLException e){

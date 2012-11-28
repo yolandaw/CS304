@@ -196,6 +196,7 @@ public class Clerk {
 
 				}				
 			}
+			stmt.close();
 			return overdueList;		
 		}
 		catch(SQLException e){
@@ -210,18 +211,18 @@ public class Clerk {
 
 	
 	//checks array (testing method)
-	public void printArray(){
-
-		System.out.println("checkoutcount in printarray is " + checkOutCount);
-		for(int k = 0; k < checkOutCount; k++){
-			for(int j = 0; j < 5 ; j++){
-				
-				System.out.println(receipt[k][j] + " ");
-
-			}
-			System.out.println(" ");
-		}
-	}
+//	public void printArray(){
+//
+//		System.out.println("checkoutcount in printarray is " + checkOutCount);
+//		for(int k = 0; k < checkOutCount; k++){
+//			for(int j = 0; j < 5 ; j++){
+//				
+//				System.out.println(receipt[k][j] + " ");
+//
+//			}
+//			System.out.println(" ");
+//		}
+//	}
 
 	public static void main(String[] args) {
 
@@ -264,7 +265,7 @@ public class Clerk {
 //				System.out.println(clerkTest.checkOut(10, input2));
 //				System.out.println(clerkTest.checkOut(10, input3));
 //				clerkTest.printArray();
-				clerkTest.checkOverdue();
+				//clerkTest.checkOverdue();
 
 			}
 		});
