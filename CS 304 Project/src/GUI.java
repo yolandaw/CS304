@@ -65,7 +65,7 @@ public class GUI implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		System.exit(0);
+		//System.exit(0);
 	}
 
 	private void initializeMenu() {
@@ -297,8 +297,13 @@ public class GUI implements ActionListener{
 						else if (rp == JOptionPane.OK_OPTION && (index != 1 | index != 2 | index != 3)) {
 							popUp("Please select an option.");
 						}
-
-						
+//						else {
+//							System.out.println("wer");
+//						}
+//
+//						if (rp == JOptionPane.OK_OPTION && (sinOrStNo.getText() == "" | sinOrStNo.getText() == null)) {
+//							popUp("Please enter a SIN or Student Number.");
+//						}
 						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 							popUp("Borrower added successfully!");
 						}
