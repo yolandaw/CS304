@@ -520,18 +520,32 @@ public class GUI implements ActionListener{
 		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
-			status2.setEnabled(false);
-			status3.setEnabled(false);
+			ButtonGroup buttonGroup1 = new ButtonGroup();
+			buttonGroup1.add(status2);
+			buttonGroup1.add(status3);
+			buttonGroup1.clearSelection();
+//			status2.setEnabled(false);
+//			status3.setEnabled(false);
 		}
 		else if (status2.isSelected()) {
 			status = 1;
-			status1.setEnabled(false);
-			status3.setEnabled(false);
+			ButtonGroup buttonGroup1 = new ButtonGroup();
+			buttonGroup1.add(status1);
+			buttonGroup1.add(status3);
+			buttonGroup1.clearSelection();
+
+//			status1
+//			status3.setEnabled(false);
 		}
 		else if (status3.isSelected()) {
 			status = 2;
-			status1.setEnabled(false);
-			status2.setEnabled(false);
+			ButtonGroup buttonGroup1 = new ButtonGroup();
+			buttonGroup1.add(status1);
+			buttonGroup1.add(status2);
+			buttonGroup1.clearSelection();
+
+//			status1.setEnabled(false);
+//			status2.setEnabled(false);
 		}	
 		else {
 			popUp("Please select an option.");
