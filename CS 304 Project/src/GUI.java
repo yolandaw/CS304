@@ -58,7 +58,7 @@ public class GUI implements ActionListener{
 		mainFrame.getContentPane().add(dataPanel, BorderLayout.NORTH);
 		
 		mainFrame.pack();
-		mainFrame.setSize(500, 500);
+		mainFrame.setSize(600, 600);
 		mainFrame.setVisible(true);
 		dataPanel.setVisible(true);
 
@@ -149,18 +149,19 @@ public class GUI implements ActionListener{
 						String columnName[] = {"Call Number", "Copy Number", "Title", "Out Date", "Due Date"
 						, "Overdue Status"	};
 						String columnName2[] = {"Call Number", "Title", "Issued Date"};
-						String columnName3[] = {"Outstanding Fines"};
+						String columnName3[] = {"Issued Date", "Fine Amount", "Call Number", "Book Title", "Due Date"};
 						Object dataValues[][] = borrower.checkLoans(Integer.parseInt(id));
 						Object dataValues2[][] = borrower.checkHolds(Integer.parseInt(id));
 						Object dataValues3[][] = borrower.checkFines(Integer.parseInt(id));
 
-						if (dataValues == null && dataValues2 == null && dataValues3 == null) {
+						if (dataValues.equals("") && dataValues2.equals("") && dataValues3.equals("")) {
 							popUp("No records associated with Borrower ID " + id + ".");
 						}
 						else {
 							dataPanel.removeAll();
 							JLabel table1Label = new JLabel ("Books Out");
 							JLabel table2Label = new JLabel ("Hold Requests");
+							JLabel table3Label = new JLabel( "Outstanding Fines");
 							JTable table1 = new JTable(dataValues,columnName);
 							JTable table2 = new JTable(dataValues2,columnName2);
 							JTable table3 = new JTable(dataValues3,columnName3);
@@ -179,13 +180,17 @@ public class GUI implements ActionListener{
 							table2Panel.add(sp2);
 					
 							JScrollPane sp3 = new JScrollPane(table3);
+							JPanel table3Panel = new JPanel(new BorderLayout());
+							table3Panel.add(table3Label, BorderLayout.NORTH);
+							table3Panel.add(sp3);
+							
 							sp1.setPreferredSize(new Dimension(200,150));
-							sp2.setPreferredSize(new Dimension(200,150));
-							sp3.setPreferredSize(new Dimension(200,150));
+							sp2.setPreferredSize(new Dimension(50,150));
+							sp3.setPreferredSize(new Dimension(150,150));
 
 							dataPanel.add(table1Panel);
 							dataPanel.add(table2Panel);
-							dataPanel.add(sp3);
+							dataPanel.add(table3Panel);
 							mainFrame.revalidate();	
 						}
 					}
@@ -413,6 +418,7 @@ public class GUI implements ActionListener{
 				String columnNames[] = { "Call Number", "Copy Number", "Title", "Out Date", "Overdue" };
 				Object dataValues[][] = librarian.generateBookReport();
 				JTable bookTable = new JTable(dataValues,columnNames);
+				bookTable.setEnabled(false);
 				dataPanel.add(new JScrollPane(bookTable));
 				mainFrame.validate();
 			}
@@ -437,6 +443,7 @@ public class GUI implements ActionListener{
 					}
 					else {
 						JTable bookTable = new JTable(dataValues,columnNames);
+						bookTable.setEnabled(false);
 						dataPanel.add(new JScrollPane(bookTable));
 						mainFrame.validate();
 					}
@@ -501,6 +508,7 @@ public class GUI implements ActionListener{
 		int status = 0;
 		if (status1.isSelected()) {
 				status = 0;
+				//status2.set
 		}
 		else if (status2.isSelected()) {
 			status = 1;
