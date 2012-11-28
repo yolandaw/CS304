@@ -508,6 +508,10 @@ public class GUI implements ActionListener{
 		else if (status3.isSelected()) {
 			status = 2;
 		}	
+		else {
+			popUp("Please select an option.");
+			addCopyHelper();
+		}
 		return status;
 	}
     
