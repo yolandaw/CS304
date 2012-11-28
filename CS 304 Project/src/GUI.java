@@ -248,9 +248,16 @@ public class GUI implements ActionListener{
 					JTextField phone = new JTextField();
 					JTextField email = new JTextField();
 					JTextField sinOrStNo = new JTextField();
+					ButtonGroup borrowerGroup = new ButtonGroup();
+
 					JRadioButton type1 = new JRadioButton("Student");
 					JRadioButton type2 = new JRadioButton("Faculty");
 					JRadioButton type3 = new JRadioButton("Staff");
+					
+					borrowerGroup.add(type1);
+					borrowerGroup.add(type2);
+					borrowerGroup.add(type3);
+					
 					final JComponent[] inputs = new JComponent[] {
 							new JLabel("Name"),name,
 							new JLabel("Password"),password,
@@ -267,6 +274,9 @@ public class GUI implements ActionListener{
 						popUp("SIN or Student No. already exists");
 					}
 					else {
+						
+						int rp = JOptionPane.showConfirmDialog(null, inputs, "Add Borrower", JOptionPane.CLOSED_OPTION);
+						
 						int index = 0;
 
 						if (type1.isSelected()) {
@@ -281,6 +291,14 @@ public class GUI implements ActionListener{
 							index = 3;
 						}
 
+						if ( rp == JOptionPane.CLOSED_OPTION ) {
+							index = 4;
+						}
+						else if (rp == JOptionPane.OK_OPTION && (index != 1 | index != 2 | index != 3)) {
+							popUp("Please select an option.");
+						}
+
+						
 						if (clerk.addBorrower(name.getText(), password.getText(), address.getText(), Integer.parseInt(phone.getText()), email.getText(), Integer.parseInt(sinOrStNo.getText()), index)) {
 							popUp("Borrower added successfully!");
 						}
