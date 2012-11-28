@@ -112,6 +112,8 @@ public class Borrower{
 			catch(Exception ex) {
 				return null;
 			}
+			
+
 			if (count > 0) {
 				currentLoans = new Object[count][6];
 			}
@@ -141,24 +143,31 @@ public class Borrower{
 				currentLoans[i][3] = outDate;
 				currentLoans[i][4] = borr.getDueDate(id, borid);
 				currentLoans[i][5] = overdue;
-						i++;
+				i++;
 			}
 			stmt.close();
 
-//			for (i=0;i<count;i++) {
-//				for (int j=0;j<5;j++) {
-//					System.out.println(currentLoans[i][j]);
-//				}
-//			}
 
-			return currentLoans;
+			
+
+			if (count>0) {
+				return currentLoans;
+			}
+
 		}
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
 		}
-
-		return null;
+		currentLoans = new Object[1][6];
+		currentLoans[0][0] = "helo";
+		currentLoans[0][1] = "";
+		currentLoans[0][2] = "";
+		currentLoans[0][3] = "";
+		currentLoans[0][4] = "";
+		currentLoans[0][5] = "";
+		
+		return currentLoans;
 
 	}
 
@@ -189,9 +198,11 @@ public class Borrower{
 			catch(Exception ex) {
 				return null;
 			}
-//			if (count > 0) {
+			
+
+			if (count > 0) {
 				currentFines = new Object[count][5];
-//			}
+			}
 
 			int i=0;
 			while(rs.next()) {
@@ -215,20 +226,30 @@ public class Borrower{
 			}
 			stmt.close();
 
-//			for (i=0;i<count;i++) {
-//				for (int j=0;j<5;j++) {
-//					System.out.println(currentFines[i][j]);
-//				}
-//			}
+			if (count>0) {
 
-			return currentFines;
+				return currentFines;
+			}
 		}
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
 		}
 
-		return null;
+
+		currentFines = new Object[1][5];
+		currentFines[0][0] = "hello";
+		currentFines[0][1] = "";
+		currentFines[0][2] = "";
+		currentFines[0][3] = "";
+		currentFines[0][4] = "";
+
+					for (int i=0;i<1;i++) {
+						for (int j=0;j<5;j++) {
+							System.out.println(currentFines[i][j]);
+						}
+					}
+		return currentFines;
 
 	}
 
@@ -241,8 +262,6 @@ public class Borrower{
 		int callNo;
 		String title;
 		Date issueDate;
-
-		Borrowing borrowing = new Borrowing();
 
 		Object[][] currentHolds = null;
 		try {
@@ -261,6 +280,7 @@ public class Borrower{
 				currentHolds = new Object[count][3];
 			}
 
+
 			int i=0;
 			while(rs.next()) {
 
@@ -277,22 +297,27 @@ public class Borrower{
 				currentHolds[i][2] = issueDate;
 				i++;
 			}
+
+
 			stmt.close();
 
-//			for (i=0;i<count;i++) {
-//				for (int j=0;j<3;j++) {
-//					System.out.println(currentHolds[i][j]);
-//				}
-//			}
+			if (count>0) {
+				return currentHolds;
+			}
 
-			return currentHolds;
 		}
 		catch (SQLException ex)
 		{
 			System.out.println("Message: " + ex.getMessage());
 		}
 
-		return null;
+		currentHolds = new Object[1][3];
+
+		currentHolds[0][0] = "";
+		currentHolds[0][1] = "";
+		currentHolds[0][2] = "";
+
+		return currentHolds;
 
 	}
 
@@ -310,7 +335,7 @@ public class Borrower{
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT bookCopy_status FROM bookCopy WHERE book_callNo = '" + callNo + "'");
-			
+
 			while (rs.next()) {
 				status = rs.getString("bookCopy_status");
 
@@ -321,7 +346,7 @@ public class Borrower{
 
 			hr.insertHoldRequest(bid, callNo);
 			stmt.close();
-		
+
 		}
 		catch (SQLException ex)
 		{
@@ -342,18 +367,18 @@ public class Borrower{
 			return false;
 		}
 	}
-	
+
 	//get total fines
 	public float getTotalFines(int bid){
 		float totalFines = 0;
 		Statement stmt;
 		ResultSet rs;
-		
+
 		try{
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT DISTINCT f.fine_amount FROM fine f, borrowing b, borrower br WHERE b.borr_bid = "
 					+ bid + "AND b.borrowing_borid = f.borrowing_borid AND f.fine_paiddate IS NULL" );
-			
+
 			while(rs.next()){
 				totalFines = totalFines + rs.getFloat(1);
 			}
@@ -376,14 +401,14 @@ public class Borrower{
 				//				Fine f = new Fine();
 				//				f.displayBIDFines(10);
 				//				borrower.search("a");
-//					borrower.checkLoans(15);
-				//				borrower.checkFines(10);
+//									borrower.checkLoans(5);
+//				borrower.checkFines(10);
 
 				//borrower.placeHold(10,2);
-				//borrower.checkHolds(10);
-								
-//				System.out.println(borrower.getTotalFines(10));
-				
+				//				borrower.checkHolds(15);
+
+				//				System.out.println(borrower.getTotalFines(10));
+
 			}
 		});
 	}
