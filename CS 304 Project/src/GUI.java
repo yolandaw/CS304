@@ -520,18 +520,18 @@ public class GUI implements ActionListener{
 		int status = 0;
 		if (status1.isSelected()) {
 			status = 0;
-			status2.setSelected(false);
-			status3.setSelected(false);
+			status2.setEnabled(false);
+			status3.setEnabled(false);
 		}
 		else if (status2.isSelected()) {
 			status = 1;
-			status1.setSelected(false);
-			status3.setSelected(false);
+			status1.setEnabled(false);
+			status3.setEnabled(false);
 		}
 		else if (status3.isSelected()) {
 			status = 2;
-			status1.setSelected(false);
-			status2.setSelected(false);
+			status1.setEnabled(false);
+			status2.setEnabled(false);
 		}	
 		else {
 			popUp("Please select an option.");
