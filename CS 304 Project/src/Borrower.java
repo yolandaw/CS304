@@ -82,6 +82,7 @@ public class Borrower{
 		return null;
 	}
 
+
 	public Object[][] checkLoans(int id) {
 		Statement stmt;
 		Statement stmt2;
