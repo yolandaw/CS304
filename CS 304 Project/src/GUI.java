@@ -420,7 +420,7 @@ public class GUI implements ActionListener{
 						int response = JOptionPane.showConfirmDialog(null, "Book already exists! Add a copy instead?", "Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 						if (response == 0 ) {
 							int resp = addCopyHelper();
-							if (resp == 1 | resp == 2 | resp == 3) {
+							if (resp == 0 | resp == 1 | resp == 2) {
 								System.out.println(resp + "");
 								int callNo = book.checkBook(isbn);
 								librarian.addCopy(callNo, resp);
@@ -537,18 +537,10 @@ public class GUI implements ActionListener{
 	
 		final JComponent[] inputs = new JComponent[] {
 				new JLabel ("Select Status of Book Copy"),status1,status2,status3};
-		final JOptionPane pane = new JOptionPane();
-		pane.showMessageDialog(null, inputs, "Add Copy", JOptionPane.PLAIN_MESSAGE);
-		JDialog dia = pane.createDialog(null);
-		dia.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dia.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent we) {
-				pane.setValue(JOptionPane.CANCEL_OPTION);
-			}
-		});
 		
-		
-		int status = 0;
+		int rsp = JOptionPane.showConfirmDialog(null, inputs, "Add Copy", JOptionPane.CLOSED_OPTION);
+	
+		int status = 4;
 		if (status1.isSelected()) {
 			status = 0;
 		}
@@ -558,7 +550,10 @@ public class GUI implements ActionListener{
 		else if (status3.isSelected()) {
 			status = 2;
 		}	
-		else {
+		if (rsp == JOptionPane.CLOSED_OPTION) {
+			status = 4;
+		}
+		else if (rsp == JOptionPane.OK_OPTION && (status != 0 | status != 1 | status != 2)) {
 			popUp("Please select an option.");
 			addCopyHelper();
 		}
