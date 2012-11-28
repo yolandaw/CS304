@@ -565,7 +565,7 @@ public class GUI implements ActionListener{
 		if (rsp == JOptionPane.CLOSED_OPTION) {
 			status = 4;
 		}
-		else if (rsp == JOptionPane.OK_OPTION && (status != 0 | status != 1 | status != 2)) {
+		else if (rsp == JOptionPane.OK_OPTION && (status == 4)) {
 			popUp("Please select an option.");
 			addCopyHelper();
 		}
